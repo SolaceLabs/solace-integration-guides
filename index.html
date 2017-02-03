@@ -1,0 +1,29 @@
+---
+layout: default
+---
+<section>
+  {% include intro.html %}
+
+  {% for section in site.data.guides %}
+    {% for item in section.guides %}
+      {% assign item_url = item | prepend:"/" | append:"/" %}
+      {% assign p = site.guides | where:"url", item_url | first %}
+      {% assign loopindex = forloop.index | modulo: 2 %}
+      {% if loopindex == 1 or forloop.first %}
+        <div class="grid">
+      {% endif %}
+          <a href="{{ site.baseurl }}{{ p.url }}">
+            <div class="unit one-quarter" style='padding:10px;'>
+              <div class="grid" style='border-width:1px; border-color:#d3d3d3; border-style:solid; padding:10px; background-color:#ffffff; border-radius:5px;'>
+                <img src="{{ site.baseurl }}/images/{{ p.icon }}" alt="{{ p.title }}" width="300"/>
+                <h3 class="nolineheading" align="center">{{ p.title }}</h3>
+                <p>{{ p.summary }}</p>
+              </div>
+            </div>
+          </a>
+      {% if loopindex != 1 or forloop.last %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  {% endfor %}
+</section>
