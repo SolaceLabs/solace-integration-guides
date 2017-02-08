@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:camel="http://camel.apache.org/schema/spring"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <bean id="Solace.JndiTemplate"
+        class="org.springframework.jndi.JndiTemplate">
+        <property name="environment">
+         <props>
+             <prop key="java.naming.provider.url">smf://__IP:PORT__</prop>
+             <prop key="java.naming.factory.initial">com.solacesystems.jndi.SolJNDIInitialContextFactory</prop>
+             <prop key="java.naming.security.principal">fuse_user@Solace_Fuse_VPN</prop>
+         </props>
+        </property>
+    </bean>
+    <bean id="Solace.JndiObjectFactoryBean"
+        class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiTemplate" ref="Solace.JndiTemplate"/>
+        <property name="jndiName" value="JNDI/CF/fuse"/>
+    </bean>
+    <bean id="Solace.CachedConnectionFactory"
+        class="org.springframework.jms.connection.CachingConnectionFactory">
+        <property name="targetConnectionFactory" ref="Solace.JndiObjectFactoryBean" />
+        <property name="sessionCacheSize" value="10" />
+    </bean> 
+     <bean id="Solace.JndiDestinationResolver"
+        class="org.springframework.jms.support.destination.JndiDestinationResolver">
+        <property name="jndiTemplate" ref="Solace.JndiTemplate" />
+        <property name="cache" value="true" />
+    </bean>
+    <bean id="Solace.JmsComponent" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="connectionFactory" ref="Solace.CachedConnectionFactory"/>
+        <property name="destinationResolver" ref="Solace.JndiDestinationResolver" />
+    </bean>
+    
+    <!-- Configures the Camel Context-->
+    
+    <camelContext xmlns="http://camel.apache.org/schema/spring">
+      <route id="pubtosolace">
+          <from uri="timer:simple?period=5000"/>
+          <setBody>
+              <simple>Solace Camel JMS Test</simple>
+          </setBody>
+          <to uri="Solace.JmsComponent:queue:JNDI/Q/requests"/>
+      </route>
+      <route id="recvFromSolace">
+          <from uri="Solace.JmsComponent:queue:JNDI/Q/requests"/>
+          <to uri="log:SOLACE-Message received!"/>
+      </route>
+    </camelContext>
+
+</beans>
+
