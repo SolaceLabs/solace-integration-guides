@@ -3,6 +3,9 @@ layout: guides
 title: HermesJMS
 summary: HermesJMS is an extensible console that helps you interact with JMS providers making it simple to publish and edit messages, browse or search queues and topics, copy messages around and delete them.
 icon: hermesjms.png
+links:
+    - label: Blog Post - Browsing Messages on Solace using HermesJMS
+      link: https://solace.com/blog/devops/browsing-messages-solace-using-hermesjms
 ---
 
 ## Prerequisites
