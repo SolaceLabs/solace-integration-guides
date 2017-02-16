@@ -1,6 +1,6 @@
 ---
 layout: guides
-title: Flink Streaming 2.10
+title: Apache Flink Streaming 2.10
 summary: Apache Flink provides an optimized engine that supports distributed, high-performing, always-available, and accurate data streaming applications. Flink Streaming supports high-throughput, fault-tolerant stream processing of live data streams for continuous processing of unbounded datasets.  The Flink Streaming generic SourceFunction is a simple interface that allows third party applications to push data into Flink in an efficient manner. 
 icon: flink_squirrel.png
 links:
