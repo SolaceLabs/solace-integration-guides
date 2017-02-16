@@ -748,7 +748,7 @@ config)# jndi message-vpn Solace_Spring_VPN
 
 There are two associated files you can use for reference:
 
-*    [spring.xml]({{ site.repository }}/blob/master/resources/jboss-fuse/spring.xml){:target="_blank"}
-*    [blueprint.xml]({{ site.repository }}/blob/master/resources/jboss-fuse/blueprint.xml){:target="_blank"}
+*    [spring.xml]({{ site.repository }}/blob/master/src/jboss-fuse/spring.xml){:target="_blank"}
+*    [blueprint.xml]({{ site.repository }}/blob/master/src/jboss-fuse/blueprint.xml){:target="_blank"}
 
 
