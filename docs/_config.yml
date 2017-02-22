@@ -15,6 +15,7 @@ links-docs-cli: http://docs.solace.com/CLI-Reference/Command_Line_Reference.html
 links-downloads: http://dev.solace.com/downloads
 links-vmr-getstarted: http://dev.solace.com/get-started/start-up-solace-messaging/
 links-jms-maven: https://mvnrepository.com/artifact/com.solacesystems/sol-jms
+links-jms-cust-rar-download: https://products.solace.com
 
 
 #----------------------------------------------------

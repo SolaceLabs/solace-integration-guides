@@ -3,7 +3,9 @@ layout: guides
 title: Red Hat JBoss Fuse v6
 summary: Red Hat JBoss Fuse product is an open source Enterprise Service Bus (ESB) that delivers a robust, cost-effective, and open integration platform that lets enterprises easily connect their disparate applications, services, or devices in real time.
 icon: red-hat-jboss-fuse.png
-links: 
+links:
+   - label: Example Source Code - JBoss Fuse
+     link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-fuse
 ---
 
 ## Overview

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wls:weblogic-ejb-jar
+	xmlns:wls="http://xmlns.oracle.com/weblogic/weblogic-ejb-jar"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd http://xmlns.oracle.com/weblogic/weblogic-ejb-jar http://xmlns.oracle.com/weblogic/weblogic-ejb-jar/1.7/weblogic-ejb-jar.xsd">
+	<wls:weblogic-enterprise-bean>
+		<wls:ejb-name>ConsumerMDB</wls:ejb-name>
+		<wls:message-driven-descriptor>
+			<wls:pool>
+				<wls:max-beans-in-free-pool>10</wls:max-beans-in-free-pool>
+				<wls:initial-beans-in-free-pool>1</wls:initial-beans-in-free-pool>
+			</wls:pool>
+		</wls:message-driven-descriptor>
+	</wls:weblogic-enterprise-bean>
+</wls:weblogic-ejb-jar>
