@@ -1,6 +1,6 @@
 ---
 layout: guides
-title: Apache Flink Streaming 2.10
+title: Feeding Flink Streaming 2.10 from a Solace Message Bus
 summary: Apache Flink provides an optimized engine that supports distributed, high-performing, always-available, and accurate data streaming applications. Flink Streaming supports high-throughput, fault-tolerant stream processing of live data streams for continuous processing of unbounded datasets.  The Flink Streaming generic SourceFunction is a simple interface that allows third party applications to push data into Flink in an efficient manner. 
 icon: flink_squirrel.png
 links:
@@ -12,7 +12,7 @@ links:
 
 This document demonstrates how to integrate the Solace Java Message Service (JMS) with Flink Streaming source functions for consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both Flink Streaming and Solace JMS. 
 
-The target audience of this document is developers with knowledge of both Spark and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Flink refer to the referenced documents below.
+The target audience of this document is developers with knowledge of both Flink and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Flink refer to the referenced documents below.
 
 This document is divided into the following sections to cover the Solace JMS integration with Flink Streaming:
 
@@ -32,7 +32,7 @@ These links contain information related to this guide:
 * [Solace Message Router Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 * [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html){:target="_blank"}
-* [Spark SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html){:target="_blank"}
+* [Flink SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html){:target="_blank"}
 
 ## Integrating with Flink Streaming
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in [src/flink-jms-connector]({{ site.repository }}/blob/master/src/flink-jms-connector){:target="_blank"}.
@@ -104,7 +104,38 @@ The Solace messaging router can be obtained one of 2 ways.
 1.	If you are in an organization that is an existing Solace customer, it is likely your organization already has Solace Message Routers and corporate policies about their use.  You will have to contact your middleware operational team in regards to access to a Solace Message Router.
 2.	If you are new to Solace or your company does not have development message routers, you can obtain a trail Solace Virtual Message Router (VMR) from the [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"}. For help getting started with your Solace VMR you can refer to [Solace VMR Getting Started Guides]({{ site.links-vmr-getstarted }}){:target="_top"}.
 
-The Solace JMS are required.  They can be obtained on [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"} or from [Maven Central]({{ site.links-jms-maven }}){:target="_blank"}.
+The Solace JMS jars are required.  They can be obtained on [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"} or from [Maven Central]({{ site.links-jms-maven }}){:target="_blank"}.
+
+##### Maven Dependencies
+
+The easiest way to integrate Solace and Flink is using the client libraries available via public Maven Repositories, for example:
+
+``` xml
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-java</artifactId>
+      <version>1.1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-streaming-java_2.10</artifactId>
+      <version>1.1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flink</groupId>
+      <artifactId>flink-clients_2.10</artifactId>
+      <version>1.1.4</version>
+    </dependency>
+      <dependency>
+          <groupId>com.solacesystems</groupId>
+          <artifactId>sol-jms</artifactId>
+          <version>10.0.0</version>
+      </dependency>
+  </dependencies>
+```
+
+Or if you downloaded the libraries and are referencing them directly, the following resources are all required:
 
 <table>
     <tr>
@@ -146,7 +177,7 @@ The Solace JMS are required.  They can be obtained on [Solace Developer Portal D
 
 ### Step 2 – Configuring the Solace Message Router
 
-The Solace appliance needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Spark application. 
+The Solace appliance needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application. 
 
 * A Message VPN, or virtual message broker, to scope the integration on the Solace appliance.
 * Client connectivity configurations like usernames and profiles
@@ -396,7 +427,7 @@ The key component for debugging integration issues with the Solace JMS API is th
 
 ### How to enable Solace JMS API logging
 
-Spark was written using Jakarta Commons Logging API (JCL), Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring the Solace JMS API logging is very similar to configuring any other Spark application. The following example shows how to enable debug logging in the Solace JMS API using log4j.
+Flink was written using Jakarta Commons Logging API (JCL), Solace JMS API also makes use of the Jakarta Commons Logging API (JCL), configuring the Solace JMS API logging is very similar to configuring any other Flink application. The following example shows how to enable debug logging in the Solace JMS API using log4j.
 
 One note to consider is that since the Solace JMS API has a dependency on the Solace Java API (JCSMP) both of the following logging components should be enabled and tuned when debugging to get full information. For example to set both to debug level:
 
