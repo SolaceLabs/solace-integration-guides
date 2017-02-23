@@ -2,6 +2,7 @@
   guides:
   - flink-streaming-2-10
   - hermesjms
+  - nagios
   - red-hat-jboss-fuse-v6
   - weblogic-app-server
   

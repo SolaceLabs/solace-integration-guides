@@ -1,0 +1,22 @@
+==> cfg/nsca.cfg <==
+log_facility=daemon
+pid_file=/var/run/nsca.pid
+server_port=5667
+nsca_user=nagios
+nsca_group=nagios
+debug=0
+command_file=/var/spool/nagios/cmd/nagios.cmd
+alternate_dump_file=/usr/local/nagios/var/rw/nsca.dump
+aggregate_writes=0
+append_to_file=0
+max_packet_age=30
+decryption_method=1
+
+
+==> cfg/nsca_client.cfg <==
+encryption_method=1
+
+==> cfg/nsca_server.cfg <==
+
+host=127.0.0.1
+port=5667

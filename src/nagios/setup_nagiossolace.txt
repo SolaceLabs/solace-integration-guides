@@ -1,0 +1,212 @@
+#!/bin/bash
+#setup_nagiossolace
+
+httpcfg=/etc/httpd/conf/httpd.conf
+nagioscfg=/etc/nagios/nagios.cfg
+nagiosgraphcfg=/usr/local/nagiosgraph/etc/nagiosgraph.conf
+nagiosgraphapachecfg=/usr/local/nagiosgraph/etc/nagiosgraph-apache.conf
+nagioscmdfile=/etc/nagios/objects/commands.cfg
+nagiostmplfile=/etc/nagios/objects/templates.cfg
+nagioslocalhostcfg=/etc/nagios/objects/localhost.cfg
+nagiosgraphcmdfile=/usr/local/nagiosgraph/etc/nagiosgraph-commands.cfg
+nagiosgraphinsertscript=/usr/local/nagiosgraph/bin/insert.pl
+nagiossolaceplugindir=/usr/local/nagios/plugins
+nagiossolacecfgdir=/etc/nagios/solace
+
+tag="::BEGIN_SETUP-Nagiosgraph::"
+
+echo
+echo "Checking required files ..." 
+for f in $httpcfg $nagioscfg $nagiosgraphcfg $nagiosgraphapachecfg $nagioscmdfile $nagiostmplfile $nagioslocalhostcfg $nagiosgraphinsertscript; do
+if [ ! -f $f ]; then 
+  echo "   $f : missing. Exiting!"
+  exit
+fi
+echo "   $f :"
+grep -q $tag $f && echo "      already setup. will be skipped"
+done
+
+
+#-------------------------------------------------------------------------
+#
+ts=$(date "+%y%m%d_%H%M%S")
+echo
+echo "Setting up config files ... "
+echo "   $nagioscfg: "
+grep -q $tag $nagioscfg || {
+cp -p $nagioscfg $nagioscfg.sav-$ts
+cat >> $nagioscfg <<__END__
+
+#---  $tag
+
+# process nagios performance data using nagiosgraph
+process_performance_data=1
+service_perfdata_file=/var/log/nagios/perfdata.log
+service_perfdata_file_template=\$LASTSERVICECHECK\$||\$HOSTNAME\$||\$SERVICEDESC\$||\$SERVICEOUTPUT\$||\$SERVICEPERFDATA\$
+service_perfdata_file_mode=a
+service_perfdata_file_processing_interval=30
+service_perfdata_file_processing_command=process-service-perfdata-for-nagiosgraph
+
+# host config with sample nagiosgraphs
+cfg_file=/etc/nagios/objects/localhost-graph.cfg
+
+# solace config
+cfg_file=/etc/nagios/solace/solace.cfg
+
+#-- end setup
+__END__
+}
+
+#-------------------------------------------------------------------------
+#
+echo "   $nagiostmplfile :"
+grep -q $tag $nagiostmplfile || {
+cp -p  $nagiostmplfile $nagiostmplfile.sav-$ts
+cat >> $nagiostmplfile <<__END__
+#--  $tag
+define service {
+       name graphed-service
+       action_url /nagiosgraph/cgi-bin/show.cgi?host=\$HOSTNAME\$&service=\$SERVICEDESC\$' onMouseOver='showGraphPopup(this)' onMouseOut='hideGraphPopup()' rel='/nagiosgraph/cgi-bin/showgraph.cgi?host=\$HOSTNAME\$&service=\$SERVICEDESC\$&period=week&rrdopts=-w+450+-j
+       register 0
+     }
+
+#-- end setup
+__END__
+}
+
+#-------------------------------------------------------------------------
+# localhost-graph.cfg generaed if not there already
+outfile=$(dirname "$nagioslocalhostcfg")/localhost-graph.cfg
+echo "   $outfile :"
+if [ ! -f $outfile ]; then
+sed -e "s/local-service/local-service,graphed-service/g"  \
+    -e "s/\(localhost\)/\1-gr/g"   \
+    -e "s/\(linux-servers\)/\1-gr/g"   \
+    $nagioslocalhostcfg  > /tmp/localhost-graph.cfg
+    cp -p /tmp/localhost-graph.cfg  $outfile
+fi
+
+
+#-------------------------------------------------------------------------
+#
+echo "   $nagioscmdfile :"
+grep -q $tag $nagioscmdfile || {
+cp -p  $nagioscmdfile $nagioscmdfile.sav-$ts
+cat >> $nagioscmdfile <<__END__
+#--  $tag
+# command to process nagios performance data for nagiosgraph
+define command {
+  command_name process-service-perfdata-for-nagiosgraph
+  command_line $nagiosgraphinsertscript
+}
+#-- end setup
+__END__
+}
+
+#-------------------------------------------------------------------------
+#
+#echo "   $nagiosgraphcmdfile :"
+#grep -q $tag $nagiosgraphcmdfile || {
+#cp -p  $nagiosgraphcmdfile $nagiosgraphcmdfile.sav-$ts
+#cat >> $nagiosgraphcmdfile <<__END__
+#--  $tag
+# command to process nagios performance data for nagiosgraph
+#define command {
+#  command_name process-service-perfdata
+#  command_line $nagiosgraphinsertscript
+#}
+#-- end setup
+#__END__
+#}
+
+#-------------------------------------------------------------------------
+# note -- this file is overwritten (not append)
+#
+echo "   $nagiosgraphapachecfg :"
+grep -q $tag $nagiosgraphapachecfg || {
+cp -p $nagiosgraphapachecfg $nagiosgraphapachecfg.sav-$ts
+cat > $nagiosgraphapachecfg <<__END__
+#--- $tag
+# enable nagiosgraph CGI scripts
+ScriptAlias /nagiosgraph/cgi-bin "/usr/local/nagiosgraph/cgi"
+<Directory "/usr/local/nagiosgraph/cgi">
+   Options ExecCGI
+   AllowOverride None
+   Order allow,deny
+   Allow from all 
+</Directory>
+# enable nagiosgraph CSS and JavaScript
+Alias /nagiosgraph "/usr/local/nagiosgraph/share"
+<Directory "/usr/local/nagiosgraph/share">
+   Options None 
+   AllowOverride None
+   Order allow,deny
+   Allow from all
+</Directory> 
+#-- end setup
+__END__
+}
+
+#-------------------------------------------------------------------------
+#
+#echo "   $nagiosgraphcfg :"
+#grep -q $tag $nagiosgraphcfg || {
+#cp -p $nagiosgraphcfg $nagiosgraphcfg.sav-$ts
+#sed -e "s/\(nagiosgraphcgiurl =\)\(.*\)/#-- $tag\n#\1\2\n\1 \/nagiosgraph\/cgi-bin\n#--end setup\n/g" \
+#	 $nagiosgraphcfg > /tmp/nagiosgraph.cfg
+#sed -e "s#/nagios/cgi-bin#/nagiosgraph/cgi-bin#g" \
+#    -e "s#/nagios/nagiosgraph.js#/nagiosgraph/nagiosgraph.js#g" \
+#    -e "s#/nagios/nagiosgraph.css#/nagiosgraph/nagiosgraph.css#g" \
+#	 $nagiosgraphcfg > /tmp/nagiosgraph.cfg
+#cp -p /tmp/nagiosgraph.cfg $nagiosgraphcfg
+#}
+
+#-------------------------------------------------------------------------
+#
+echo "   $httpcfg :"
+grep -q $tag  $httpcfg || {
+cp -p $httpcfg $httpcfg.sav-$ts
+cat >> $httpcfg <<__END__
+
+#--- $tag
+include $nagiosgraphapachecfg
+#-- end setup
+__END__
+}
+
+#-------------------------------------------------------------------------
+# 
+echo
+echo "Setting Solace for Nagios"
+if [ -d plugin ] ; then
+  echo "   $nagiossolaceplugindir :"
+  [ -d $nagiossolaceplugindir ] || mkdir -p $nagiossolaceplugindir
+  cp -p plugin/* $nagiossolaceplugindir
+  chmod 555 $nagiossolaceplugindir/*
+else 
+   echo "   No plugin dir in package. $nagiossolaceplugindir not setup" 
+fi
+
+if [ -f cfg/solace.cfg ] ; then
+   echo "   $nagiossolacecfgdir :"
+   [ -d $nagiossolacecfgdir ] || mkdir -p $nagiossolacecfgdir
+   cp -p cfg/solace.cfg $nagiossolacecfgdir
+else 
+   echo "   No cfg file cfg/solace.cfg. $nagiossolacecfgdir not setup" 
+fi
+
+
+#-------------------------------------------------------------------------
+# try to gernerate sample cfg
+#
+#./mk_nagiossolacecfg cfg/samplerouter.cfg
+
+#-------------------------------------------------------------------------
+#
+echo
+echo "Restarting services ..."
+for s in nagios httpd; do
+echo "   $s :"
+systemctl restart $s > /tmp/$s.out 2>&1
+systemctl status $s 
+done

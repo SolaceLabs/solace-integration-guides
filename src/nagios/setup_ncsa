@@ -1,0 +1,79 @@
+#!/bin/bash
+#setup_nsca : setup nsca daemon
+
+while getopts s:t: arg
+do 
+   case $arg in
+   s) SRCDIR="$OPTARG" ;;
+   i) SVRIP="$OPTARG" ;;
+   t) TARGETDIR="$OPTARG" ;;
+   *) printf "Usage: %s -a <nsca-src-dir> [-t <install-target-dir>]\n" $0
+      exit 2;;
+   esac
+done
+
+if [ -z "$SRCDIR" ] ; then
+   printf "Missing -s <nsca-src-dir>. Exiting ...\n"
+   exit 2
+fi
+printf  "   srcdir $SRCDIR ok\n"
+if [ -z "$SVRIP" ] ; then
+   SVRIP="127.0.0.1"
+   printf "Missing -i <server-ip>. Using $SVRIP\n"
+fi
+printf  "   serverip $SVRIP\n"
+
+[ -z "$TARGETDIR" ] && TARGETDIR=/usr/local/nsca
+if [ -d $TARGETDIR ]; then
+   printf "target dir $TARGETDIR already exists. Exiting ... \n" 
+   exit 3
+fi
+printf "   target dir $TARGETDIR ok\n"
+
+echo "
+host=$SVRIP
+port=5667
+" > cfg/nsca_server.cfg
+
+printf "Checking ...\n"
+for file in src/nsca src/send_nsca; do
+   if [ ! -x $SRCDIR/$file ]; then
+      printf "Required file $SRCDIR/$file not found. Exiting ...\n" ;
+      exit 3
+   fi
+   printf "  file $file ok\n"
+done
+
+for file in scripts/nsca.init scripts/send_ngalert.pl cfg/nsca.cfg cfg/nsca_server.cfg cfg/nsca_client.cfg; do
+  if [ ! -f $file ]; then
+      printf "Required file $file not found. Exiting ...\n" ;
+      exit 3
+  fi
+   printf "  file $file ok\n"
+done
+
+mkdir -p $TARGETDIR/{bin,cfg,sbin}
+[ -d /var/run/nsca ] || mkdir /var/run/nsca
+
+printf "Installing ...\n"
+printf "  $TARGETDIR/sbin/nsca :\n"
+cp -p $SRCDIR/src/nsca $TARGETDIR/sbin
+
+printf "  $TARGETDIR/bin/send_nsca :\n"
+cp -p $SRCDIR/src/send_nsca $TARGETDIR/bin
+
+printf "  $TARGETDIR/cfg/nsca.cfg :\n"
+cp -p cfg/nsca*.cfg $TARGETDIR/cfg
+
+printf "  $TARGETDIR/bin/send_ngalert.pl :\n"
+cp -p scripts/send_ngalert.pl $TARGETDIR/bin
+
+if [ ! -f /etc/init.d/nsca ]; then
+   printf "  /etc/init.d/nsca :\n"
+   cp -p scripts/nsca.init /etc/init.d/nsca
+   printf "Creating service  ...\n"
+   chkconfig --add nsca
+else
+   echo "/etc/init.d/nsca exists. Skipping service creation ..."
+fi
+printf "Installation complete!\n" ;

@@ -1,0 +1,89 @@
+
+#!/bin/bash
+#
+# nsca        Startup script for the Nagios Service Check Acceptor
+#
+# chkconfig: - 85 15
+# description: Nagios service check acceptor daemon
+# processname: nsca
+# config: /usr/local/nsca/cfg/nsca.cfg
+# pidfile: /var/run/nsca/nsca.pid__NOT_USED
+#
+### BEGIN INIT INFO
+# Provides: nsca
+# Required-Start: $local_fs $remote_fs $network $named
+# Required-Stop: $local_fs $remote_fs $network
+# Should-Start: distcache
+# Short-Description: start and stop Nagios Service check Accaptor Server
+# Description: Nagios extension
+### END INIT INFO
+
+
+# Start nsca in the C locale by default.
+NSCA_LANG=${NSCA_LANG-"C"}
+
+# This will prevent initlog from swallowing up a pass-phrase prompt if
+# mod_ssl needs a pass-phrase from the user.
+INITLOG_ARGS=""
+
+# Set NSCA=/usr/sbin/nsca.worker in /etc/sysconfig/nsca to use a server
+# with the thread-based "worker" MPM; BE WARNED that some modules may not
+# work correctly with a thread-based MPM; notably PHP will refuse to start.
+
+nsca=${NSCA-/usr/local/nsca/sbin/nsca}
+nscacfg=/usr/local/nsca/cfg/nsca.cfg
+prog=nsca
+pidfile=${PIDFILE-/var/run/nsca/nsca.pid}
+lockfile=${LOCKFILE-/var/lock/subsys/nsca}
+RETVAL=0
+STOP_TIMEOUT=${STOP_TIMEOUT-10}
+#OPTIONS="-c $nscacfg  --inetd"
+OPTIONS="-c $nscacfg"
+
+start() {
+        echo -n $"Starting $prog: "
+        LANG=$NSCA_LANG $nsca $OPTIONS
+        RETVAL=$?
+        echo
+        [ $RETVAL = 0 ] && touch ${lockfile}
+        pgrep -f "/usr/local/nsca/sbin/nsca.*nsca.cfg$"
+        return $RETVAL
+}
+
+# When stopping nsca, a delay (of default 10 second) is required
+# before SIGKILLing the nsca parent; this gives enough time for the
+# nsca parent to SIGKILL any errant children.
+stop() {
+	echo -n $"Stopping $prog: "
+        pgrep -f "/usr/local/nsca/sbin/nsca.*nsca.cfg$" &&  pkill -f "/usr/local/nsca/sbin/nsca.*nsca.cfg$"
+	RETVAL=$?
+	echo
+	[ $RETVAL = 0 ] && rm -f ${lockfile} ${pidfile}
+}
+
+# See how we were called.
+case "$1" in
+  start)
+	start
+	;;
+  stop)
+	stop
+	;;
+  status)
+        pid=$(pgrep -f "/usr/local/nsca/sbin/nsca.*nsca.cfg$")
+        if [ -z "$pid" ]; then
+           echo "nsca is not running"
+        else
+           echo "nsca (pid $pid) is running ..."
+        fi
+	;;
+  restart)
+	stop
+	start
+	;;
+  *)
+	echo $"Usage: $prog {start|stop|restart|condrestart|try-restart|force-reload|reload|status|fullstatus|graceful|help|configtest}"
+	RETVAL=2
+esac
+
+exit $RETVAL
