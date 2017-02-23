@@ -386,7 +386,7 @@ On the remote client hosts, we would need to install the Nagios plugins and NRPE
 
 ```
 # apt-get install openssl nagios-nrpe-server nagios-plugins nagios-plugins-basic nagios-plugins-standard
-```
+```
 
 ### Post Install Configuration
 
