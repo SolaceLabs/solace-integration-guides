@@ -379,8 +379,7 @@ In the ‘Configuration > General’ tab, add a JNDI name for the solace resourc
 ![]({{ site.baseurl }}/images/weblogic/config-solace-ra-2.png)
 
 * Step 2. Click on the ‘Save’ button to commit the changes to the application server.
-* Step 3. When the server prompts for a Deployment Plan to be created, configure its desired location.
-* Step 4. When the server prompts for a Deployment Plan to be created, configure its desired location.  More details on deployment plan files can be found at the “Configuring Applications for Production Deployment”: [http://docs.oracle.com/cd/E12839_01/web.1111/e13702/config.htm#DEPGD169](http://docs.oracle.com/cd/E12839_01/web.1111/e13702/config.htm#DEPGD169){:target="_blank"}
+* Step 3. When the server prompts for a Deployment Plan to be created, configure its desired location.  More details on deployment plan files can be found at the “Configuring Applications for Production Deployment”: [http://docs.oracle.com/cd/E12839_01/web.1111/e13702/config.htm#DEPGD169](http://docs.oracle.com/cd/E12839_01/web.1111/e13702/config.htm#DEPGD169){:target="_blank"}
 
 #### Properties Configuration
 
@@ -390,7 +389,7 @@ In the ‘Configuration > Properties’ tab, edit the connectivity properties fo
   * Step a.	Click on the ‘ConnectionURL’ property and specify the value ‘smf://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message router message-backbone VRF IP ).
   * Step b.	Click on the ‘MessageVPN’ property and specify the value corresponding to the Solace message VPN (‘solace_VPN’ for this example).  Press Enter to input the change.
   * Step c.	Click on the ‘UserName’ property and specify the value corresponding to the Solace username (‘solace_user’ for this example).  Press Enter to input the change.
-  * Step d.	Click on the ‘Password’ property and specify the value for the Solace username if required (Note, in this example, Section 0 Configuring Client Usernames & Profiles specified a Solace authentication type of ‘none’, so the password here will be ignored).
+  * Step d.	Click on the ‘Password’ property and specify the value for the Solace username if required (Note, this example specified a Solace authentication type of ‘none’, so the password here will be ignored).
   * Step e.	Click on the ‘Save’ button to commit the changes to the application server. 
 
 ![]({{ site.baseurl }}/images/weblogic/config-solace-ra-3.png)
@@ -420,8 +419,8 @@ The following table summarizes the values used for the resource adapter’s bean
     </tr>    
     <tr>
       <td>Password</td>
-      <td>default</td>
-      <td>Password of the Client Username on the Solace appliance</td>
+      <td></td>
+      <td>Optional password of the Client Username on the Solace appliance</td>
     </tr> 
     <tr>
       <td>ExtendedProps</td>
@@ -607,7 +606,7 @@ New deployments should deploy using the resource adapter.
 
 ![]({{ site.baseurl }}/images/weblogic/new-foreign-server-3.png)
 
-* Step 4. arget the mapping as desired for the JMS module, depending on which server(s) the applications will be deployed on, and click next.
+* Step 4. Target the mapping as desired for the JMS module, depending on which server(s) the applications will be deployed on, and click next.
 
 ![]({{ site.baseurl }}/images/weblogic/new-foreign-server-4.png)
 
