@@ -64,7 +64,7 @@ The following Solace Message Router resources are required.
     <tr>
     <td>Solace Message Router IP:Port</td>
     <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace appliance message backbone. This is the address client’s use when connecting to the Solace appliance to send and receive message. This document uses a value of __IP:PORT__.</td>
+    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
     </tr>
     <tr>
     <td>Message VPN</td>
@@ -177,20 +177,20 @@ Or if you downloaded the libraries and are referencing them directly, the follow
 
 ### Step 2 – Configuring the Solace Message Router
 
-The Solace appliance needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application. 
+The Solace Message Router needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace appliance.
+* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Router.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace appliance configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace appliance CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
+For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
 
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace appliance. This document uses CLI as the reference to remain concise.
+Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “Solace_Flink_VPN” on the Solace appliance with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Flink configuration when connecting to the Solace messaging appliance. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called “Solace_Flink_VPN” on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Flink configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 (config)# create message-vpn Solace_Flink_VPN
@@ -210,9 +210,9 @@ This section outlines how to create a message-VPN called “Solace_Flink_VPN” 
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace appliance. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Router. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of “flink_user” will be required by the Flink application when connecting to the Solace appliance.
+The chosen client username of “flink_user” will be required by the Flink application when connecting to the Solace Message Router.
 
 ```
 (config)# client-profile default message-vpn Solace_Flink_VPN
@@ -246,7 +246,7 @@ This integration guide shows receiving messages within the Flink application fro
 
 #### Setting up Solace JNDI References
 
-To enable the JMS clients to connect and look up the Queue destination required by Flink, there are two JNDI objects required on the Solace appliance:
+To enable the JMS clients to connect and look up the Queue destination required by Flink, there are two JNDI objects required on the Solace Message Router:
 
 * A connection factory: JNDI/CF/flink
 * A queue destination: JNDI/Q/receive
@@ -387,12 +387,12 @@ Note that the JMSTranslator exposes an outputType() method that returns the Clas
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby appliance in the case of a HA failover of a Solace appliance. By default Solace JMS connections will reconnect to the standby appliance in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
 ```
-Note: When using HA redundant appliances, a fail-over from one appliance to its mate will typically
+Note: When using HA redundant message routers, a fail-over from one message router to its mate will typically
 occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 ```
 

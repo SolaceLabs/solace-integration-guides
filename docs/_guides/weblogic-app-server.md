@@ -63,7 +63,7 @@ This integration guide will demonstrate the creation of Solace resources and the
 
 #### Solace Resource Naming Convention
 
-To illustrate this integration example, all named resources created on the Solace appliance will have the following prefixes:
+To illustrate this integration example, all named resources created on the Solace Message Router will have the following prefixes:
 
 <table>
     <tr>
@@ -93,7 +93,7 @@ The following Solace message router resources are required for the integration s
     <tr>
     <td>Solace Message Router IP:Port</td>
     <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace appliance message backbone. This is the address client’s use when connecting to the Solace appliance to send and receive message. This document uses a value of __IP:PORT__.</td>
+    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
     </tr>
     <tr>
     <td>Message VPN</td>
@@ -208,7 +208,7 @@ Also note that this configuration can also be easily performed using SolAdmin, S
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “solace_VPN” on the Solace message router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the WebLogic Application Server configuration when connecting to the Solace messaging appliance. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called “solace_VPN” on the Solace message router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the WebLogic Application Server configuration when connecting to the Solace Message Router. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 (config)# create message-vpn solace_VPN
@@ -357,7 +357,7 @@ Connecting to the Solace message router through the Solace JMS Resource Adapter 
 
 The above information is specified across one or more J2C entities depending on your application’s JMS message flow (Inbound, Outbound, or both). 
 
-The Solace resource adapter includes several custom properties for specifying connectivity and authentication details to the Solace appliance.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple Solace message routers.
+The Solace resource adapter includes several custom properties for specifying connectivity and authentication details to the Solace Message Router.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple Solace message routers.
 
 Please refer to [WL-REF] and [JCA-1.5] for more details on configuring general JEE authentication options. The [Authentication](#authentication) section below discusses configuration of Solace specific authentication in more detail. 
 
@@ -415,12 +415,12 @@ The following table summarizes the values used for the resource adapter’s bean
     <tr>
       <td>UserName</td>
       <td>solace_user</td>
-      <td>The client username credentials on the Solace appliance</td>
+      <td>The client username credentials on the Solace Message Router</td>
     </tr>    
     <tr>
       <td>Password</td>
       <td></td>
-      <td>Optional password of the Client Username on the Solace appliance</td>
+      <td>Optional password of the Client Username on the Solace Message Router</td>
     </tr> 
     <tr>
       <td>ExtendedProps</td>
@@ -475,7 +475,7 @@ Enter the local JNDI name for the destination and click Finish.
 
 ![]({{ site.baseurl }}/images/weblogic/config-dest-4.png)
 
-* Step 5. In the Properties section, the connectivity to the Solace appliance is configured. Enter the remote JNDI name as configured at the Solace appliance for the destination to connect to and confirm the settings with the Save button.  Similarly to the connection factory configuration, fields left empty will inherit the configuration from the resource adapter’s configuration in WebLogic.
+* Step 5. In the Properties section, the connectivity to the Solace Message Router is configured. Enter the remote JNDI name as configured at the Solace Message Router for the destination to connect to and confirm the settings with the Save button.  Similarly to the connection factory configuration, fields left empty will inherit the configuration from the resource adapter’s configuration in WebLogic.
 
 ![]({{ site.baseurl }}/images/weblogic/config-dest-5.png)
 
@@ -531,7 +531,7 @@ The following table summarizes the values used for the J2C connection factory cu
 
 ### Configuring connection pooling for a connection factory
 
-The Connection Pool tab allows the configuration of the amount of concurrent connections that are run between the WebLogic server and the Solace appliance. Those connections are shared between the requests coming from the applications, therefore the resources can be used more efficiently (limited number of connections) and optimized for performance (pre-initialized connections).
+The Connection Pool tab allows the configuration of the amount of concurrent connections that are run between the WebLogic server and the Solace Message Router. Those connections are shared between the requests coming from the applications, therefore the resources can be used more efficiently (limited number of connections) and optimized for performance (pre-initialized connections).
 
 The amounts to be set vary, depending on the demand of the WebLogic application(s). Capacity planning and load testing should identify the appropriate values. E.g. if only every 3rd request is using messaging, the pool size can be reduced approximately by that factor from the maximum amount of concurrent requests.
 
@@ -548,7 +548,7 @@ The most relevant values are:
     <tr>
       <td>1</td>
       <td>Initial Capacity</td>
-      <td>Number of connections to the Solace appliance initially available in the pool for this connection factory.</td>
+      <td>Number of connections to the Solace Message Router initially available in the pool for this connection factory.</td>
     </tr>
     <tr>
       <td>2</td>
@@ -698,7 +698,7 @@ java.naming.security.principal=%CLIENT_USERNAME%, Solace_JMS_VPN=%VPN_NAME%</td>
     <tr>
       <td>3</td>
       <td>Remote JNDI Name</td>
-      <td>This is the JNDI name for the Destination as configured on the Solace appliance for the Endpoint. This can be configured using SolAdmin from the JMS Tab</td>
+      <td>This is the JNDI name for the Destination as configured on the Solace Message Router for the Endpoint. This can be configured using SolAdmin from the JMS Tab</td>
     </tr>   
 </table>
 
@@ -731,7 +731,7 @@ java.naming.security.principal=%CLIENT_USERNAME%, Solace_JMS_VPN=%VPN_NAME%</td>
     <tr>
       <td>3</td>
       <td>Remote JNDI Name</td>
-      <td>This is the JNDI name for the Connection Factory as configured on the Solace appliance. This can be configured using CLI or through SolAdmin from the JMS Tab</td>
+      <td>This is the JNDI name for the Connection Factory as configured on the Solace Message Router. This can be configured using CLI or through SolAdmin from the JMS Tab</td>
     </tr>   
 </table>
 
@@ -757,17 +757,17 @@ In particular, enabling concurrent MDB instances may not mean that messages are 
 
 If using XA, it is strongly recommended to set total time for low level connection retries to be longer than the transaction timeout, but shorter than the maximum duration of XA calls.  These settings can be found in 3 locations:
 
-1. The connection factory on the Solace Appliance controls the low-level connection configuration, such as “Number of Times to Attempt Reconnect” and “Interval Between Reconnect Attempts”
+1. The connection factory on the Solace Message Router controls the low-level connection configuration, such as “Number of Times to Attempt Reconnect” and “Interval Between Reconnect Attempts”
 2. The WebLogic server’s bean configuration controls the transaction configuration.  This can be found in Deployments - <application name> - <bean name> - Configuration.  The Transaction Timeout is set at the bottom of the page. Other fine-tuning options are available here, such as the Max Beans in Free Pool, the Max Messages in a Transaction, etc.
 3. The WebLogic server’s Java Transaction API (JTA), located at Services – JTA – Configuration – JTA, controls several more XA configuration parameters.  In particular, the Maximum Duration of XA Calls can be changed here. 
 
 ## Working with Solace High Availability (HA)
 
-The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby appliance in the case of a HA failover of a Solace message router. By default Solace JMS connections will reconnect to the standby appliance in the case of an HA failover.
+The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace message router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
-Note: When using HA redundant appliances, a fail-over from one appliance to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
+Note: When using HA redundant message routers, a fail-over from one message router to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 
 In "Setting up Solace JNDI References", the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.
 
@@ -869,12 +869,12 @@ Before, starting, here is some background detail on the server certificate requi
   To enable the exchange of information through TLS/SSL-encrypted SMF service, 
   you must set the TLS/SSL server certificate file that the Solace message router
   is to use. This server certificate is presented to a client during the TLS/SSL
-  handshakes. A server certificate used by an appliance must be an x509v3 
+  handshakes. A server certificate used by an message router must be an x509v3 
   certificate and it must include a private key. The server certificate and key
   use an RSA algorithm for private key generation, encryption and decryption, 
   and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
 
-  The single server certificate file set for the appliance can have a maximum
+  The single server certificate file set for the message router can have a maximum
   chain depth of three (that is, the single certificate file can contain up to 
   three certificates in a chain that can be used for the certificate verification).
 ```
@@ -1103,9 +1103,9 @@ Upon receiving these exceptions the client application will know to create a new
 
 After a new session is established, the client application can republish any Guaranteed messages that had been sent but not acked on the previous session, as these message might not have been persisted and replicated.
 
-To avoid out-of-order messages, the application must maintain an unacked list that is added to before message publish and removed from on receiving an ack from the appliance. If a connection is re‑established to a different host in the hostlist, the unacked list must be resent before any new messages are published.
+To avoid out-of-order messages, the application must maintain an unacked list that is added to before message publish and removed from on receiving an ack from the message router. If a connection is re‑established to a different host in the hostlist, the unacked list must be resent before any new messages are published.
 
-Note: When sending persistent messages using the JMS API, a producer’s send message will not return until an acknowledgment is received from the appliance. Once received, it is safe to remove messages from the unacked list.
+Note: When sending persistent messages using the JMS API, a producer’s send message will not return until an acknowledgment is received from the message router. Once received, it is safe to remove messages from the unacked list.
 
 Alternatively, if the application has a way of determining the last replicated message—perhaps by reading from a last value queue—then the application can use that to determine where to start publishing.
 For integration with WebLogic, it’s important to consider this interaction in the context of a Message Driven Bean and Session Bean.

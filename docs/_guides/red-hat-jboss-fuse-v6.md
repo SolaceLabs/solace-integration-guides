@@ -37,8 +37,8 @@ These links contain information related to this guide:
 
 This integration guide demonstrates how to configure JBoss Fuse to send and receive JMS messages using a shared JMS connection. Accomplishing this requires completion of the following steps:
 
-* Step 1 – Configuration of the Solace Appliance.
-* Step 2 – Configuring JBoss Fuse to connect to the Solace appliance.
+* Step 1 – Configuration of the Solace Message Router.
+* Step 2 – Configuring JBoss Fuse to connect to the Solace Message Router.
 * Step 3 – Configuring JBoss Fuse to send messages using Solace JMS.
 * Step 4 – Configuring JBoss Fuse to receive messages using Solace JMS.
 
@@ -48,7 +48,7 @@ This integration guide will demonstrate creation of Solace resources and configu
 
 #### Solace Resources
 
-The following Solace appliance resources are required.
+The following Solace Message Router resources are required.
 
 <table>
     <tr>
@@ -59,7 +59,7 @@ The following Solace appliance resources are required.
     <tr>
     <td>Solace Message Router IP:Port</td>
     <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace appliance message backbone. This is the address client’s use when connecting to the Solace appliance to send and receive message. This document uses a value of __IP:PORT__.</td>
+    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
     </tr>
     <tr>
     <td>Message VPN</td>
@@ -114,21 +114,21 @@ The following Solace appliance resources are required.
     </tr>
 </table>
 
-### Step 1 – Configuring the Solace Appliance
+### Step 1 – Configuring the Solace Message Router
 
-The Solace appliance needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within JBoss Fuse:
+The Solace Message Router needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within JBoss Fuse:
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace appliance.
+* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Router.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace appliance configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace appliance CLI see [Solace-CLI]. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace-FG] section “User Authentication and Authorization”.
+For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace-CLI]. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace-FG] section “User Authentication and Authorization”.
 
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace appliance. This document uses CLI as the reference to remain concise.
+Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
 
 #### Creating a Message VPN
-This section outlines how to create a message-VPN called “Solace_Fuse_VPN” on the Solace appliance with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in JBoss Fuse configuration when connecting to the Solace messaging appliance. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called “Solace_Fuse_VPN” on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in JBoss Fuse configuration when connecting to the Solace Message Router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 (config)# create message-vpn Solace_Fuse_VPN
@@ -148,9 +148,9 @@ This section outlines how to create a message-VPN called “Solace_Fuse_VPN” o
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace appliance. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions. 
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Router. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions. 
 
-The chosen client username of “fuse_user” will be required by JBoss Fuse when connecting to the Solace appliance.
+The chosen client username of “fuse_user” will be required by JBoss Fuse when connecting to the Solace Message Router.
 
 ```
 (config)# client-profile default message-vpn Solace_Fuse_VPN
@@ -185,7 +185,7 @@ This integration guide shows receiving messages within JBoss Fuse from a single 
 
 ### Setting up Solace JNDI References
 
-To enable the JMS clients to connect and look up the Queue destination required by JBoss Fuse, there are two JNDI objects required on the Solace appliance:
+To enable the JMS clients to connect and look up the Queue destination required by JBoss Fuse, there are two JNDI objects required on the Solace Message Router:
 
 * A connection factory: JNDI/CF/fuse
 * A queue destination: JNDI/Q/requests
@@ -254,7 +254,7 @@ JBoss Fuse will be configured either through the Spring or the Blueprint depende
 
 ##### Option 1: JBoss Fuse Configuration using Spring configuration file
 
-It is necessary to create and deploy a Spring XML configuration file under the JBoss Fuse deploy folder. The following is a sample Spring configuration showing necessary configuration in order to successfully connect to the Solace appliance. The XML configuration file can have any name, e.g.: spring.xml 
+It is necessary to create and deploy a Spring XML configuration file under the JBoss Fuse deploy folder. The following is a sample Spring configuration showing necessary configuration in order to successfully connect to the Solace Message Router. The XML configuration file can have any name, e.g.: spring.xml 
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -303,7 +303,7 @@ It is necessary to create and deploy a Spring XML configuration file under the J
 </beans>
 ```
 
-The following table explains the configuration and its purpose when connecting to the Solace appliance.
+The following table explains the configuration and its purpose when connecting to the Solace Message Router.
 
 <table>
     <tr>
@@ -312,7 +312,7 @@ The following table explains the configuration and its purpose when connecting t
     </tr>
     <tr>
     <td>Solace.JndiTemplate</td>
-    <td>This template outlines general connection details for reaching the Solace JNDI hosted on the Solace appliance. The Solace JNDI is used to look up parameters for client connections and for destinations.</td>
+    <td>This template outlines general connection details for reaching the Solace JNDI hosted on the Solace Message Router. The Solace JNDI is used to look up parameters for client connections and for destinations.</td>
     </tr>
     <tr>
     <td>Solace.JndiObjectFactoryBean</td>
@@ -334,7 +334,7 @@ The following table explains the configuration and its purpose when connecting t
 
 ##### Option 2: JBoss Fuse Configuration using Blueprint configuration file
 
-Similarly to Option 1, it is necessary to create and deploy a Blueprint XML configuration file under the JBoss Fuse deploy folder. The following is a sample Blueprint configuration showing necessary configuration in order to successfully connect to the Solace appliance. The XML configuration file can have any name, e.g.: blueprint.xml 
+Similarly to Option 1, it is necessary to create and deploy a Blueprint XML configuration file under the JBoss Fuse deploy folder. The following is a sample Blueprint configuration showing necessary configuration in order to successfully connect to the Solace Message Router. The XML configuration file can have any name, e.g.: blueprint.xml 
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -458,12 +458,12 @@ Ideally, the value of the property “sessionCacheSize” should be kept equal t
     
 ## Working with Solace High Availability (HA)
 
-The [Solace-JMS-REF] section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby appliance in the case of a HA failover of a Solace appliance. By default Solace JMS connections will reconnect to the standby appliance in the case of an HA failover.
+The [Solace-JMS-REF] section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
 ```
-    Note: When using HA redundant appliances, a fail-over from one appliance to its mate will typically
+    Note: When using HA redundant message routers, a fail-over from one message router to its mate will typically
     occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 ```
 
@@ -519,7 +519,7 @@ FuseESB:karaf@root> config:update
 
 ### Authentication
 
-JMS Client authentication is handled by the Solace appliance. The Solace appliance supports a variety of authentications schemes as described in [Solace-FG] in the Section “Client Authentication and Authorization”.  The required JMS authentication properties can be set in the JndiTemplate configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of “fuse_user” and password of “fuse_password”.
+JMS Client authentication is handled by the Solace Message Router. The Solace Message Router supports a variety of authentications schemes as described in [Solace-FG] in the Section “Client Authentication and Authorization”.  The required JMS authentication properties can be set in the JndiTemplate configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of “fuse_user” and password of “fuse_password”.
 
 ```xml
 <bean id="Solace.JndiTemplate" class="org.springframework.jndi.JndiTemplate">
@@ -539,16 +539,16 @@ JMS Client authentication is handled by the Solace appliance. The Solace applian
 
 ### Using SSL Communication
 
-This section outlines how to update the Solace appliance and JBoss Fuse configuration to switch the client connection to using secure connections with the Solace appliance. For the purposes of illustration, this section uses a server certificate on the Solace appliance and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-FP] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.
+This section outlines how to update the Solace Message Router and JBoss Fuse configuration to switch the client connection to using secure connections with the Solace Message Router. For the purposes of illustration, this section uses a server certificate on the Solace Message Router and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-FP] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.
 
 To change a JBoss Fuse application from using a plain text connection to a secure connection you must do two things:
 
-1. The Solace appliance configuration must be updated 
+1. The Solace Message Router configuration must be updated 
 2. The Solace JMS configuration within JBoss Fuse.
 
-#### Configuring the Solace Appliance
+#### Configuring the Solace Message Router
 
-To enable secure connections to the Solace appliance, the following configuration must be updated on the Solace appliance:
+To enable secure connections to the Solace Message Router, the following configuration must be updated on the Solace Message Router:
 
 * Server Certificate
 * TLS/SSL Service Listen Port
@@ -558,21 +558,21 @@ The following sections outline how to configure these items.
 
 ##### Configure the Server Certificate
 
-Before, starting, here is some background detail on the server certificate required by the Solace appliance. This is from the [Solace-FP] section “Setting a Server Certificate”
+Before, starting, here is some background detail on the server certificate required by the Solace Message Router. This is from the [Solace-FP] section “Setting a Server Certificate”
 
 ```
     To enable the exchange of information through TLS/SSL-encrypted SMF service, you must set the TLS/SSL server
-    certificate file that the Solace appliance is to use. This server certificate is presented to a client during
-    the TLS/SSL handshakes. A server certificate used by an appliance must be an x509v3 certificate and
+    certificate file that the Solace Message Router is to use. This server certificate is presented to a client during
+    the TLS/SSL handshakes. A server certificate used by a message router must be an x509v3 certificate and
     it must include a private key. The server certificate and key use an RSA algorithm for private key generation,
     encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
 
-    The single server certificate file set for the appliance can have a maximum chain depth of three (that is,
+    The single server certificate file set for the message router can have a maximum chain depth of three (that is,
     the single certificate file can contain up to three certificates in a chain that can be used for the certificate
     verification).
 ```
 
-To configure the server certificate, first copy the server certificate to the Solace appliance. For the purposes of this example, assume the server certificate file is named “mycert.pem”.
+To configure the server certificate, first copy the server certificate to the Solace Message Router. For the purposes of this example, assume the server certificate file is named “mycert.pem”.
 
 ```
 # copy sftp://[<username>@]<ip-addr>/<remote-pathname>/mycert.pem /certs
@@ -580,7 +580,7 @@ To configure the server certificate, first copy the server certificate to the So
 #
 ```
 
-Then set the server certificate for the Solace appliance.
+Then set the server certificate for the Solace Message Router.
 
 ```
 (config)# ssl server-certificate mycert.pem
@@ -588,7 +588,7 @@ Then set the server certificate for the Solace appliance.
 
 ##### Configure TLS/SSL Service Listen Port
 
-By default, the Solace appliance accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace appliance and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.
+By default, the Solace Message Router accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace Message Router and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.
 
 ```
 (config)# service smf
@@ -637,7 +637,7 @@ Recall from above, originally, the “java.naming.provider.url” was as follows
     <prop key="java.naming.provider.url" value="smf://___IP:PORT___" />
 ```
 
-This specified a URI scheme of “smf” which is the plaint-text method of communicating with the Solace appliance. This should be updated to “smfs” to switch to secure communication giving you the following configuration:
+This specified a URI scheme of “smf” which is the plaint-text method of communicating with the Solace Message Router. This should be updated to “smfs” to switch to secure communication giving you the following configuration:
 
 ```xml
     <prop key="java.naming.provider.url" value="smfs://___IP:PORT___" />
@@ -645,9 +645,9 @@ This specified a URI scheme of “smf” which is the plaint-text method of comm
 
 ##### Adding SSL Related Configuration
 
-Additionally, the Solace JMS API must be able to validate the server certificate of the Solace appliance in order to establish a secure connection. To do this, the following trust store parameters need to be provided.
+Additionally, the Solace JMS API must be able to validate the server certificate of the Solace Message Router in order to establish a secure connection. To do this, the following trust store parameters need to be provided.
 
-First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace appliance server certificate during connection establishment. This parameter takes a URL or Path to the trust store file. 
+First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace Message Router server certificate during connection establishment. This parameter takes a URL or Path to the trust store file. 
 
 ```xml
     <prop key="Solace_JMS_SSL_TrustStore" value="___Path_or_URL___" />
@@ -733,7 +733,7 @@ For the `java.naming.provider.url` both the active site IP address and standby s
 
 In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
 
-The reconnect retries is tuned in the Solace appliance CLI as follows:
+The reconnect retries is tuned in the Solace Message Router CLI as follows:
 
 ```
 config)# jndi message-vpn Solace_Spring_VPN
