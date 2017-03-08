@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><configuration>
+<intAttribute key="com.apama.text.CONFIG_VERSION" value="3"/>
+<listAttribute key="com.apama.text.COMPONENTS">
+<listEntry>
+<component clear="true" correlatorLog="false" correlatorLogLocation="logs/${LAUNCH_CONFIG_NAME}_${CORRELATOR_NAME}.output.log" dataLocationDir="${project_loc:SolaceReceiver}/database/defaultCorrelator" distMemoryStoreEnabled="false" enabled="true" extraArguments="" hostname="localhost" inputLog="true" inputLogLocation="logs/defaultCorrelator_${START_TIME}_${ID}.input.log" isAutomaticOrdering="true" isPeristanceEnabled="false" javaEnabled="true" jmsResiliencyEnabled="true" logLevel="INFO" maxMBLocalHeap="512" maxMBLocalHeapEnabled="false" maxMBLocalOffHeap="16384" maxMBLocalOffHeapEnabled="false" name="defaultCorrelator" persistenceStartupOption="CLEAR_REINJECT" port="15903" reuse="false" type="CORRELATOR" umConfigurationEnabled="false" workingDir="/SolaceReceiver" xConfigEnabled="false" xConfigLocation="${project_loc:SolaceReceiver}/config/CorrelatorConfig.yaml">
+<runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/CorrelatorJMSEvents.mon" type="PROJECT_BUNDLE_MON_FILE">
+<attributes>
+<attribute name="bundle-name" value="Correlator-Integrated JMS"/>
+<attribute name="origin-path" value=""/>
+<attribute name="origin" value="ADAPTER_CATALOG"/>
+<attribute name="bundle-file" value="Correlator_JMS.bnd"/>
+<attribute name="bundle-display-name" value="Correlator-Integrated JMS"/>
+</attributes>
+</runtimeDependencyEntry>
+<runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/StatusSupport.mon" type="PROJECT_BUNDLE_MON_FILE">
+<attributes>
+<attribute name="bundle-name" value="Status Support"/>
+<attribute name="origin-path" value=""/>
+<attribute name="origin" value="ADAPTER_CATALOG"/>
+<attribute name="bundle-file" value="Correlator_JMS.bnd"/>
+<attribute name="bundle-display-name" value="Status Support"/>
+</attributes>
+</runtimeDependencyEntry>
+<runtimeDependencyEntry enabled="true" path="${APAMA_HOME}/monitors/CorrelatorJMSStatusManager.mon" type="PROJECT_BUNDLE_MON_FILE">
+<attributes>
+<attribute name="bundle-name" value="Correlator-Integrated JMS"/>
+<attribute name="origin-path" value=""/>
+<attribute name="origin" value="ADAPTER_CATALOG"/>
+<attribute name="bundle-file" value="Correlator_JMS.bnd"/>
+<attribute name="bundle-display-name" value="Correlator-Integrated JMS"/>
+</attributes>
+</runtimeDependencyEntry>
+<runtimeDependencyEntry enabled="true" path="/SolaceReceiver/monitors/SolaceSample.mon" type="PROJECT_MON_FILE"/>
+</component>
+</listEntry>
+</listAttribute>
+<booleanAttribute key="com.apama.text.OPEN_DASHBOARD_ATTR" value="true"/>
+<booleanAttribute key="com.apama.text.OPEN_DEFAULT_DASHBOARD_ATTR" value="true"/>
+<booleanAttribute key="com.apama.text.OPEN_ENABLE_DATAPLAYER_MODE_ATTR" value="false"/>
+<booleanAttribute key="com.apama.text.GENERATE_TIME_EVENTS_ATTR" value="true"/>
+</configuration>
