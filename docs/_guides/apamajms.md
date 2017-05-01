@@ -12,6 +12,12 @@ links:
 
 This document demonstrates how to integrate the Solace Java Message Service (JMS) with Apama Streaming Analytics for consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both Apama Streaming Analytics and Solace JMS. 
 
+![Sequence Diagram]({{ site.baseurl }}/images/apama-solace-sample/solace2apama.png)
+
+Apama CEP has been used in many real-time applications, i.e. HFT, trade surveillance, auto hedging, real-time betting, real-time analytics, real-time firewall and etc. Apama CEP has its place in streaming space with little footprint. Flink and Spark are all implemented in Java and Scala with inherited JVM disadvantages. [How can Apama’s EPL run faster than both C and Java®?](https://www.softwareag.com/corporate/images/SAG_Apama_EPL_FS_Jun14_Web_tcm16-122355.pdf)
+
+Solace has been the OPEN messaging leader in the industry, and is widely adopted by many financial firms and vertical industries. Solace's ultra wide bandwidth and low latency messaging router works well with Apama hand-in-hand.
+
 The target audience of this document is developers with knowledge of both Apama and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Apama refer to the referenced documents below.
 
 This document is divided into the following sections to cover the Solace JMS integration with Apama Streaming Analytics:
