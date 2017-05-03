@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<m:mappingInfo xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:m="urn:mappinginfo" xsi:schemaLocation="urn:mappinginfo mappingInfo.xsd">
+  <m:generateServiceMon>NCName</m:generateServiceMon>
+  <m:parameters>
+    <m:parameterMap name="" type="JMS_MESSAGE" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;mapping:messageMapping xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:mapping=&quot;http://www.apama.com/schema/mapping/1.0&quot; xmlns:metadata=&quot;http://www.apama.com/schema/mapping/toolingMetadata/1.0&quot;>&#xD;&#xA;  &lt;metadata:toolingMetadata xsi:type=&quot;metadata:toolingMetadata&quot;>&#xD;&#xA;    &lt;metadata:mapOutput>&#xD;&#xA;      &lt;metadata:source/>&#xD;&#xA;      &lt;metadata:target/>&#xD;&#xA;    &lt;/metadata:mapOutput>&#xD;&#xA;  &lt;/metadata:toolingMetadata>&#xD;&#xA;  &lt;mapping:mapInput/>&#xD;&#xA;  &lt;mapping:mapOutput>&#xD;&#xA;    &lt;mapping:property name=&quot;eventType&quot; value=&quot;com.solace.sample.SampleTextMessage&quot;/>&#xD;&#xA;    &lt;mapping:rule>&#xD;&#xA;      &lt;mapping:source>&lt;![CDATA[${jms.body.textmessage}]]>&lt;/mapping:source>&#xD;&#xA;      &lt;mapping:target>&lt;![CDATA[${apamaEvent['payload']}]]>&lt;/mapping:target>&#xD;&#xA;      &lt;mapping:action>&lt;![CDATA[None]]>&lt;/mapping:action>&#xD;&#xA;      &lt;mapping:type>&lt;![CDATA[BINDING_PARAM]]>&lt;/mapping:type>&#xD;&#xA;    &lt;/mapping:rule>&#xD;&#xA;    &lt;mapping:rule>&#xD;&#xA;      &lt;mapping:source>&lt;![CDATA[${jms.properties}]]>&lt;/mapping:source>&#xD;&#xA;      &lt;mapping:target>&lt;![CDATA[${apamaEvent['extraParam']}]]>&lt;/mapping:target>&#xD;&#xA;      &lt;mapping:action>&lt;![CDATA[None]]>&lt;/mapping:action>&#xD;&#xA;      &lt;mapping:type>&lt;![CDATA[BINDING_PARAM]]>&lt;/mapping:type>&#xD;&#xA;    &lt;/mapping:rule>&#xD;&#xA;  &lt;/mapping:mapOutput>&#xD;&#xA;  &lt;mapping:mapFault name=&quot;default_fault&quot;/>&#xD;&#xA;&lt;/mapping:messageMapping>">
+      <m:parameterMap name="" type="OUTPUT" value="com.solace.sample.SampleTextMessage">
+        <m:param name="" type="EXPRESSION" value="${jms.property['MESSAGE_TYPE']=='com.solace.sample.SampleTextMessage'}"/>
+      </m:parameterMap>
+    </m:parameterMap>
+  </m:parameters>
+  <m:events/>
+  <m:dbs/>
+</m:mappingInfo>
