@@ -1,5 +1,6 @@
 - title: Integration Guides
   guides:
+  - apamajms
   - flink-streaming-2-10
   - hermesjms
   - nagios
