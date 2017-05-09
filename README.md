@@ -2,7 +2,7 @@
 
 This project provides the markdown tutorials and supporting source code for these Integration Guides: http://dev.solace.com/integration-guides/.
 
-The integration guides attempt to make it easy to integrate Solace messaging into many divers environments. 
+The integration guides make it easy to integrate Solace messaging into many diverse environments. 
 
 ## Contributing
 
