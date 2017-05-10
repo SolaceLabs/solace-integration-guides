@@ -52,7 +52,7 @@ This integration guide demonstrates how to configure a Apama Streaming Analytics
 * Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](http://www.apamacommunity.com/downloads/){:target="_blank"}
 * Step 4 – Coding Solace message producer
 * Step 5 – Coding Apama Event Processing Language AKA MonitorScript
-* Step 6 - Configuring Apama correlator-integrated adapter for JMS either in the correlator-integrated adapter for JMS editor or by editing sections of the XML and .properties configuration files directly.
+* Step 6 - Configuring Apama correlator-integrated adapter for JMS
 * Step 7 - Starting up Apama correlator with correlator-integrated adapter for JMS
 
 ### Description of Resources Required
@@ -342,7 +342,7 @@ monitor SampleTopicReceiver {
 
 ### Step 6 – Configuring Apama correlator-integrated adapter for JMS
 
-From [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/documents/10.0.0.1/apama_10.0.0.1_connecting-apama-applications.pdf){:target="_blank"} there are details on how to set up JMS connection bundle. 
+From [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/documents/10.0.0.1/apama_10.0.0.1_connecting-apama-applications.pdf){:target="_blank"} there are details on how to set up JMS connection bundle.  JMS adapter can be configured either in the correlator-integrated adapter for JMS editor or by editing sections of the XML and .properties configuration files directly.
 
 The Apama correlator-integrated messaging for JMS configuration consists of a set of XML files and .properties files.
 
@@ -396,6 +396,10 @@ The message to event mapping is done in adapter editor. Manual changes to the ma
     </mapping:rule>
   </mapping:mapOutput>
 ```
+
+### Step 7 – Starting up Apama correlator with correlator-integrated adapter for JMS
+
+Starting up Apama correlator in development is done from Apama Workbench. For server deployment, please see From [Deploying and Managing Apama Applications](http://www.apamacommunity.com/documents/10.0.0.1/apama_10.0.0.1_deploying-apama-applications.pdf){:target="_blank"}.
 
 ## Working with Solace High Availability (HA)
 
