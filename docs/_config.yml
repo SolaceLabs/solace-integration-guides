@@ -12,6 +12,7 @@ links-docs-jms-api: http://docs.solace.com/API-Developer-Online-Ref-Documentatio
 links-docs-features: http://docs.solace.com/Features/Features-Intro.htm
 links-docs-router-config: http://docs.solace.com/Router-Configuration.htm
 links-docs-cli: http://docs.solace.com/CLI-Reference/Command_Line_Reference.html
+links-docs-auth: http://docs.solace.com/Configuring-and-Managing-Routers/Management-User-Authentication-Authorization.htm?Highlight=user%20authentication%20and%20authorization
 links-downloads: http://dev.solace.com/downloads
 links-vmr-getstarted: http://dev.solace.com/get-started/start-up-solace-messaging/
 links-jms-maven: https://mvnrepository.com/artifact/com.solacesystems/sol-jms
