@@ -1,0 +1,41 @@
+//*****************************************************************************
+// Title:         SolaceSample
+// Description:   SolaceSample description
+// Dependencies:  None
+// Author:        wsang
+//
+//*****************************************************************************
+
+
+
+package com.solace.sample;
+
+using com.apama.correlator.jms.JMSReceiverStatus;
+using com.apama.correlator.jms.JMS;
+
+event AppStarted
+{
+}
+
+event SampleTextMessage {
+	string payload;
+	dictionary<string, string> extraParam;
+}
+monitor SampleTopicReceiver {
+	action getSolaceMessage() {
+		on AppStarted() {
+			JMS.onApplicationInitialized();
+		}
+	}
+	action onload () {
+		getSolaceMessage();
+		on JMSReceiverStatus() as receiverStatus
+		{
+			log "Received receiverStatus from JMS: " + receiverStatus.toString() at INFO;
+			on all SampleTextMessage() as sampleTextMessage {
+				log "From JMS: " + sampleTextMessage.toString() at INFO;
+			}
+		}
+		route AppStarted();
+	}
+}

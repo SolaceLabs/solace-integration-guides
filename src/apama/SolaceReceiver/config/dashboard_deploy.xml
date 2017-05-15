@@ -1,0 +1,21 @@
+<dashboardDeployConfigs>
+  <deploy>
+    <property name="apama.rtv.name" value="solace"/>
+    <property name="apama.customName" value=""/>
+    <property name="apama.deployment.configName" value="My Config"/>
+    <property name="apama.displayserver.host" value="localhost"/>
+    <property name="apama.rtv.usePanel" value="false"/>
+    <property name="apama.deployment.overwrite" value="true"/>
+    <property name="apama.dataserver.host" value="localhost"/>
+    <property name="apama.displayserver.port" value="3279"/>
+    <property name="apama.rtv.main" value=""/>
+    <property name="apama.rtv.title" value=""/>
+    <property name="apama.rtv.update.period" value="1000"/>
+    <property name="apama.dataserver.port" value="3278"/>
+    <property name="apama.deployment" value="DISPSERVER"/>
+    <property name="apama.displayserver.refresh" value="10"/>
+    <property name="apama.deployment.location" value=""/>
+    <property name="apama.rtv.panel" value=""/>
+    <property name="apama.rtv.location" value="DASHBOARD_FOLDER_TOKEN"/>
+  </deploy>  
+</dashboardDeployConfigs>

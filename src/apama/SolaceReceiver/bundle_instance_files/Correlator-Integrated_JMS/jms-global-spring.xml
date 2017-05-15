@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans 
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jms="http://www.apama.com/schema/correlator-jms"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.apama.com/schema/correlator-jms http://www.apama.com/schema/correlator-jms.xsd"
+>
+	<description>
+		Global configuration beans that are shared across all the JMS 
+		connections configured for this Correlator. 
+	</description>
+	
+	<bean id="globalSenderSettings" class="com.apama.correlator.jms.config.JmsSenderSettings">
+		<!-- These logging options are for testing/diagnostics only and should 
+			not be enabled in a production system due to the possible 
+			performance impact 
+		-->
+		<property name="logJmsMessages" value="false"/>
+		<property name="logJmsMessageBodies" value="false"/>
+		<property name="logProductMessages" value="false"/>
+
+		<property name="logPerformanceBreakdown" value="false"/>
+		<property name="logDetailedStatus" value="false"/>
+	</bean>
+	
+	<bean id="globalReceiverSettings" class="com.apama.correlator.jms.config.JmsReceiverSettings">
+		
+		<property name="receiverFlowControl" value="false"/>
+		
+		<!-- These logging options are for testing/diagnostics only and should 
+			not be enabled in a production system due to the possible 
+			performance impact 
+		-->
+		<property name="logJmsMessages" value="false"/>
+		<property name="logJmsMessageBodies" value="true"/>
+		<property name="logProductMessages" value="false"/>
+		
+		<property name="logPerformanceBreakdownIntervalSecs" value="10"/>
+<!-- 		<property name="maxBatchIntervalMillis" value="100"/> -->
+		<property name="maxBatchSize" value="1"/>
+		
+		<property name="logPerformanceBreakdown" value="true"/>
+		<property name="logDetailedStatus" value="false"/>
+	</bean>
+
+	<!-- Required if persistence is enabled, ignored if not. -->
+	<bean id="reliableReceiveDatabase" class="com.apama.correlator.jms.config.DefaultReliableReceiveDatabase">
+	</bean>
+
+</beans>

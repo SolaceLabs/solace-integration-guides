@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lm:eCafModel xmlns:lm="http://www.progress.com/tools/caf/core/internal/logicalStructure/schema/v1.0" xmlns:prop="http://www.progress.com/tools/caf/core/internal/property/schema/v1.0/" version="1.0">
+  <lm:serviceCollection adapterType="JMS" usage="CONSUME">
+    <lm:services description="" displayName="solace" id="solace" serviceName="solace">
+      <lm:nodes id="solace_groupingNode" name="solace">
+        <lm:invocationOperationReference>
+          <lm:invocationIdentifier>
+            <lm:invocationId>solace</lm:invocationId>
+          </lm:invocationIdentifier>
+          <lm:operationDetails>
+            <lm:idlLocation></lm:idlLocation>
+            <lm:operationIdentifier>
+              <lm:operationName>solace</lm:operationName>
+            </lm:operationIdentifier>
+          </lm:operationDetails>
+          <lm:product>DEFAULT</lm:product>
+          <lm:springXmlLocation>/solace-spring.xml</lm:springXmlLocation>
+          <lm:name>solace</lm:name>
+          <lm:description></lm:description>
+          <lm:details>
+            <lm:adapterDetails>
+              <lm:properties>
+                <lm:properties name="Provider">Other</lm:properties>
+              </lm:properties>
+            </lm:adapterDetails>
+          </lm:details>
+          <lm:propertyDetails>
+            <lm:propertyFileLocation>/solace-spring.properties</lm:propertyFileLocation>
+            <prop:propertyCollection>
+              <prop:properties description="Connection factory JNDI lookup name" displayName="ConnectionFactory JNDI Lookup Name" mode="ADVANCED" name="connectionFactory.jndiName.solace" type="STRING" value="ConnectionFactory"/>
+              <prop:properties description=" The value of the property should be the fully qualified class name of the factory class that will create an initial context. " displayName="Initial context factory" mode="BASIC" name="java.naming.factory.initial" type="STRING" value="/jms/cf/default"/>
+              <prop:properties description="The value of the property should contain a URL string (e.g. ldap://somehost:389)." displayName="Provider URL" mode="BASIC" name="java.naming.provider.url" type="STRING" value="smf://192.168.4.167"/>
+              <prop:properties description="" displayName="JNDI Environment properties" mode="BASIC" name="jndiContext.environment.solace" type="CSV_MAP_NEWLINE" value="java.naming.factory.initial=/jms/cf/default&#xA;java.naming.provider.url=${jndiContext.environment.provider.url.solace}&#xA;"/>
+              <prop:properties description="" displayName="JNDI Provider URL property" mode="ADVANCED" name="jndiContext.environment.provider.url.solace" type="STRING" value="smf://192.168.4.167"/>
+              <prop:properties description="" displayName="JNDI Authentication UserName property" mode="ADVANCED" name="jndiContext.jndiAuthentication.username.solace" type="STRING" value=""/>
+              <prop:properties description="" displayName="JNDI Authentication Password property" mode="ADVANCED" name="jndiContext.jndiAuthentication.password.solace" type="STRING" value=""/>
+              <prop:properties description="" displayName="Connection User Name " mode="BASIC" name="connectionAuthentication.username.solace" type="STRING" value="default"/>
+              <prop:properties description="" displayName="Connection Password " mode="BASIC" name="connectionAuthentication.password.solace" type="PASSWORD" value=""/>
+              <prop:properties description="" displayName="Client ID " mode="ADVANCED" name="clientId.solace" type="STRING" value=""/>
+              <prop:properties description="Comma separated list of static receivers" displayName="Static receivers" mode="BASIC" name="staticReceiverList.solace" type="CSV_LIST_JMSDESTINATION" value=""/>
+              <prop:properties description="Default reliability setting for all receivers" displayName="Default receiver reliability" mode="ADVANCED" name="defaultReceiverReliability.solace" type="ENUM:BEST_EFFORT,AT_LEAST_ONCE,EXACTLY_ONCE,APP_CONTROLLED" value="BEST_EFFORT"/>
+              <prop:properties description="Default reliability setting for all senders" displayName="Default sender reliability" mode="ADVANCED" name="defaultSenderReliability.solace" type="ENUM:BEST_EFFORT,AT_LEAST_ONCE,EXACTLY_ONCE" value="BEST_EFFORT"/>
+              <prop:properties description="Classpath separated with semicolon" displayName="solace Connection Classpath " mode="BASIC" name="classpath.solace" type="CSV_LIST_CLASSPATH" value="${JMSProviderInstallDir.solace}/sol-common-7.2.2.100.jar;${JMSProviderInstallDir.solace}/sol-jcsmp-7.2.2.100.jar;${JMSProviderInstallDir.solace}/sol-jms-7.2.2.100.jar"/>
+            </prop:propertyCollection>
+          </lm:propertyDetails>
+        </lm:invocationOperationReference>
+      </lm:nodes>
+      <lm:propertyDetails/>
+    </lm:services>
+  </lm:serviceCollection>
+  <lm:propertyDetails/>
+</lm:eCafModel>

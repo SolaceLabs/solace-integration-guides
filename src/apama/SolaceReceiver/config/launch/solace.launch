@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="com.apama.text.launcher.monitorscriptApplication">
+<stringAttribute key="com.apama.text.CONFIG_LOCATION" value="\solace\config\launch\solace.deploy"/>
+<intAttribute key="com.apama.text.CONFIG_VERSION" value="3"/>
+<stringAttribute key="com.apama.text.PROJECT_ATTR" value="solace"/>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/solace"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="4"/>
+</listAttribute>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CAPTURE_IN_FILE" value="${workspace_loc}\correlator.log"/>
+<stringAttribute key="org.eclipse.debug.ui.ATTR_CONSOLE_ENCODING" value="UTF-8"/>
+<stringAttribute key="process_factory_id" value="com.apama.launching.core.processFactory"/>
+</launchConfiguration>

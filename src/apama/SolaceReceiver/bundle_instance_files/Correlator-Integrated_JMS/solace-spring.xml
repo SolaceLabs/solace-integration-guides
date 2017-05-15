@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:jms="http://www.apama.com/schema/correlator-jms"
+xsi:schemaLocation="
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.apama.com/schema/correlator-jms http://www.apama.com/schema/correlator-jms.xsd"
+> 
+
+	<jms:classpath classpath="${classpath.solace}">
+		<jms:connection id="solace">
+
+			<property name="clientId" value="${clientId.solace}" />
+
+			<property name="connectionAuthentication.username" value="${connectionAuthentication.username.solace}" />
+			<property name="connectionAuthentication.password" value="${connectionAuthentication.password.solace}" />
+
+			<property name="staticReceiverList" value="${staticReceiverList.solace}" />
+			
+			<property name="defaultReceiverReliability" value="${defaultReceiverReliability.solace}"/>
+			<property name="defaultSenderReliability" value="${defaultSenderReliability.solace}"/>
+			<property name="connectionFactory.jndiName" value="${connectionFactory.jndiName.solace}" />
+			<property name="jndiContext.environment">
+				<value>${jndiContext.environment.solace}</value>
+			</property>
+			<property name="jndiContext.jndiAuthentication.username" value="${jndiContext.jndiAuthentication.username.solace}" />
+			<property name="jndiContext.jndiAuthentication.password" value="${jndiContext.jndiAuthentication.password.solace}" />
+			
+		</jms:connection>
+		
+	</jms:classpath>
+</beans>
