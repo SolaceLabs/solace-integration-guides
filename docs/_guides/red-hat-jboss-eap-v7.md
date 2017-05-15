@@ -75,7 +75,7 @@ The Solace JCA 1.5 resource adapter is provided as a standalone RAR file and is 
     </tr>
     <tr>
     <td>Solace JCA 1.5 resource adapter stand-alone RAR file</td>
-    <td>http://dev.solace.com/downloads/download_jms-api/ or https://sftp.solacesystems.com/~{{customer}}/{{version}}/Topic_Routing/APIs/JMS/Current/{{release}}//sol-jms-ra-{{release}}.rar</td>
+    <td><a href="http://dev.solace.com/downloads/download_jms-api/" target="_top">http://dev.solace.com/downloads/download_jms-api/</a> or <br/> https://sftp.solacesystems.com/~[customer]/[version]/Topic_Routing/APIs/JMS/Current/[release]/sol-jms-ra-[release].rar</td>
     </tr>
 </table>
 
