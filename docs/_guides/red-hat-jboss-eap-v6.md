@@ -5,7 +5,7 @@ summary: The JBoss Application Server provides a comprehensive framework for app
 icon: red-hat-jboss-eap.png
 links:
    - label: Example Source Code - JBoss EAP v6
-     link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap-v7
+     link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap-v6
 ---
 
 ## Overview
@@ -579,7 +579,9 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
 ```
 
 Step 2 - Specify the value ‘com.solacesystems.jms.ra.outbound.ManagedJMSConnectionFactory‘ for the class-name attribute of the connection-definition.
+
 Step 3 - Edit the local jndi-name attribute of the connection factory as referenced by EJB code (for this example use the value ‘java:/jms/myCF’)
+
 Step 4 - Edit the connection-definition configuration property ‘ConnectionFactoryJndiName’ (for this example use the value ‘JNDI/Sol/CF‘)
 
 Note, values for ConnectionURL, MessageVPN, UserName and Password must also be specified for the JNDI lookup of the connection factory to succeed.  In this example, these values are inherited by the connection-definition from the Resource Adapter configuration properties (or alternatively the values may be specified directly as config-property entries of the JMS connection-definition).
@@ -783,7 +785,9 @@ Step 1 - Edit the Solace Resource Adapter definition in the ‘resource-adapters
 ```
 
 Step 2 - Specify the value ‘com.solacesystems.jms.ra.outbound.QueueProxy‘ for the class-name attribute of the admin-object.
+
 Step 3 - Edit the local JNDI name attribute value of the admin-object as referenced by EJB application code (for this example use the value ‘java:/jms/myReplyQueue’)
+
 Step 4 - Edit the value for the admin-object configuration property ‘Destination’ (for this example use the value ‘JNDI/Sol/Q/replies‘)
 
 The following table summarizes the values used for the administered object configuration properties:
@@ -1454,19 +1458,35 @@ When a disaster recovery switch-over occurs, the Solace JMS API must establish a
 ```
 Java and JMS APIs
 
-For client applications using the Java or JMS APIs, any sessions on which the clients have published Guaranteed messages will be destroyed after the switch‑over. To indicate the disconnect and loss of publisher flow:
+For client applications using the Java or JMS APIs, any sessions on which the
+clients have published Guaranteed messages will be destroyed after the switch‑over.
+To indicate the disconnect and loss of publisher flow:
 
--	The Java API will generate an exception from the JCSMPStreamingPublishCorrelatingEventHandler.handleErrorEx() that contains a subcode of JCSMPErrorResponseSubcodeEx.UNKNOWN_FLOW_NAME.
+- The Java API will generate an exception from the 
+  JCSMPStreamingPublishCorrelatingEventHandler.handleErrorEx() that contains a
+  subcode of JCSMPErrorResponseSubcodeEx.UNKNOWN_FLOW_NAME.
 
--	The JMS API will generate an exception from the javax.jms.ExceptionListener that contains the error code SolJMSErrorCodes.EC_UNKNOWN_FLOW_NAME_ERROR.
-Upon receiving these exceptions the client application will know to create a new session.
-After a new session is established, the client application can republish any Guaranteed messages that had been sent but not acked on the previous session, as these message might not have been persisted and replicated.
+- The JMS API will generate an exception from the javax.jms.ExceptionListener
+  that contains the error code SolJMSErrorCodes.EC_UNKNOWN_FLOW_NAME_ERROR.
+  Upon receiving these exceptions the client application will know to create
+  a new session.
 
-To avoid out-of-order messages, the application must maintain an unacked list that is added to before message publish and removed from on receiving an ack from the appliance. If a connection is re‑established to a different host in the hostlist, the unacked list must be resent before any new messages are published.
+After a new session is established, the client application can republish any 
+Guaranteed messages that had been sent but not acked on the previous session, 
+as these message might not have been persisted and replicated.
 
-Note: When sending persistent messages using the JMS API, a producer’s send message will not return until an acknowledgment is received from the appliance. Once received, it is safe to remove messages from the unacked list.
+To avoid out-of-order messages, the application must maintain an unacked list
+that is added to before message publish and removed from on receiving an ack 
+from the appliance. If a connection is re‑established to a different host in 
+the hostlist, the unacked list must be resent before any new messages are published.
 
-Alternatively, if the application has a way of determining the last replicated message—perhaps by reading from a last value queue—then the application can use that to determine where to start publishing.
+Note: When sending persistent messages using the JMS API, a producer’s send 
+message will not return until an acknowledgment is received from the appliance.
+Once received, it is safe to remove messages from the unacked list.
+
+Alternatively, if the application has a way of determining the last replicated
+message—perhaps by reading from a last value queue—then the application can use
+that to determine where to start publishing.
 ```
 
 For integration with JBoss, it’s important to consider this interaction in the context of a Message Driven Bean and Session Bean.
@@ -1487,11 +1507,11 @@ For JBoss applications that are sending messages, there is nothing specifically 
 
 There are some associated files you can use for reference:
 
-*    [ProducerSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v7/ProducerSB.java){:target="_blank"}
-*    [XAProducerSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v7/XAProducerSB.java){:target="_blank"}
-*    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v7/XAProducerBMTSB.java){:target="_blank"}
-*    [ConsumerMDB.java]({{ site.repository }}/blob/master/src/jboss-eap-v7/ConsumerMDB.java){:target="_blank"}
-*    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/jboss-eap-v7/XAConsumerMDB.java){:target="_blank"}
-*    [ejb-jar.xml]({{ site.repository }}/blob/master/src/jboss-eap-v7/ejb-jar.xml){:target="_blank"}
+*    [ProducerSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v6/ProducerSB.java){:target="_blank"}
+*    [XAProducerSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v6/XAProducerSB.java){:target="_blank"}
+*    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/jboss-eap-v6/XAProducerBMTSB.java){:target="_blank"}
+*    [ConsumerMDB.java]({{ site.repository }}/blob/master/src/jboss-eap-v6/ConsumerMDB.java){:target="_blank"}
+*    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/jboss-eap-v6/XAConsumerMDB.java){:target="_blank"}
+*    [ejb-jar.xml]({{ site.repository }}/blob/master/src/jboss-eap-v6/ejb-jar.xml){:target="_blank"}
 
 
