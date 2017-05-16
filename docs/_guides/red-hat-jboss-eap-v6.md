@@ -1,20 +1,20 @@
 ---
 layout: guides
-title: Red Hat JBoss EAP v7
+title: Red Hat JBoss EAP v6
 summary: The JBoss Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace message router.   
 icon: red-hat-jboss-eap.png
 links:
-   - label: Example Source Code - JBoss EAP v7
+   - label: Example Source Code - JBoss EAP v6
      link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap-v7
 ---
 
 ## Overview
 
-This document demonstrates how to integrate Solace Java Message Service (JMS) with the JBoss Application Server EAP 7.0 for production and consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both the application server and Solace JMS. 
+This document demonstrates how to integrate Solace Java Message Service (JMS) with the JBoss Application Server EAP 6.2 for production and consumption of JMS messages. The goal of this document is to outline best practices for this integration to enable efficient use of both the application server and Solace JMS. 
 
 The target audience of this document is developers using the JBoss Application Server with knowledge of both the JBoss Application Server and JMS in general. As such this document focuses on the technical steps required to achieve the integration. 
 
-Note this document provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter in JBoss EAP 7.0 (Enterprise Application Platform).  For detailed background on either Solace JMS or the JBoss Application Server refer to the referenced documents below.
+Note this document provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter in JBoss EAP 6.2 (Enterprise Application Platform).  For detailed background on either Solace JMS or the JBoss Application Server refer to the referenced documents below.
 
 This document is divided into the following sections to cover the Solace JMS integration with JBoss Application Server:
 
@@ -38,8 +38,8 @@ These links contain information related to this guide:
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
 * [Solace Message Router Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
-* [JBoss Enterprise Application Platform Documentation](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/){:target="_blank"}
-* [JBoss Enterprise Application Platform 7.0 Security Guide](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/7.0/how-to-configure-server-security/how-to-configure-server-security){:target="_blank"}
+* [JBoss Application Server Information Library](https://docs.jboss.org/author/display/AS7/Documentation){:target="_blank"}
+* [JBoss Enterprise Application Platform 6.2 Security Guide](https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6.2/pdf/Security_Guide/JBoss_Enterprise_Application_Platform-6.2-Security_Guide-en-US.pdf){:target="_blank"}
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112){:target="_blank"}
 
 
@@ -325,7 +325,8 @@ They are configured as follows (Note, ensure that the ‘xa’ property is set t
 
 Solace provides a JCA compliant Resource Adapter that can be deployed to the JBoss Application Server to allow Enterprise Java Beans to connect to Solace through a standard JCA interface.  This integration guide outlines the steps required to deploy the Solace resource adapter (provided as a stand-alone RAR file) to JBoss.  
 
-The release of JBoss EAP 7.0 introduced a new Modular Class Loading mechanism which provides fine-grained isolation of Java classes for deployed applications.  The following deployment instructions provide the steps to deploy the Solace JCA Resource Adapter as a JBoss Global Module.
+The release of JBoss EAP 6.2 introduced a new Modular Class Loading mechanism which provides fine-grained isolation of Java classes for deployed applications.  The following deployment instructions provide the steps to deploy the Solace JCA Resource Adapter as a JBoss Global Module.
+
 
 #### Resource Adapter Deployment Steps
 
@@ -440,22 +441,24 @@ i.	Start the JBoss Application Server with the following Java system property se
 
 ii.	The above Java system property may be configured in the JBoss application server $JBOSS_HOME/bin/standalone.conf file.  Refer to [JBOSS-REF] for alternate ways to configure these settings depending on your specific server configuration.
 
-Step 5 - Update the JBoss server configuration – ‘urn:jboss:domain:ee:4.0’ subsystem to specify the Solace Resource Adapter module as a Global Module:
+Step 5 - Update the JBoss server configuration – ‘urn:jboss:domain:ee:1.1’ subsystem to specify the Solace Resource Adapter module as a Global Module:
 
 ```xml
-<subsystem xmlns="urn:jboss:domain:ee:4.0">
+<subsystem xmlns="urn:jboss:domain:ee:1.1">
    <global-modules>
          <module name="com.solacesystems.ra" slot="main"/>
+         <module name="org.jboss.common-core" slot="main"/>
    </global-modules>
    <spec-descriptor-property-replacement>true</spec-descriptor-property-replacement>
    <jboss-descriptor-property-replacement>true</jboss-descriptor-property-replacement>
 </subsystem>
+
 ```
 
-Step 6 - Update the JBoss server configuration – ‘urn:jboss:domain:ejb3:4.0’ subsystem to specify the Solace Resource Adapter as the default adapter for Message-Driven-Beans:
+Step 6 - 1.	Update the JBoss server configuration – ‘urn:jboss:domain:ejb3:1.4’ subsystem to specify the Solace Resource Adapter as the default adapter for Message-Driven-Beans:
 
 ```xml
-<subsystem xmlns="urn:jboss:domain:ejb3:4.0">
+<subsystem xmlns="urn:jboss:domain:ejb3:1.4">
   :
    <mdb>
    	<resource-adapter-ref resource-adapter-name="com.solacesystems.ra"/>
@@ -464,10 +467,10 @@ Step 6 - Update the JBoss server configuration – ‘urn:jboss:domain:ejb3:4.0�
   :
 ```
 
-Step 7 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:4.0’ subsystem to add the minimum Solace Resource Adapter configuration.  Note, the resource adapter archive location is specified as a module path ‘com.solacesystems.ra’:
+Step 7 - 1.	Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:1.1’ subsystem to add the minimum Solace Resource Adapter configuration.  Note, the resource adapter archive location is specified as a module path ‘com.solacesystems.ra’:
 
 ```xml
-<subsystem xmlns="urn:jboss:domain:resource-adapters:4.0">
+<subsystem xmlns="urn:jboss:domain:resource-adapters:1.1">
   <resource-adapters>
      <resource-adapter id="com.solacesystems.ra">
         <module slot="main" id="com.solacesystems.ra"/>
@@ -493,7 +496,7 @@ The Solace resource adapter includes several custom properties for specifying co
 
 Steps to configure the Solace JCA Resource Adapter:
 
-Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:4.0’ subsystem and edit the configuration properties of the Solace Resource Adapter.  Update the values for the configuration properties  ‘ConnectionURL’, ‘UserName’, ‘Password’, and ‘MessageVPN’:
+Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:1.1’ subsystem and edit the configuration properties of the Solace Resource Adapter.  Update the values for the configuration properties  ‘ConnectionURL’, ‘UserName’, ‘Password’, and ‘MessageVPN’:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -506,6 +509,7 @@ Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-
     <connection-definitions/>
     <admin-objects/>
 </resource-adapter>
+
 ```
 
 Step 2 - ‘ConnectionURL’ property has the format ‘smf://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message router message-backbone VRF IP ).
@@ -547,7 +551,7 @@ smf://__IP:Port__
 
 Steps to configure a JCA connection factory (This example is for non-transacted messaging; refer to the section Working with XA Transactions for details on configuring XA enabled JCA connection factories):
 
-Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘resource-adapters:4.0’ subsystem of the JBoss application server configuration, and add a new connection-definition entry:
+Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘resource-adapters:1.1’ subsystem of the JBoss application server configuration, and add a new connection-definition entry:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -605,9 +609,9 @@ This example uses a Message-Driven-Bean to receive messages from the Solace JMS 
 
 #### Configuration
 
-In JBoss EAP 7.0, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace message router as well as other configuration options.  
+In JBoss EAP 6.2, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace message router as well as other configuration options.  
 
-Note the values for the attributes (‘propertyValue’) can take the form ‘${propertyName}’ where JBoss replaces the values if the spec-descriptor-property-replacement and / or jboss-descriptor-property-replacement JBoss server configuration properties are set to ‘true’ in the ‘urn:jboss:domain:ee:4.0’ subsystem (Refer to [JBOSS-REF] for further details).
+Note the values for the attributes (‘propertyValue’) can take the form ‘${propertyName}’ where JBoss replaces the values if the spec-descriptor-property-replacement and / or jboss-descriptor-property-replacement JBoss server configuration properties are set to ‘true’ in the ‘urn:jboss:domain:ee:1.1’ subsystem (Refer to [JBOSS-REF] for further details).
 
 ```
 @MessageDriven(
@@ -760,7 +764,7 @@ The connection factory used in this example was configured in Section 3.4 Step 3
 
 Steps to create a JCA administered object (of type Queue)
 
-Step 1 - Edit the Solace Resource Adapter definition in the ‘resource-adapters:4.0’ subsystem of the JBoss application server configuration and add a new admin-object entry:
+Step 1 - Edit the Solace Resource Adapter definition in the ‘resource-adapters:1.1’ subsystem of the JBoss application server configuration and add a new admin-object entry:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -954,7 +958,8 @@ To configure JNDI connection properties for JNDI lookups, set the corresponding 
 The key component for debugging integration issues with the Solace JMS API is to enable API logging. Enabling API logging from JBoss Application Server is described below.
 
 ### How to enable Solace JMS API logging
-Logging and the logging levels for Solace Resource Adapter Java packages can be enabled using Log4J style configuration in the JBoss ‘urn:jboss:domain:logging:3.0’ subsystem .  You can enable logging for one or more of the Solace Resource Adapter Java packages listed below.
+
+Logging and the logging levels for Solace Resource Adapter Java packages can be enabled using Log4J style configuration in the JBoss ‘urn:jboss:domain:logging:1.3’ subsystem .  You can enable logging for one or more of the Solace Resource Adapter Java packages listed below.
 
 Note the trace logs can be found in the JEE server logs directory (example: $JBOSS_HOME/standalone/server.log).
 
@@ -962,7 +967,7 @@ Steps to configure debug tracing for specific Solace API packages:
 
 Step 1 - Modify the JBoss server configuration:
 
-* In the sub-system ‘urn:jboss:domain:logging:3.0’, add  entries for one or more of the following Solace Resource Adapter packages (Update the logging level to one of ‘FATAL’, ‘ERROR’, ‘WARN’, ‘INFO’, ‘DEBUG’, or ‘TRACE’).
+* In the sub-system ‘urn:jboss:domain:logging:1.3’, add  entries for one or more of the following Solace Resource Adapter packages (Update the logging level to one of ‘FATAL’, ‘ERROR’, ‘WARN’, ‘INFO’, ‘DEBUG’, or ‘TRACE’).
 
 ```xml
 <subsystem xmlns="urn:jboss:domain:logging:3.0">
@@ -1107,7 +1112,7 @@ smfs://___IP:PORT___
 
 Steps to update the ConnectionURL configuration property of a Solace JMS Resource Adapter:
 
-Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:4.0’ subsystem and edit the configuration properties of the Solace Resource Adapter.  Update the values for the configuration properties  ‘ConnectionURL’:
+Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters:1.1’ subsystem and edit the configuration properties of the Solace Resource Adapter.  Update the values for the configuration properties  ‘ConnectionURL’:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -1165,7 +1170,7 @@ The following example allows SSL connectivity for connections made through a Sol
 
 Steps to update the ‘ExtendedProps’ configuration property of JMS connection factory:
 
-Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:4.0’ subsystem of the JBoss application server configuration and add or update a ‘config-property’ entry for the configuration property ’ExtendedProps’ for a specific JMS connection factory:
+Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:1.1’ subsystem of the JBoss application server configuration and add or update a ‘config-property’ entry for the configuration property ’ExtendedProps’ for a specific JMS connection factory:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -1218,7 +1223,7 @@ To enable XA Recovery for specific JCA connection factories in JBoss the custome
 
 Steps to enable XA-recovery for a JCA connection factory:
 
-Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:4.0’ subsystem of the JBoss application server configuration and add or update the ‘recovery’ sign-on credentials.  The user-name and password values may be specified using replaceable JBoss property names (Example: ‘${solace.recovery.user}’).  Note the property ‘solace.recovery.user’ may be defined in the JBoss Server Bootstrap Script Configuration file (Example: <JBOSS_HOME>/bin/standalone.conf by setting JAVA_OPTS=”$JAVA_OPTS –Dsolace.recovery.user=solace_user”):
+Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:1.1’ subsystem of the JBoss application server configuration and add or update the ‘recovery’ sign-on credentials.  The user-name and password values may be specified using replaceable JBoss property names (Example: ‘${solace.recovery.user}’).  Note the property ‘solace.recovery.user’ may be defined in the JBoss Server Bootstrap Script Configuration file (Example: <JBOSS_HOME>/bin/standalone.conf by setting JAVA_OPTS=”$JAVA_OPTS –Dsolace.recovery.user=solace_user”):
 
 ```xml
   <connection-definitions>
