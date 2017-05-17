@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flowController encoding-version="1.0">
+  <maxTimerDrivenThreadCount>10</maxTimerDrivenThreadCount>
+  <maxEventDrivenThreadCount>5</maxEventDrivenThreadCount>
+  <rootGroup>
+    <id>86dbea3a-015b-1000-f5c0-3bb3f4221118</id>
+    <name>NiFi Flow</name>
+    <position x="0.0" y="0.0"/>
+    <comment/>
+    <processor>
+      <id>f0248670-015b-1000-b79c-ce5fd19ffde2</id>
+      <name>ConsumeJMS</name>
+      <position x="2107.481414794922" y="703.399658203125"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.jms.processors.ConsumeJMS</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>STOPPED</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <executionNode>ALL</executionNode>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Connection Factory Service</name>
+        <value>fa5ff488-015b-1000-5674-9ddc019790ae</value>
+      </property>
+      <property>
+        <name>Destination Name</name>
+        <value>toNifi</value>
+      </property>
+      <property>
+        <name>Destination Type</name>
+        <value>QUEUE</value>
+      </property>
+      <property>
+        <name>User Name</name>
+        <value>default@default</value>
+      </property>
+      <property>
+        <name>Password</name>
+      </property>
+      <property>
+        <name>Session Cache size</name>
+        <value>1</value>
+      </property>
+      <property>
+        <name>Acknowledgement Mode</name>
+        <value>1</value>
+      </property>
+    </processor>
+    <processor>
+      <id>f8c44a6d-015b-1000-8a73-f6905fc634c3</id>
+      <name>PublishJMS</name>
+      <position x="2106.8836503887887" y="1022.3641144327603"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.jms.processors.PublishJMS</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>STOPPED</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <executionNode>ALL</executionNode>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Connection Factory Service</name>
+        <value>fa5ff488-015b-1000-5674-9ddc019790ae</value>
+      </property>
+      <property>
+        <name>Destination Name</name>
+        <value>fromNifi</value>
+      </property>
+      <property>
+        <name>Destination Type</name>
+        <value>QUEUE</value>
+      </property>
+      <property>
+        <name>User Name</name>
+        <value>publisher</value>
+      </property>
+      <property>
+        <name>Password</name>
+        <value>enc{86E98AF04EC74CA6684577E2AC9C5A6C01D283F2C4B10D31CF87C33E2C218DEA}</value>
+      </property>
+      <property>
+        <name>Session Cache size</name>
+        <value>1</value>
+      </property>
+      <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+    </processor>
+    <processor>
+      <id>fa0e2278-015b-1000-f537-1278ad97b17e</id>
+      <name>PublishJMS</name>
+      <position x="2766.382856824029" y="703.025474162421"/>
+      <styles/>
+      <comment/>
+      <class>org.apache.nifi.jms.processors.PublishJMS</class>
+      <maxConcurrentTasks>1</maxConcurrentTasks>
+      <schedulingPeriod>0 sec</schedulingPeriod>
+      <penalizationPeriod>30 sec</penalizationPeriod>
+      <yieldPeriod>1 sec</yieldPeriod>
+      <bulletinLevel>WARN</bulletinLevel>
+      <lossTolerant>false</lossTolerant>
+      <scheduledState>STOPPED</scheduledState>
+      <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
+      <executionNode>ALL</executionNode>
+      <runDurationNanos>0</runDurationNanos>
+      <property>
+        <name>Connection Factory Service</name>
+        <value>fa5ff488-015b-1000-5674-9ddc019790ae</value>
+      </property>
+      <property>
+        <name>Destination Name</name>
+        <value>T/fromNifi</value>
+      </property>
+      <property>
+        <name>Destination Type</name>
+        <value>TOPIC</value>
+      </property>
+      <property>
+        <name>User Name</name>
+      </property>
+      <property>
+        <name>Password</name>
+      </property>
+      <property>
+        <name>Session Cache size</name>
+        <value>1</value>
+      </property>
+      <autoTerminatedRelationship>success</autoTerminatedRelationship>
+      <autoTerminatedRelationship>failure</autoTerminatedRelationship>
+    </processor>
+    <connection>
+      <id>fa0f1187-015b-1000-794c-8a099648b7b3</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>f0248670-015b-1000-b79c-ce5fd19ffde2</sourceId>
+      <sourceGroupId>86dbea3a-015b-1000-f5c0-3bb3f4221118</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>fa0e2278-015b-1000-f537-1278ad97b17e</destinationId>
+      <destinationGroupId>86dbea3a-015b-1000-f5c0-3bb3f4221118</destinationGroupId>
+      <destinationType>PROCESSOR</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>10000</maxWorkQueueSize>
+      <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <connection>
+      <id>f8c5121d-015b-1000-8643-fb5f3367bd04</id>
+      <name/>
+      <bendPoints/>
+      <labelIndex>1</labelIndex>
+      <zIndex>0</zIndex>
+      <sourceId>f0248670-015b-1000-b79c-ce5fd19ffde2</sourceId>
+      <sourceGroupId>86dbea3a-015b-1000-f5c0-3bb3f4221118</sourceGroupId>
+      <sourceType>PROCESSOR</sourceType>
+      <destinationId>f8c44a6d-015b-1000-8a73-f6905fc634c3</destinationId>
+      <destinationGroupId>86dbea3a-015b-1000-f5c0-3bb3f4221118</destinationGroupId>
+      <destinationType>PROCESSOR</destinationType>
+      <relationship>success</relationship>
+      <maxWorkQueueSize>10000</maxWorkQueueSize>
+      <maxWorkQueueDataSize>1 GB</maxWorkQueueDataSize>
+      <flowFileExpiration>0 sec</flowFileExpiration>
+    </connection>
+    <controllerService>
+      <id>fa5ff488-015b-1000-5674-9ddc019790ae</id>
+      <name>JNDIConnectionFactoryProvider</name>
+      <comment/>
+      <class>org.apache.nifi.jms.cf.JNDIConnectionFactoryProvider</class>
+      <enabled>true</enabled>
+      <property>
+        <name>cf</name>
+        <value>com.solacesystems.jndi.SolJNDIInitialContextFactory</value>
+      </property>
+      <property>
+        <name>cflib</name>
+        <value>c:\proj\soljar</value>
+      </property>
+      <property>
+        <name>broker</name>
+        <value>192.168.56.101</value>
+      </property>
+      <property>
+        <name>cfname</name>
+        <value>/jms/cf/default</value>
+      </property>
+      <property>
+        <name>User Name</name>
+        <value>default@default</value>
+      </property>
+      <property>
+        <name>Password</name>
+      </property>
+      <property>
+        <name>SSL Context Service</name>
+      </property>
+    </controllerService>
+  </rootGroup>
+  <controllerServices/>
+  <reportingTasks/>
+</flowController>
