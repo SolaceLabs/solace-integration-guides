@@ -214,6 +214,31 @@ They are configured as follows:
 
 ### Step 3 – Developing a Solace JMS application to do message PubSub via JNDI
 
+**URL**
+
+Solace JNDI lookup must have valid username and password in URL using uses the following format: <URI Scheme>://[username]:[password]@<IP address>[:port] The VPN name can be part of the username in the form of "username@vpnname". 
+
+Where:
+
+URI Scheme is the uniform resource identifier (URI) scheme used for the JNDI lookup. The valid values are:
+
+  * ***smf*** — use plain-text over SMF for communications between the application and the host. SMF is the default.
+  * ***smfs*** — use TLS/ SSL protocols over SMF for secure communications between the application and the host
+
+***username*** is the user name that is required to authenticate a client connecting to the host. A client username can be used by a single or by multiple JMS clients.
+
+***password*** is the username password for the connection when authentication is required.
+
+***IP address*** is the IP address (or hostname) of the host. To specify a prioritized list of hosts that a client can attempt to connect to, list each IP address, in order of importance, separated by a comma.
+
+***port*** is the port number to use to establish the connection. A value is only required when the client needs to use a port other than the automatically‑assigned default port number. The default port number for is 55555 when compression is not in use, or 55003 when compression is in use. The default port for TLS/SSL connections is 55443 (note that compression is not available when TLS/SSL is used).
+
+**Note**: The provided URL parameters are used for both a JNDI connection and a JMS data connection. This is useful when both the JNDI and JMS data connections are for a Solace router that provides JNDI and JMS service. However, when the JNDI store to be used is hosted on an LDAP server, and the Solace router is only used for the JMS broker, the specified URL parameters, which are used for the JNDI connection, can be overridden by parameters specified in the Connection Factory when creating a JMS connection.
+
+  * Type: String
+  * Format: smf://username:password@ipaddress:port
+  * Default: None
+
 **Solace JMS JNDI project**
 
 - Look up connection factory by setting up Solace properties. Solace lookup must have valid user name and password to return successfully.
@@ -222,10 +247,7 @@ They are configured as follows:
     // The client needs to specify all of the following properties:
     Properties env = new Properties();
     env.put(InitialContext.INITIAL_CONTEXT_FACTORY, "com.solacesystems.jndi.SolJNDIInitialContextFactory");
-    env.put(InitialContext.PROVIDER_URL, IP_ADDRESS);
-    env.put(SupportedProperty.SOLACE_JMS_VPN, "default"); 
-    env.put(Context.SECURITY_PRINCIPAL, "nifi");
-    env.put(Context.SECURITY_CREDENTIALS, "");
+    env.put(InitialContext.PROVIDER_URL, "<URI Scheme>://[username]:[password]@<IP address>[:port]");
 
     // InitialContext is used to lookup the JMS administered objects.
     InitialContext initialContext = new InitialContext(env);
@@ -312,7 +334,7 @@ Changes are made as following:
 
 1. New Classes
   
-    * JNDIConnectionFactoryProvider builds up a new connection factory from JNDI lookup. Solace JNDI lookup must have valid username and password. The VPN name can be part of the username in the form of "username@vpnname". The code splits out username and vpn name. Password is not required if it is empty on VPN.
+    * JNDIConnectionFactoryProvider builds up a new connection factory from JNDI lookup. PROVIDER_URL value is identical to PROVIDER_URL used in the Solace project.
       
       * nifi-jms-cf-service\src\main\java\org\apache\nifi\jms\cf\JNDIConnectionFactoryProvider.java
       
