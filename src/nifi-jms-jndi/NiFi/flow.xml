@@ -20,7 +20,7 @@
       <yieldPeriod>1 sec</yieldPeriod>
       <bulletinLevel>WARN</bulletinLevel>
       <lossTolerant>false</lossTolerant>
-      <scheduledState>STOPPED</scheduledState>
+      <scheduledState>RUNNING</scheduledState>
       <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
       <executionNode>ALL</executionNode>
       <runDurationNanos>0</runDurationNanos>
@@ -55,7 +55,7 @@
     <processor>
       <id>f8c44a6d-015b-1000-8a73-f6905fc634c3</id>
       <name>PublishJMS</name>
-      <position x="2106.8836503887887" y="1022.3641144327603"/>
+      <position x="2106.8836503887887" y="1026.4893585733853"/>
       <styles/>
       <comment/>
       <class>org.apache.nifi.jms.processors.PublishJMS</class>
@@ -65,7 +65,7 @@
       <yieldPeriod>1 sec</yieldPeriod>
       <bulletinLevel>WARN</bulletinLevel>
       <lossTolerant>false</lossTolerant>
-      <scheduledState>STOPPED</scheduledState>
+      <scheduledState>RUNNING</scheduledState>
       <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
       <executionNode>ALL</executionNode>
       <runDurationNanos>0</runDurationNanos>
@@ -87,7 +87,7 @@
       </property>
       <property>
         <name>Password</name>
-        <value>enc{86E98AF04EC74CA6684577E2AC9C5A6C01D283F2C4B10D31CF87C33E2C218DEA}</value>
+        <value>enc{236C6D4C6F00A4AA52891863C179538AD41F2B1B4F80E7FF24BACCBECAEFA172}</value>
       </property>
       <property>
         <name>Session Cache size</name>
@@ -109,7 +109,7 @@
       <yieldPeriod>1 sec</yieldPeriod>
       <bulletinLevel>WARN</bulletinLevel>
       <lossTolerant>false</lossTolerant>
-      <scheduledState>STOPPED</scheduledState>
+      <scheduledState>RUNNING</scheduledState>
       <schedulingStrategy>TIMER_DRIVEN</schedulingStrategy>
       <executionNode>ALL</executionNode>
       <runDurationNanos>0</runDurationNanos>
@@ -138,6 +138,33 @@
       <autoTerminatedRelationship>success</autoTerminatedRelationship>
       <autoTerminatedRelationship>failure</autoTerminatedRelationship>
     </processor>
+    <label>
+      <id>015c1002-44b4-1cf3-65a9-fbed025551f4</id>
+      <position x="2301.5105346847386" y="982.522410137607"/>
+      <size height="26.12592315673828" width="243.3838653564453"/>
+      <styles>
+        <style name="font-size">18px</style>
+      </styles>
+      <value>To Solace queue 'fromNifi'</value>
+    </label>
+    <label>
+      <id>015c1000-44b4-1cf3-14df-df76504b7ba7</id>
+      <position x="2814.4043682282263" y="662.1359245270822"/>
+      <size height="26.12592315673828" width="243.3838653564453"/>
+      <styles>
+        <style name="font-size">18px</style>
+      </styles>
+      <value>To Solace topic 'T/fromNifi'</value>
+    </label>
+    <label>
+      <id>0cf344b4-015c-1000-e352-fe15af1f1920</id>
+      <position x="2150.1670960093475" y="652.7505185761459"/>
+      <size height="31.62619972229004" width="226.19602966308594"/>
+      <styles>
+        <style name="font-size">18px</style>
+      </styles>
+      <value>From Solace queue 'toNifi'</value>
+    </label>
     <connection>
       <id>fa0f1187-015b-1000-794c-8a099648b7b3</id>
       <name/>
@@ -188,18 +215,11 @@
       </property>
       <property>
         <name>broker</name>
-        <value>192.168.56.101</value>
+        <value>smf://nifi@192.168.56.101:55555</value>
       </property>
       <property>
         <name>cfname</name>
         <value>/jms/cf/default</value>
-      </property>
-      <property>
-        <name>User Name</name>
-        <value>default@default</value>
-      </property>
-      <property>
-        <name>Password</name>
       </property>
       <property>
         <name>SSL Context Service</name>
