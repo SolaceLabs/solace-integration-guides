@@ -643,26 +643,26 @@ By default info logs will be written to the console. This section will focus on 
 Below is an example Log4j2 properties file that will enable debug logging within the Solace JMS API.
 
 ``` properties
-        name=PropertiesConfig
-        property.filename = logs
-        appenders = console, file
-        appender.console.type = Console
-        appender.console.name = STDOUT
-        appender.console.layout.type = PatternLayout
-        appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
-        appender.file.type = File
-        appender.file.name = LOGFILE
-        appender.file.fileName=${filename}/propertieslogs.log
-        appender.file.layout.type=PatternLayout
-        appender.file.layout.pattern=[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
-        loggers=file
-        logger.file.name=solacJms.log
-        logger.file.level = debug
-        logger.file.appenderRefs = file
-        logger.file.appenderRef.file.ref = LOGFILE
-        rootLogger.level = debug
-        rootLogger.appenderRefs = stdout
-        rootLogger.appenderRef.stdout.ref = STDOUT
+    name=PropertiesConfig
+    property.filename = logs
+    appenders = console, file
+    appender.console.type = Console
+    appender.console.name = STDOUT
+    appender.console.layout.type = PatternLayout
+    appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+    appender.file.type = File
+    appender.file.name = LOGFILE
+    appender.file.fileName=${filename}/propertieslogs.log
+    appender.file.layout.type=PatternLayout
+    appender.file.layout.pattern=[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
+    loggers=file
+    logger.file.name=solacJms.log
+    logger.file.level = debug
+    logger.file.appenderRefs = file
+    logger.file.appenderRef.file.ref = LOGFILE
+    rootLogger.level = debug
+    rootLogger.appenderRefs = stdout
+    rootLogger.appenderRef.stdout.ref = STDOUT
 ```
 
 With Log4j2 properties file in classpath, you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.
