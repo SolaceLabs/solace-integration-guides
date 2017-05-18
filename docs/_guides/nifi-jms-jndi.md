@@ -640,39 +640,31 @@ The key component for debugging integration issues with the Solace JMS API is th
 
 ### How to enable Solace JMS API logging
 
-Solace JMS API makes use of the Jakarta Commons Logging API (JCL). The following example shows how to enable debug logging in the Solace JMS API using log4j2.
+Solace JMS API makes use of the Jakarta Commons Logging API (JCL). The following example shows how to enable debug logging in the Solace JMS API using log4j.
 
-By default info logs will be written to the console. This section will focus on using log4j2 as the logging library and tuning Solace JMS API logs using the log4j2 properties. Therefore in order to enable Solace JMS API logging, a user must do two things:
+By default info logs will be written to the console. This section will focus on using log4j as the logging library and tuning Solace JMS API logs using the log4j properties. Therefore in order to enable Solace JMS API logging, a user must do two things:
 
-* Put Log4j2 on the classpath.
-* Create a log4j2.properties configuration file in the root folder of the classpath
+* Put Log4j on the classpath.
+* Create a log4j.properties configuration file in the root folder of the classpath
 
-Below is an example Log4j2 properties file that will enable debug logging within the Solace JMS API.
+Below is an example Log4j properties file that will enable debug logging within the Solace JMS API.
 
 ``` properties
-    name=PropertiesConfig
-    property.filename = logs
-    appenders = console, file
-    appender.console.type = Console
-    appender.console.name = STDOUT
-    appender.console.layout.type = PatternLayout
-    appender.console.layout.pattern = [%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
-    appender.file.type = File
-    appender.file.name = LOGFILE
-    appender.file.fileName=${filename}/propertieslogs.log
-    appender.file.layout.type=PatternLayout
-    appender.file.layout.pattern=[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n
-    loggers=file
-    logger.file.name=solacJms.log
-    logger.file.level = debug
-    logger.file.appenderRefs = file
-    logger.file.appenderRef.file.ref = LOGFILE
-    rootLogger.level = debug
-    rootLogger.appenderRefs = stdout
-    rootLogger.appenderRef.stdout.ref = STDOUT
+log4j.rootLogger=info, stdout
+log4j.appender.Appender1=org.apache.log4j.ConsoleAppender
+log4j.appender.Appender1.layout=org.apache.log4j.PatternLayout
+log4j.appender.Appender1.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+log4j.appender.Appender2=org.apache.log4j.FileAppender
+log4j.appender.Appender2.File=applog.txt
+log4j.appender.Appender2.layout=org.apache.log4j.PatternLayout
+log4j.appender.Appender2.layout.ConversionPattern=%-7p %d [%t] %c %x - %m%n
+
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} | %-5.5p | %-16.16t | %-32.32c{1} | %-32.32C %5L | %m%n
 ```
 
-With Log4j2 properties file in classpath, you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.
+With Log4j properties file in classpath, you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.
 
         [DEBUG] 2017-05-16 15:27:13.418 [main] ClientRequestResponse - Starting request timer (SMP-EstablishP2pSub) (10000 ms)
         [DEBUG] 2017-05-16 15:27:13.430 [Context_2_ReactorThread] ClientRequestResponse - Stopping request timer (SMP-EstablishP2pSub)
@@ -699,6 +691,5 @@ NiFi '~\NiFi\conf\logback.xml' has configurable setting for tracing and debuggin
 A working sample with maven pom build is provided in GitHub with this guide:
 
 *    [src/nifi-jms-jndi]({{ site.repository }}/blob/master/src/nifi-jms-jndi){:target="_blank"}
-
 
 
