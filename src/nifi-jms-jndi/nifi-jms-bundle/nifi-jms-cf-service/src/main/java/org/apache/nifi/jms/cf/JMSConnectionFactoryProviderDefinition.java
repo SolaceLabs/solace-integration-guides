@@ -63,7 +63,7 @@ public interface JMSConnectionFactoryProviderDefinition extends ControllerServic
             .name(BROKER)
             .displayName("Broker URI")
             .description("URI pointing to the network location of the JMS Message broker. For example, "
-                      + "'tcp://myhost:61616' for ActiveMQ or 'myhost:1414' for IBM MQ or 'myhost' for Solace")
+                      + "'tcp://myhost:61616' for ActiveMQ or 'myhost:1414' for IBM MQ or 'smf://user:pwd@192.168.56.101:55555' for Solace")
             .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
             .required(true)
             .expressionLanguageSupported(true)
@@ -83,23 +83,6 @@ public interface JMSConnectionFactoryProviderDefinition extends ControllerServic
             .required(true)
             .expressionLanguageSupported(false)
             .build();
-    
-    static final PropertyDescriptor JNDI_USER = new PropertyDescriptor.Builder()
-            .name("User Name")
-            .description("User Name used for authentication and authorization. (i.e., Solace must have clientname@solaceVpn specified)")
-            .required(false)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .build();
-    
-    static final PropertyDescriptor JNDI_PASSWORD = new PropertyDescriptor.Builder()
-            .name("Password")
-            .description("Password used for authentication and authorization.")
-            .required(false)
-            .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
-            .sensitive(true)
-            .build();
-    
- 
 
     /**
      * Returns an instance of the {@link ConnectionFactory} specific to the

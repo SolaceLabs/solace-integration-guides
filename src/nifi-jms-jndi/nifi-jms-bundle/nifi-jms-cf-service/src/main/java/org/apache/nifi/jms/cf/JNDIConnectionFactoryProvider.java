@@ -70,7 +70,7 @@ public class JNDIConnectionFactoryProvider extends AbstractControllerService imp
     private static final List<PropertyDescriptor> propertyDescriptors;
 
     static {
-        propertyDescriptors = Collections.unmodifiableList(Arrays.asList(CONNECTION_FACTORY_IMPL, CLIENT_LIB_DIR_PATH, BROKER_URI, JNDI_CF_LOOKUP, JNDI_USER, JNDI_PASSWORD, SSL_CONTEXT_SERVICE));
+        propertyDescriptors = Collections.unmodifiableList(Arrays.asList(CONNECTION_FACTORY_IMPL, CLIENT_LIB_DIR_PATH, BROKER_URI, JNDI_CF_LOOKUP, SSL_CONTEXT_SERVICE));
     }
 
     private volatile boolean configured;
@@ -264,21 +264,7 @@ public class JNDIConnectionFactoryProvider extends AbstractControllerService imp
         try {
             env.put(InitialContext.INITIAL_CONTEXT_FACTORY, connectionFactoryImplName);
             env.put(InitialContext.PROVIDER_URL, getContextValue(context, BROKER_URI));
-            if (isSolace(context)) {
 
-                String user = getContextValue(context, JNDI_USER);
-                if (user != null || user.length() > 0) {
-                    String clnNames[] = user.split("@");
-                    if (clnNames.length == 2) {
-                        env.put("Solace_JMS_VPN", clnNames[1]);
-                    }
-                    env.put(Context.SECURITY_PRINCIPAL, clnNames[0]);
-                    String pass = getContextValue(context, JNDI_PASSWORD);
-                    if (pass != null && pass.length() > 0) {
-                        env.put(Context.SECURITY_CREDENTIALS, pass);
-                    }
-                }
-            } 
             InitialContext initialContext = new InitialContext(env);
             this.connectionFactory = (ConnectionFactory) initialContext.lookup(context.getProperty(JNDI_CF_LOOKUP).evaluateAttributeExpressions().getValue());
             if (logger.isDebugEnabled())
