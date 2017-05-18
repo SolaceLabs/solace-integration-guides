@@ -346,21 +346,6 @@ Changes are made as following:
                 try {
                     env.put(InitialContext.INITIAL_CONTEXT_FACTORY, connectionFactoryImplName);
                     env.put(InitialContext.PROVIDER_URL, getContextValue(context, BROKER_URI));
-                    if (isSolace(context)) {
-
-                        String user = getContextValue(context, JNDI_USER);
-                        if (user != null || user.length() > 0) {
-                            String clnNames[] = user.split("@");
-                            if (clnNames.length == 2) {
-                                env.put("Solace_JMS_VPN", clnNames[1]);
-                            }
-                            env.put(Context.SECURITY_PRINCIPAL, clnNames[0]);
-                            String pass = getContextValue(context, JNDI_PASSWORD);
-                            if (pass != null && pass.length() > 0) {
-                                env.put(Context.SECURITY_CREDENTIALS, pass);
-                            }
-                        }
-                    } 
                     InitialContext initialContext = new InitialContext(env);
                     this.connectionFactory = (ConnectionFactory) initialContext.lookup(context.getProperty(JNDI_CF_LOOKUP).evaluateAttributeExpressions().getValue());
                 } catch (Exception e) {
