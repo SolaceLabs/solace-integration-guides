@@ -281,7 +281,7 @@ They are configured as follows:
     });
 ```
 
-- Create a text message. Current NiFi version supports TextMessage and ByteMessage types.
+- Create a text message. Current NiFi version supports TextMessage and BytesMessage types.
 
 ```java
     TextMessage message = session.createTextMessage("Hello world Queues!");
@@ -522,7 +522,7 @@ After setting up both Solace router and NiFi, the project runs and generates log
         Message 1 is sent at 1494703349358
 
 
-**NiFi can receive both TextMessages and ByteMessages, other message types trigger exceptions**
+**NiFi can receive both TextMessages and BytesMessages, other message types trigger exceptions**
 
 ```java
     if (message != null) {
@@ -545,7 +545,7 @@ After setting up both Solace router and NiFi, the project runs and generates log
 
 The received messages are from NiFi - hence some of the JMS properties are filled in by NiFi and can be quite different from the orginal messages sent from the Solace application. 'appID' is a user property to identify messages visually. The code also computes latency between publishing and receiving.
 
-**Original text messages after looping back from NiFi are in ByteMessage type**
+**Original text messages after looping back from NiFi are in BytesMessage type**
 
         Text:	Hello world Queues!
         JMSDeliveryMode:                        2
@@ -558,7 +558,7 @@ The received messages are from NiFi - hence some of the JMS properties are fille
 
         Message 10 is sent at 1494978143660 
 
-**As noted, messages published by NiFi are ByteMessages**
+**As noted, messages published by NiFi are BytesMessages**
 
         Message received.
         Message Dump:
@@ -642,6 +642,7 @@ By default info logs will be written to the console. This section will focus on 
 
 Below is an example Log4j2 properties file that will enable debug logging within the Solace JMS API.
 
+``` properties
         name=PropertiesConfig
         property.filename = logs
         appenders = console, file
@@ -662,6 +663,7 @@ Below is an example Log4j2 properties file that will enable debug logging within
         rootLogger.level = debug
         rootLogger.appenderRefs = stdout
         rootLogger.appenderRef.stdout.ref = STDOUT
+```
 
 With Log4j2 properties file in classpath, you can get output in a format similar to the following which can help in understanding what is happening within the Solace JMS API.
 
