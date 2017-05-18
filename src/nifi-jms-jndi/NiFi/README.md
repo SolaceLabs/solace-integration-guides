@@ -27,18 +27,11 @@ NiFi keeps all the GUI widget configurations in a file '~/nifi-1.1.2/conf/flow.x
       </property>
       <property>
         <name>broker</name>
-        <value>192.168.56.101</value>
+        <value>smf://nifi@192.168.56.101:55555</value>
       </property>
       <property>
         <name>cfname</name>
         <value>/jms/cf/default</value>
-      </property>
-      <property>
-        <name>User Name</name>
-        <value>nifi@default</value>
-      </property>
-      <property>
-        <name>Password</name>
       </property>
       <property>
         <name>SSL Context Service</name>
