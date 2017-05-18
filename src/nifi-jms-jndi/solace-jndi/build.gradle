@@ -27,7 +27,7 @@ dependencies {
 task(runQueuePubSubJNDI, dependsOn: 'classes', type: JavaExec) {
     main = 'com.solace.sample.QueuePubSubJNDI'
     classpath = sourceSets.main.runtimeClasspath
-    args '192.168.56.101'
+    args 'smf://nifi@192.168.56.101:55555'
     //systemProperty 'simple.message', 'Hello '
 }
 
