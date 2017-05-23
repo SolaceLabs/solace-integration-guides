@@ -1,0 +1,37 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+sourceCompatibility = '1.8'
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+mainClassName = 'com.solace.sample.QueuePubSubJNDI'
+repositories {
+    mavenCentral()
+    // You may define additional repositories, or even remove "mavenCentral()".
+    // Read more about repositories here:
+    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:repositories
+}
+
+dependencies {
+    // TODO: Add dependencies here ...
+    // You can read more about how to add dependency here:
+    //   http://www.gradle.org/docs/current/userguide/dependency_management.html#sec:how_to_declare_your_dependencies
+    testCompile group: 'junit', name: 'junit', version: '4.10'
+    compile("com.solacesystems:sol-jms:10.+")
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+}
+task(runQueuePubSubJNDI, dependsOn: 'classes', type: JavaExec) {
+    main = 'com.solace.sample.QueuePubSubJNDI'
+    classpath = sourceSets.main.runtimeClasspath
+    args 'smf://nifi@192.168.56.101:55555'
+    //systemProperty 'simple.message', 'Hello '
+}
+
+// gradlew run -Pargs="192.168.56.101 3"
+run {
+    if(project.hasProperty('args')){
+        args project.args.split('\\s')
+    }
+}
