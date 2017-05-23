@@ -89,7 +89,7 @@ The Solace JMS jars are required.  They can be obtained on [Solace Developer Por
 
 ##### Solace JMS Dependencies
 
-The easiest way to integrate Solace and NiFi is using the client libraries available via public [Maven Repositories](https://mvnrepository.com/artifact/com.solacesystems){:target="_blank"}. You can downloaded the libraries into a directory and reference them directly, the following resources are all required:
+The easiest way to integrate Solace and NiFi is using the client libraries available via public [Maven Central]({{ site.links-jms-maven }}){:target="_blank"}. You can download the libraries into a directory and reference them directly, the following resources are all required:
 
 |Resource|Value|Description|
 |---|---|---|
