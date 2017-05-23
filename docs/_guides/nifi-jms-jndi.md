@@ -2,7 +2,7 @@
 layout: guides
 title: JNDI Connection Factory Provider for Apache NiFi
 summary: Apache NiFi is a software project from the Apache Software Foundation which enables the automation of data flow between systems. It can be described as data logistics. Similar to how parcel services move and track packages, Apache NiFi helps move and track data. 
-icon: nifilogo.png
+icon: nifilogo.jpg
 links:
     - label: Sample Source Code - NiFi JMS JNDI Connection Service
       link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/nifi-jms-jndi
