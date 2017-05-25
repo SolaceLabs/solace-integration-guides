@@ -6,6 +6,8 @@ icon: red-hat-jboss-eap.png
 links:
    - label: Example Source Code - JBoss EAP v7
      link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/jboss-eap-v7
+   - label: JBoss EAP v6
+     link: http://dev.solace.com/integration-guides/jboss-eap-v6/
 ---
 
 ## Overview
