@@ -761,6 +761,8 @@ If using XA, it is strongly recommended to set total time for low level connecti
 2. The WebLogic server’s bean configuration controls the transaction configuration.  This can be found in Deployments - <application name> - <bean name> - Configuration.  The Transaction Timeout is set at the bottom of the page. Other fine-tuning options are available here, such as the Max Beans in Free Pool, the Max Messages in a Transaction, etc.
 3. The WebLogic server’s Java Transaction API (JTA), located at Services – JTA – Configuration – JTA, controls several more XA configuration parameters.  In particular, the Maximum Duration of XA Calls can be changed here. 
 
+JVM threads that have been running for more than a certain configurable time (default 600 seconds), will be marked as STUCK in Weblogic. If using Spring Framework with Weblogic, a DefaultMessageListenerContainer using a standard TaskExecutor will continue reusing a thread indefinitely. This will cause threads to become marked as STUCK. We recommend setting MaxMessagesPerTask in the DMLC to a finite value in order to avoid this.
+
 ## Working with Solace High Availability (HA)
 
 The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace message router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
