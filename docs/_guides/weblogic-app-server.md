@@ -204,7 +204,7 @@ The following entities on the Solace message router need to be configured at a m
 
 For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace message router CLI see [Solace-CLI]. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace-FG] section “User Authentication and Authorization”.
 
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace message router. This document uses CLI as the reference to remain concise.
+Also note that this configuration can also be easily performed using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace’s browser-based administration console packaged with the Solace PubSub+ message broker. This is in fact the recommended approach for configuring a Solace message router. This document uses CLI as the reference to remain concise.
 
 #### Creating a Message VPN
 
@@ -368,7 +368,7 @@ Steps to configure the Solace JMS Resource Adapter:
 * Step 3.	Click on the resource adapter to begin its configuration.
 * Step 4.	In the ‘Overview’ tab, modify the deployment order to ensure that the adapter has a lower value than any application that will depend on the JMS connection provided by the RA.  This is to ensure that the RA is deployed first.
 
-![]({{ site.baseurl }}/images/weblogic/config-solace-ra-1.png)
+![]({{ site.baseurl }}/images/weblogic/config-solace-ra-1.png)
 
 #### General Configuration
 
@@ -454,7 +454,7 @@ Extended Properties Supported Values:
 * Solace_JMS_SSL_TrustedCommonNameList
 
 For example: `Solace_JMS_CompressionLevel=9`
-
+
 ### Configuring destinations
 
 * Step 1. To create a new Destination, in the list of Destination types, click the New button.
@@ -633,7 +633,7 @@ New deployments should deploy using the resource adapter.
 ### Configuring the connection to Solace
 
 * Step 1. Click on the newly created Foreign Server to open the configuration page. The General Tab will open.
-
+
 ![]({{ site.baseurl }}/images/weblogic/sol-connection-1.png)
 
 * Step 2. Enter the following values in the fields and click Save
@@ -997,7 +997,7 @@ This section demonstrates how to configure the Solace message router to support 
 XA transactions are supported in the general-availability release of SolOS version 7.1 and above.  The Solace JCA Resource Adapter provides XA Transaction support in version 7.2 and above.
 
 In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, SolOS version 7.1 provides XA transaction administration facilities in the event that customers must perform manual failure recovery. Refer to the document [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for full details on administering and configuring XA Transaction support on the Solace Message Router.
-
+
 #### Enabling XA Support for JMS Connection Factories
 
 To enable XA transaction support for specific JMS connection factories the customer must configure XA support for the respective JNDI connection factory on the Solace Message Router:  
@@ -1085,7 +1085,7 @@ The reconnect retries is tuned in the Solace message router CLI as follows:
 (config)#
 ```
 
-#### Disaster Recovery Behavior Notes
+#### Disaster Recovery Behavior Notes
 
 When a disaster recovery switch-over occurs, the Solace JMS API must establish a new connection to the Solace message routers in the standby data center. Because this is a new connection there are some special considerations worth noting. The [Solace-FG] contains the following notes:
 Java and JMS APIs
