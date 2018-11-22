@@ -26,6 +26,7 @@ This document is divided into the following sections to cover the Solace JMS int
   * Using SSL Communication
   * Working with XA Transactions
   * Working with Solace Disaster Recovery
+  * Using an external JNDI store for Solace JNDI lookups
 
 ### Related Documentation
 
@@ -395,7 +396,7 @@ Steps to configure the Solace JMS Resource Adapter:
 
   * Update the value for the custom properties  'ConnectionURL', 'UserName', 'Password', and 'MessageVPN':
 
-    i. Click on the 'ConnectionURL' property and specify the value `smf://IP:Port` (Update the value '__IP:Port__' with the actual Solace message router message-backbone VRF IP ).
+    i. Click on the 'ConnectionURL' property and specify the value `tcp://IP:Port` (Update the value '__IP:Port__' with the actual Solace message router message-backbone VRF IP ).
 
     ii. Click on the 'Apply' button and then the 'Save' link to commit the changes to the application server.
 
@@ -422,8 +423,8 @@ The following table summarizes the values used for the resource adapter's bean p
     </tr>
     <tr>
       <td>ConnectionURL</td>
-      <td>smf://__IP:Port__</td>
-      <td>The connection URL to the Solace message router of the form: `smf://__IP:Port__` (Update the value `__IP:Port__` with the actual Solace message router message-backbone VRF IP)</td>
+      <td>tcp://__IP:Port__</td>
+      <td>The connection URL to the Solace message router of the form: `tcp://__IP:Port__` (Update the value `__IP:Port__` with the actual Solace message router message-backbone VRF IP)</td>
     </tr>
     <tr>
       <td>messageVPN</td>
@@ -688,10 +689,10 @@ Upon receiving a message, the MDB calls the method sendMessage() of the "Produce
 
 There are associated files you can use for reference:
 
-*    [ConsumerMDB.java]({{ site.repository }}/blob/master/src/WebSphere/ConsumerMDB.java){:target="_blank"}
-*    [ProducerSB.java]({{ site.repository }}/blob/master/src/WebSphere/ProducerSB.java){:target="_blank"}
-*    [ejb-jar.xml]({{ site.repository }}/blob/master/src/WebSphere/ejb-jar.xml){:target="_blank"}
-*    [ibm-ejb-jar-bnd.xml]({{ site.repository }}/blob/master/src/WebSphere/ibm-ejb-jar-bnd.xml){:target="_blank"}
+*    [ConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ConsumerMDB.java){:target="_blank"}
+*    [ProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ProducerSB.java){:target="_blank"}
+*    [ejb-jar.xml]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/META-INF/ejb-jar.xml){:target="_blank"}
+*    [ibm-ejb-jar-bnd.xml]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/META-INF/ibm-ejb-jar-bnd.xml){:target="_blank"}
 
 ## Performance Considerations
 
@@ -936,13 +937,13 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 Recall from above, originally, the “ConnectionURL” was as follows:
 
 ```
-smf://___IP:PORT___
+tcp://___IP:PORT___
 ```
 
 This specified a URI scheme of “smf” which is the plaint-text method of communicating with the Solace message router. This should be updated to “smfs” to switch to secure communication giving you the following configuration:
 
 ```
-smfs://___IP:PORT___
+tcps://___IP:PORT___
 ```
 
 <br/>
@@ -1039,7 +1040,7 @@ The following examples demonstrate how to receive and send messages using XA tra
 
 The following code is similar to the above "ConsumerMDB" example but specifies Container-Managed XA Transaction support for inbound messages.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
 
-*    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/WebSphere/XAConsumerMDB.java){:target="_blank"}
+*    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAConsumerMDB.java){:target="_blank"}
 
 Note that it is important to limit the maximum number of XAConsumerMDB in the pool to ensure that the maximum per client concurrent transaction session count on the Solace router is not exceeded. The maximum concurrent transacted sessioncount can be configured on the client-profile on the Solace router.
 
@@ -1047,13 +1048,13 @@ Note that it is important to limit the maximum number of XAConsumerMDB in the po
 
 The following code is similar to the "ProducerSB" EJB example from above but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean 'XAProducerSB' method 'sendMessage()' requires that the caller have an existing XA Transaction context.  In this example, the 'sendMessage()' method is called from the MDB - 'XAConsumerMDB' in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
 
-*    [XAProducerSB.java]({{ site.repository }}/blob/master/src/WebSphere/XAProducerSB.java){:target="_blank"}
+*    [XAProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAProducerSB.java){:target="_blank"}
 
 ##### Sending Messages to Solace over XA Transaction – BMT Sample Code
 
 EJB code can use the UserTransaction interface (Bean-Managed) to provision and control the lifecycle of an XA transaction.  The EJB container will not provision XA transactions when the EJB class's 'TransactionManagement' type is designated as 'BEAN' managed.  In the following example, the session Bean 'XAProducerBMTSB' starts a new XA Transaction and performs an explicit 'commit()' operation after successfully sending the message.  If a runtime error is detected, then an explicit 'rollback()' operation is executed.  If the rollback operation fails, then the EJB code throws an EJBException() to allow the EJB container to handle the error.  
 
-*    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/WebSphere/XAProducerBMTSB.java){:target="_blank"}
+*    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/com/solace/sample/XAProducerBMTSB.java){:target="_blank"}
 
 ##### Enabling Local Transaction Support for EJBs
 
@@ -1061,7 +1062,18 @@ A developer can override the use of XA Transactions (the default transactional m
 
 The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean ‘ProducerSB’ to use Local Transactions instead of XA Transactions.  Refer to [WAS-REF] for further details on WebSphere specific EJB deployment descriptor files.
 
-*    [ibm-ejb-jar-ext.xml]({{ site.repository }}/blob/master/src/WebSphere/ibm-ejb-jar-ext.xml){:target="_blank"}
+```xml
+<ejb-jar-ext xmlns="http://websphere.ibm.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee 
+    http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-ext_1_0.xsd"
+    version="1.0">
+    <session name="ProducerSB">
+        <local-transaction boundary="BEAN_METHOD"        
+                   resolver="CONTAINER_AT_BOUNDARY"/>
+    </session>
+</ejb-jar-ext>
+```
 
 
 ### Working with the Solace Disaster Recovery Solution
@@ -1073,7 +1085,7 @@ The [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} secti
 As described in [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}, the host list provides the address of the backup data center. This is configured within the WebSphere application server through the `ConnectionURL` custom property value (of a respective J2C entity) as follows:
 
 ```
-smf://__IP_active_site:PORT__,smf://__IP_standby_site:PORT__
+tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
 ```
 
 The active site and standby site addresses are provided as a comma-separated list of `Connection URIs`.  When connecting, the Solace JMS connection will first try the active site and if it is unable to successfully connect to the active site, then it will try the standby site. This is discussed in much more detail in the referenced Solace documentation
@@ -1158,4 +1170,84 @@ For WebSphere applications that are sending messages, there is nothing specifica
 * javax.resource.spi.SecurityException
 * javax.resource.ResourceException or one of its subclasses
 * javax.jms.JMSException
+
+### Using an external JNDI store for Solace JNDI lookups
+
+By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the Solace message broker.
+
+It is possible to use an external JNDI provider such as an external LDAP server instead, and provision the Solace JNDI objects there.
+
+The following configuration changes are required to use an external JNDI provider:
+
+##### Solace JMS Resource Adapter configuration
+
+Refer to the section "Configuring the Solace Resource Adapter properties" to compare to the default setup.
+
+The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
+
+<table>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>ConnectionURL</td>
+      <td>__PROVIDER_PROTOCOL__://__IP:Port__</td>
+      <td>The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom`</td>
+    </tr>
+    <tr>
+      <td>messageVPN</td>
+      <td></td>
+      <td>The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store.</td>
+    </tr>
+    <tr>
+      <td>UserName</td>
+      <td>jndi_provider_username</td>
+      <td>The username credential on the external JNDI store (not on the Solace Message Router)</td>
+    </tr>    
+    <tr>
+      <td>Password</td>
+      <td>jndi_provider_password</td>
+      <td>The password credential on the external JNDI store (not on the Solace Message Router)</td>
+    </tr> 
+    <tr>
+      <td>ExtendedProps</td>
+      <td>java.naming.factory.initial= __PROVIDER_InitialContextFactory_CLASSNAME__ (ensure there is no space used)</td>
+      <td>Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional supported values may be configured as described in the Solace Resource Adapter properties section.</td>
+    </tr>     
+</table>
+
+<br/>
+
+**Important**: the jar library implementing the 3rd party provider InitialContextFactory class must be placed in the application server's class path.
+
+<br/>
+
+##### Connection Factories, Activation Specifications and Administered Objects configuration
+
+Refer to the relevant sections to compare to the default setup.
+
+The following table summarizes the values used for custom properties if using an external JNDI store:
+
+<table>
+    <tr>
+      <th>Name</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>connectionFactoryJndiName</td>
+      <td>__CONFIGURED_CF_JNDI_NAME__</td>
+      <td>The JNDI name of the JMS connection factory as configured on the external JNDI store.</td>
+    </tr>
+    <tr>
+      <td>destination</td>
+      <td>__CONFIGURED_DESTINATION_JNDI_NAME__</td>
+      <td>The JNDI name of the JMS destination as configured on the external JNDI store.</td>
+    </tr>
+</table>
+
+
+
 
