@@ -47,7 +47,7 @@ Solace provides a JCA compliant resource adapter for integrating Java enterprise
 
 In order to illustrate WebSphere Application Server integration, the following sections will highlight the required WebSphere configuration changes and provide sample code for sending and receiving messages using Enterprise Java Beans. 
 
-This EJB sample consists of two enterprise beans, a Message Driven Bean and a Session Bean.  The MDB is configured to receive a message on a `requests` Queue.  When the MDB receives a message it then calls a method of the Session Bean to send a reply message to a `reply` Queue.  The EJB sample requires configuration of various J2C entities in WebSphere to support usage of the Solace JCA compliant resource adapter.
+This EJB sample consists of two enterprise beans, a Message Driven Bean and a Session Bean.  The MDB is configured to receive a message on a `requests` Queue.  When the MDB receives a message it then calls a method of the Session Bean to send a reply message to a `replies` Queue.  The EJB sample requires configuration of various J2C entities in WebSphere to support usage of the Solace JCA compliant resource adapter.
 
 The following steps are required to accomplish the above goals of sending and receiving messages using the Solace message router. 
 
@@ -67,139 +67,43 @@ This integration guide will demonstrate the creation of Solace resources and the
 
 To illustrate this integration example, all named resources created on the Solace Message Router will have the following prefixes:
 
-<table>
-    <tr>
-    <th>Resource</th>
-    <th>Prefix</th>
-    </tr>
-    <tr>
-    <td>Non-JNDI resource</td>
-    <td>solace_%RESOURCE_NAME%</td>
-    </tr>
-    <tr>
-    <td>JNDI names</td>
-    <td>JNDI/Sol/%RESOURCE_NAME%</td>
-    </tr>
-</table>
+| **Resource** | **Prefix** |
+| Non-JNDI resource | solace_%RESOURCE_NAME% |
+| JNDI names | JNDI/Sol/%RESOURCE_NAME% |
 
 #### Solace Resources
 
 The following Solace message router resources are required for the integration sample in this document.
 
-<table>
-    <tr>
-    <th>Resource</th>
-    <th>Value</th>
-    <th>Description</th>
-    </tr>
-    <tr>
-    <td>Solace Message Router IP:Port</td>
-    <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace Message Router message backbone. This is the address client's use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
-    </tr>
-    <tr>
-    <td>Message VPN</td>
-    <td>solace_VPN</td>
-    <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
-    </tr>
-    <tr>
-    <td>Client Username</td>
-    <td>solace_user</td>
-    <td>The client username.</td>
-    </tr>
-    <tr>
-    <td>Client Password</td>
-    <td>solace_password</td>
-    <td>Optional client password. </td>
-    </tr>
-    <tr>
-    <td>Solace Queue</td>
-    <td>solace_requests</td>
-    <td>Solace destination for messages consumed by JEE enterprise application</td>
-    </tr>
-    <tr>
-    <td>Solace Queue</td>
-    <td>solace_replies</td>
-    <td>Solace destination for messages produced by JEE enterprise application</td>
-    </tr>
-    <tr>
-    <td>JNDI Connection Factory</td>
-    <td>JNDI/Sol/CF</td>
-    <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
-    </tr>
-    <tr>
-    <td>JNDI Queue Name</td>
-    <td>JNDI/Sol/Q/requests</td>
-    <td>The JNDI name of the queue used in the samples</td>
-    </tr>
-    <tr>
-    <td>JNDI Queue Name</td>
-    <td>JNDI/Sol/Q/replies</td>
-    <td>The JNDI name of the queue used in the samples</td>
-    </tr>
-</table>
+| **Resource** | **Value** | **Description** |
+| Solace Message Router IP:Port | __IP:Port__ | The IP address and port of the Solace Message Router message backbone. This is the address client's use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__. |
+| Message VPN | solace_VPN | A Message VPN, or virtual message broker, to scope the integration on the Solace message router. |
+| Client Username | solace_user | The client username. |
+| Client Password | solace_password |  Optional client password. |
+| Solace Queue | solace_requests | Solace destination for messages consumed by JEE enterprise application |
+| Solace Queue | solace_replies | Solace destination for messages produced by JEE enterprise application |
+| JNDI Connection Factory | JNDI/Sol/CF | The JNDI Connection factory for controlling Solace JMS connection properties |
+| JNDI Queue Name | JNDI/Sol/Q/requests | The JNDI name of the queue used in the samples |
+| JNDI Queue Name | JNDI/Sol/Q/replies | The JNDI name of the queue used in the samples |
 
 #### Application Server Resource Naming Convention
 
 To illustrate this integration example, all named resources created in WebSphere application server will have the following prefixes:
 
-<table>
-    <tr>
-    <th>Resource</th>
-    <th>Prefix</th>
-    </tr>
-    <tr>
-    <td>Non-JNDI resource</td>
-    <td>j2c_%RESOURCE_NAME%</td>
-    </tr>
-    <tr>
-    <td>JNDI names</td>
-    <td>JNDI/J2C/%RESOURCE_NAME%</td>
-    </tr>
-</table>
+| **Resource** | **Prefix** |
+| Non-JNDI resource | j2c_%RESOURCE_NAME% |
+| JNDI names | JNDI/J2C/%RESOURCE_NAME% |
 
 #### Application Server Resources
 
 The following WebSphere application server resources are required for the integration example in this document.
 
-<table>
-    <tr>
-      <th>Resource</th>
-      <th>JNDI Name</th>
-      <th>JNDI Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>Resource Adapter</td>
-      <td>sol-jms-ra</td>
-      <td>JNDI/J2C/RA/sol-jms-ra</td>
-      <td>The Solace JMS Resource Adapter packaged as a Standalone RAR package (Implements a JCA compliant Resource Adapter)</td>
-    </tr>
-    <tr>
-      <td>J2C connection factory</td>
-      <td>j2c_cf</td>
-      <td>JNDI/J2C/CF</td>
-      <td>A J2C entity used to access a Solace javax.jms.ConnectionFactory (For Outbound messaging)</td>
-    </tr>
-    <tr>
-      <td>J2C activation specification</td>
-      <td>j2c_as</td>
-      <td>JNDI/J2C/AS</td>
-      <td>A J2C entity used to initialize a Message Driven Bean and to bind it to a Solace JMS destination using the Solace implementation of javax.jms.MessageListener (For Inbound messaging)</td>
-    </tr>
-    <tr>
-      <td>J2C administered object</td>
-      <td>j2c_request_queue</td>
-      <td>JNDI/J2C/Q/requests</td>
-      <td>A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the Solace message router</td>
-    </tr>    
-    <tr>
-      <td>J2C administered object</td>
-      <td>j2c_reply_queue</td>
-      <td>JNDI/J2C/Q/replies</td>
-      <td>A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the Solace message router</td>
-    </tr>    
-</table>
+| **Resource** | **JNDI Name** | **JNDI Value** | **Description** |
+| Resource Adapter | N/A | N/A | The Solace JMS Resource Adapter packaged as a Standalone RAR package (Implements a JCA compliant Resource Adapter) |
+| J2C connection factory | j2c_cf | JNDI/J2C/CF | A J2C entity used to access a Solace javax.jms.ConnectionFactory (For Outbound messaging) |
+| J2C activation specification | j2c_as | JNDI/J2C/AS | A J2C entity used to initialize a Message Driven Bean and to bind it to a Solace JMS destination using the Solace implementation of javax.jms.MessageListener (For Inbound messaging) |
+| J2C administered object | j2c_request_queue | JNDI/J2C/Q/requests | A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the Solace message router |
+| J2C administered object | j2c_reply_queue | JNDI/J2C/Q/replies | A J2C entity used to perform a JNDI lookup of a javax.jms.Queue on the Solace message router |
 
 ### Solace JMS provider Configuration
 
@@ -326,6 +230,13 @@ Solace provides a JCA compliant Resource Adapter that can be deployed to the Web
 The following Java system property must be configured in the application server JVM properties:
 
 ```
+-DpasswordDecoderClassName=com.ibm.ISecurityUtilityImpl.PasswordUtil
+-DpasswordDecoderMethodName=passwordDecode
+```
+
+**Note**: if using WebSphere 7 configure:
+
+```
   -DpasswordDecoderClassName=com.ibm.ws.security.util.PasswordDecoder
   -DpasswordDecoderMethodName=decodePassword
 ```
@@ -349,6 +260,10 @@ Steps to configure application server JVM properties:
 1. Click the 'save' link to commit the changes to the application server
 
 1. Restart the application server
+
+![]({{ site.baseurl }}/images/WebSphere/config-jvm-1.png)
+
+<br/>
 
 ### Adding the Solace Resource Adapter as a Resource
 
@@ -415,38 +330,12 @@ Steps to configure the Solace JMS Resource Adapter:
 
 The following table summarizes the values used for the resource adapter's bean properties.
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>ConnectionURL</td>
-      <td>tcp://__IP:Port__</td>
-      <td>The connection URL to the Solace message router of the form: `tcp://__IP:Port__` (Update the value `__IP:Port__` with the actual Solace message router message-backbone VRF IP)</td>
-    </tr>
-    <tr>
-      <td>messageVPN</td>
-      <td>solace_VPN</td>
-      <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
-    </tr>
-    <tr>
-      <td>UserName</td>
-      <td>solace_user</td>
-      <td>The client username credentials on the Solace Message Router</td>
-    </tr>    
-    <tr>
-      <td>Password</td>
-      <td></td>
-      <td>Optional password of the Client Username on the Solace Message Router</td>
-    </tr> 
-    <tr>
-      <td>ExtendedProps</td>
-      <td></td>
-      <td>Comma-seperated list for advanced control of the connection.  For this example, leave empty.  Supported values are shown below.</td>
-    </tr>     
-</table>
+| **Name** | **Value** | **Description** |
+| ConnectionURL | tcp://IP:Port | The connection URL to the Solace message router of the form: `tcp://IP:Port` (Update the value `IP:Port` with the actual Solace message router message-backbone VRF IP) |
+| MessageVPN | solace_VPN | A Message VPN, or virtual message broker, to scope the integration on the Solace message router. |
+| UserName | solace_user | The client username credentials on the Solace Message Router |
+| Password |  | Optional password of the Client Username on the Solace Message Router |
+| ExtendedProps |  | Comma-seperated list for advanced control of the connection.  For this example, leave empty.  Supported values are shown below. |
 
 Extended Properties Supported Values:
 
@@ -515,18 +404,8 @@ Steps to create a J2C Connection Factory:
 
 The following table summarizes the values used for the J2C connection factory custom properties.
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>ConnectionFactoryJndiName</td>
-      <td>JNDI/Sol/CF</td>
-      <td>The JNDI name of the JMS connection factory as configured on the Solace message router.</td>
-    </tr>
-</table>
+| **Name** | **Value** | **Description** |
+| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the Solace message router. |
 
 
 ### Configuring Connection Pooling for a connection factory
@@ -539,16 +418,8 @@ The amounts to be set vary, depending on the demand of the WebSphere application
 
 The most relevant values are:
 
-<table>
-    <tr>
-      <td>Maximum connections</td>
-      <td>Maximum number of connection created for this pool.</td>
-    </tr>   
-    <tr>
-      <td>Minimum connections</td>
-      <td>Minimum number of connections maintained in the pool.</td>
-    </tr>   
-</table>
+| Maximum connections | Maximum number of connection created for this pool. |
+| Minimum connections | Minimum number of connections maintained in the pool. |
 
 Save and return to the resource adapter configuration page.
 
@@ -598,28 +469,10 @@ Steps to create a J2C Activation Specification:
 
 The following table summarizes the values used for the J2C activation specification custom properties.
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>connectionFactoryJndiName</td>
-      <td>JNDI/Sol/CF</td>
-      <td>The JNDI name of the JMS connection factory as configured on the Solace message router.</td>
-    </tr>
-    <tr>
-      <td>destination</td>
-      <td>JNDI/Sol/Q/requests</td>
-      <td>The JNDI name of the JMS destination as configured on the Solace message router.</td>
-    </tr>
-    <tr>
-      <td>destinationType</td>
-      <td>javax.jms.Queue</td>
-      <td>The JMS class name for the desired destination type.</td>
-    </tr>
-</table>
+| **Name** | **Value** | **Description** |
+| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the Solace message router. |
+| destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the Solace message router. |
+| destinationType | javax.jms.Queue | The JMS class name for the desired destination type. |
 
 ### Configuring Administered Objects
 
@@ -664,36 +517,182 @@ Steps to create a J2C administered object (of type Queue)
 
 The following table summarizes the values used for the J2C administered object custom properties:
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>Destination</td>
-      <td>JNDI/Sol/Q/replies</td>
-      <td>The JNDI name of the JMS destination as configured on the Solace message router.</td>
-    </tr>
-</table>
+| **Name** | **Value** | **Description** |
+| Destination | JNDI/Sol/Q/replies | The JNDI name of the JMS destination as configured on the Solace message router. |
 
 ### Redeploy the resource adapter with the new settings
 
 Restart the WebSphere Application Server for these changes to take effect.
 
-## Sample MDB Code
+## Sample Application Code
 
-The sample code linked below shows the implementation of a message-driven bean ("ConsumerMDB") which listens for JMS messages to arrive on the configured Solace connection factory and destination (`JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively - as configured in the J2C activation specification).
+Source code for an Enterprise Java Beans (EJB) application for WebSphere, implementing waiting for receiving and then sending a message, has been provided in the GitHub repo of this guide.
 
-Upon receiving a message, the MDB calls the method sendMessage() of the "ProducerSB" session bean which in turn sends a reply message to the Queue destination (`JNDI/Sol/Q/replies` - as configured as a J2C administered object above). "ProducerSB" uses Java resource injection for the resources ‘myCF’ and ‘myReplyQueue’ which are mapped to their respective J2C entities using an application binding file "ibm-ejb-jar-bnd.xml".
+There are three variants:
 
-There are associated files you can use for reference:
+* [EJBSample-WAS/ejbModule]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule){:target="_blank"} - used in this basic application sample.
+* EJBSample-WAS-XA-BMT/ejbModule - used "Working with XA Transactions", see in section Advanced Topics below.
+* EJBSample-WAS-XA-CMT/ejbModule - used "Working with XA Transactions", see in section Advanced Topics below.
 
-*    [ConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ConsumerMDB.java){:target="_blank"}
-*    [ProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ProducerSB.java){:target="_blank"}
-*    [ejb-jar.xml]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/META-INF/ejb-jar.xml){:target="_blank"}
-*    [ibm-ejb-jar-bnd.xml]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/META-INF/ibm-ejb-jar-bnd.xml){:target="_blank"}
+The structure of all variants is the same:
 
+* Java source files under `ejbModule/com/solace/sample/`
+* EJB XML descriptors under `ejbModule/META-INF/`
+
+### Receiving messages from Solace – Sample Code
+
+The sample code below shows the implementation of a message-driven bean ("ConsumerMDB") which listens for JMS messages to arrive on the configured Solace connection factory and destination (`JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively - as configured in the J2C activation specification).  Upon receiving a message, the MDB calls the method sendMessage() of the "ProducerSB" session bean which in turn sends a reply message to a ‘reply’ Queue destination.
+
+```java
+@TransactionManagement(value = TransactionManagementType.BEAN)
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+
+@MessageDriven
+public class ConsumerMDB implements MessageListener {
+
+    @EJB(beanName = "ProducerSB", beanInterface = Producer.class)
+    Producer sb;
+
+    public ConsumerMDB() {
+    }
+
+    public void onMessage(Message message) {
+	String msg = message.toString();
+
+	System.out.println(Thread.currentThread().getName() + " - ConsumerMDB: received message: " + msg);
+
+	try {
+	    // Send reply message
+	    sb.sendMessage();
+	} catch (JMSException e) {
+	    throw new EJBException("Error while sending reply message", e);
+	}
+    }
+}
+```
+
+The full source code for this example is available in the following source:
+
+ * [ConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ConsumerMDB.java){:target="_blank"}
+
+### Sending Messages to Solace – Sample code
+
+The sample code below shows the implementation of a session bean ("ProducerSB") that implements a method sendMessage() which sends a JMS message to the Queue destination configured above.  The sendMessage() method is called by the "ConsumerMDB" bean outlined in the previous section.
+
+This example uses Java resource injection for the resources ‘myCF’ and ‘myReplyQueue’ which are mapped to their respective J2C entities using an application binding file (see example application bindings file following the code example below).
+
+```java
+@Stateless(name = "ProducerSB")
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+
+public class ProducerSB implements Producer, ProducerLocal {
+    @Resource(name = "myCF")
+    ConnectionFactory myCF;
+
+    @Resource(name = "myReplyQueue")
+    Queue myReplyQueue;
+
+    public ProducerSB() {
+    }
+
+    @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+    @Override
+    public void sendMessage() throws JMSException {
+
+    System.out.println("Sending reply message");
+        Connection conn = null;
+        Session session = null;
+        MessageProducer prod = null;
+
+        try {
+            conn = myCF.createConnection();
+            session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
+            prod = session.createProducer(myReplyQueue);
+
+            ObjectMessage msg = session.createObjectMessage();
+            msg.setObject("Hello world!");
+            prod.send(msg, DeliveryMode.PERSISTENT, 0, 0);
+        } finally {
+            if (prod != null)
+          prod.close();
+            if (session != null)
+          session.close();
+            if (conn != null)
+          conn.close();
+        }
+    }
+}
+```
+
+The code sample illustrated in this guide uses the following EJB application bindings file:
+
+```
+<!-- ProducerSB (Session Bean) resources binding -->
+<session name="ProducerSB">
+  <resource-ref name="myCF" binding-name="JNDI/J2C/CF" />
+  <resource-ref name="myReplyQueue" binding-name="JNDI/J2C/Q/replies" />
+</session>
+
+<!-- ConsumerMDB (Message Driven Bean) activation specification binding -->
+<message-driven name="ConsumerMDB">
+  <jca-adapter activation-spec-binding-name="JNDI/J2C/AS" />
+</message-driven>
+```
+
+The full source code for this example is available in the following sources:
+
+ * [ProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/com/solace/sample/ProducerSB.java){:target="_blank"}
+ * [ibm-ejb-jar-bnd.xml]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS/ejbModule/META-INF/ibm-ejb-jar-bnd.xml){:target="_blank"}
+
+### Building the samples
+
+Instructions here are provided for "Eclipse IDE for Java EE Developers" with "WebSphere Application Server Developer Tools for Eclipse" installed from Eclipse Marketplace. Adjust the steps accordingly if your environment differs.
+
+Here are the steps to create and build your project:
+
+1. Clone this project from GitHub
+```
+git clone https://github.com/SolaceLabs/solace-integration-guides.git
+cd solace-integration-guides/src/websphere/EJBSample-WAS/ejbModule/
+```
+1. Create a new "EJB project" in Eclipse, set the target runtime to WebSphere Application Server. Optionally check the "Add your project to an EAR" to create an Enterprise Archive instead of an EJB JAR.
+
+1. Replace the new project `ejbModule` directory contents (created empty) with the contents of the `ejbModule` directory of this repo, then refresh your project in the IDE.
+
+1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
+
+You have now built the sample application as deployable JAR or EAR archive, take note of the file and directory location.
+
+### Deploying the sample application
+
+Steps to deploy the sample application:
+
+1. Log into the WebSphere Application Server administrative console.
+
+1. Click on the ‘Applications > Application Types > WebSphere enterprise applications’ link in the navigation pane.
+
+1. In the Enterprise Applications page, click on the ‘Install’ button.
+
+1. Specify the location of the JAR or EAR archive, then click ‘Next’.
+
+1. Click through ‘Next’ on the following screens, then ‘Finish’.
+
+1. Click the ‘Save’ link to commit the changes to the application server.
+
+1. Select and click on ‘Start’ to start your application.
+
+You have now deployed the sample application and it is ready to receive mesages from the `solace_requests` queue on the router.
+
+### Testing the sample application
+
+To send a test message you can use the **queueProducerJNDI** sample application from the [Obtaining JMS objects using JNDI](https://dev.solace.com/samples/solace-samples-jms/using-jndi/ ) tutorial. Ensure to adjust in the source code the `CONNECTION_FACTORY_JNDI_NAME` and `QUEUE_JNDI_NAME` to `JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively, as used in this tutorial.
+
+Once a message has been sent to the `solace_requests` queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the `solace_replies` queue.
+
+You can check the messages in the `solace_replies` queue using the using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace's browser-based administration console.
+
+You can also check how the message has been processed in WebSphere logs as described in section "Debugging Tips for Solace JMS API Integration".
+ 
 ## Performance Considerations
 
 The Solace JMS Resource Adapter relies on the WebSphere Application Server for managing the pool of JMS connections.  Tuning performance for outbound messaging can in part be accomplished by balancing the maximum number of pooled connections available against the number of peak concurrent outbound messaging clients.
@@ -1034,11 +1033,46 @@ To enable XA transaction support for specific JMS connection factories the custo
 
 #### XA Transactions – Sample Code
 
-The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both Bean-Managed and Container-Managed Transactions (BMT and CMT respectively).
+The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both Bean-Managed and Container-Managed Transactions (BMT and CMT respectively) in GitHub:
+
+* [EJBSample-WAS-XA-BMT/ejbModule]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/){:target="_blank"}
+* [EJBSample-WAS-XA-CMT/ejbModule]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/){:target="_blank"}
+
+For building and deployment instructions refer to the "Sample Application Code" section.
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
-The following code is similar to the above "ConsumerMDB" example but specifies Container-Managed XA Transaction support for inbound messages.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
+The following code is similar to the above "ConsumerMDB" example but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
+
+```java
+@TransactionManagement(value = TransactionManagementType.CONTAINER)
+@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
+
+@MessageDriven
+public class XAConsumerMDB implements MessageListener {
+
+    @EJB(beanName = "XAProducerSB", beanInterface = Producer.class)
+    Producer sb;
+
+    public XAConsumerMDB() {
+    }
+
+    public void onMessage(Message message) {
+        String msg = message.toString();
+
+        System.out.println(Thread.currentThread().getName() + " - ConsumerMDB: received message: " + msg);
+
+        try {
+            // Send reply message
+            sb.sendMessage();
+        } catch (JMSException e) {
+            throw new EJBException("Error while sending reply message", e);
+        }
+    }
+}
+```
+
+The full source code for this example is available in the following source:
 
 *    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAConsumerMDB.java){:target="_blank"}
 
@@ -1048,11 +1082,58 @@ Note that it is important to limit the maximum number of XAConsumerMDB in the po
 
 The following code is similar to the "ProducerSB" EJB example from above but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean 'XAProducerSB' method 'sendMessage()' requires that the caller have an existing XA Transaction context.  In this example, the 'sendMessage()' method is called from the MDB - 'XAConsumerMDB' in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
 
+```java
+@Stateless(name = "XAProducerSB")
+@TransactionManagement(value=TransactionManagementType.CONTAINER)
+public class XAProducerSB implements Producer, ProducerLocal {
+    @Resource(name = "myCF")
+    ConnectionFactory myCF;
+
+    @Resource(name = "myReplyQueue")
+    Queue myReplyQueue;
+
+    public XAProducerSB() {
+    }
+
+    @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+    @Override
+    public void sendMessage() throws JMSException {
+:
+:
+```
+    
+The full source code for this example is available in the following source:
+
 *    [XAProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAProducerSB.java){:target="_blank"}
 
 ##### Sending Messages to Solace over XA Transaction – BMT Sample Code
 
 EJB code can use the UserTransaction interface (Bean-Managed) to provision and control the lifecycle of an XA transaction.  The EJB container will not provision XA transactions when the EJB class's 'TransactionManagement' type is designated as 'BEAN' managed.  In the following example, the session Bean 'XAProducerBMTSB' starts a new XA Transaction and performs an explicit 'commit()' operation after successfully sending the message.  If a runtime error is detected, then an explicit 'rollback()' operation is executed.  If the rollback operation fails, then the EJB code throws an EJBException() to allow the EJB container to handle the error.  
+
+```java
+@Stateless(name = "XAProducerBMTSB")
+@TransactionManagement(value=TransactionManagementType.BEAN)
+
+public class XAProducerBMTSB implements Producer, ProducerLocal {
+    @Resource(name = "myCF")
+    ConnectionFactory myCF;
+
+    @Resource(name = "myReplyQueue")
+    Queue myReplyQueue;
+
+    @Resource
+    SessionContext sessionContext;
+    
+    public XAProducerBMTSB() {
+    }
+
+    @Override
+    public void sendMessage() throws JMSException {
+:
+:
+```
+    
+The full source code for this example is available in the following source:
 
 *    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/com/solace/sample/XAProducerBMTSB.java){:target="_blank"}
 
@@ -1113,24 +1194,9 @@ If a message driven bean is de-activated during a replication failover, the bean
 
 To enable WebSphere to attempt to re-activate the de-activated MDB, configure the reconnection custom properties of the J2C activation specification:
 
-<table>
-    <tr>
-      <th>Custom Property</th>
-      <th>Default Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>reconnectAttempts</td>
-      <td>0</td>
-      <td>The number of times to attempt to re-activate an MDB after the MDB has failed to activate.</td>
-    </tr>
-    <tr>
-      <td>reconnectInterval</td>
-      <td>10</td>
-      <td>The time interval in seconds to wait between attempts to re-activate the MDB.</td>
-    </tr>
-</table>
-
+| **Custom Property** | **Default Value** | **Description** |
+| reconnectAttempts | 0 | The number of times to attempt to re-activate an MDB after the MDB has failed to activate. |
+|  reconnectInterval| 10 | The time interval in seconds to wait between attempts to re-activate the MDB. |
 
 #### Disaster Recovery Behavior Notes
 
@@ -1185,42 +1251,13 @@ Refer to the section "Configuring the Solace Resource Adapter properties" to com
 
 The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>ConnectionURL</td>
-      <td>__PROVIDER_PROTOCOL__://__IP:Port__</td>
-      <td>The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom`</td>
-    </tr>
-    <tr>
-      <td>messageVPN</td>
-      <td></td>
-      <td>The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store.</td>
-    </tr>
-    <tr>
-      <td>UserName</td>
-      <td>jndi_provider_username</td>
-      <td>The username credential on the external JNDI store (not on the Solace Message Router)</td>
-    </tr>    
-    <tr>
-      <td>Password</td>
-      <td>jndi_provider_password</td>
-      <td>The password credential on the external JNDI store (not on the Solace Message Router)</td>
-    </tr> 
-    <tr>
-      <td>ExtendedProps</td>
-      <td>java.naming.factory.initial= __PROVIDER_InitialContextFactory_CLASSNAME__ (ensure there is no space used)</td>
-      <td>Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional supported values may be configured as described in the Solace Resource Adapter properties section.</td>
-    </tr>     
-</table>
-
-<br/>
-
-**Important**: the jar library implementing the 3rd party provider InitialContextFactory class must be placed in the application server's class path.
+| **Name** | **Value** | **Description** |
+| PROVIDER_PROTOCOL://IP:Port | ConnectionURL | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
+| messageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
+| UserName | jndi_provider_username | The username credential on the external JNDI store (not on the Solace Message Router) |
+| Password | jndi_provider_password | The password credential on the external JNDI store (not on the Solace Message Router) |
+| ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional supported values may be configured as described in the Solace Resource Adapter properties section.
+||| **Important**: the jar library implementing the 3rd party provider InitialContextFactory class must be placed in the application server's class path. |
 
 <br/>
 
@@ -1230,23 +1267,9 @@ Refer to the relevant sections to compare to the default setup.
 
 The following table summarizes the values used for custom properties if using an external JNDI store:
 
-<table>
-    <tr>
-      <th>Name</th>
-      <th>Value</th>
-      <th>Description</th>
-    </tr>
-    <tr>
-      <td>connectionFactoryJndiName</td>
-      <td>__CONFIGURED_CF_JNDI_NAME__</td>
-      <td>The JNDI name of the JMS connection factory as configured on the external JNDI store.</td>
-    </tr>
-    <tr>
-      <td>destination</td>
-      <td>__CONFIGURED_DESTINATION_JNDI_NAME__</td>
-      <td>The JNDI name of the JMS destination as configured on the external JNDI store.</td>
-    </tr>
-</table>
+| **Name** | **Value** | **Description** |
+| connectionFactoryJndiName | CONFIGURED_CF_JNDI_NAME | The JNDI name of the JMS connection factory as configured on the external JNDI store. |
+| destination | CONFIGURED_DESTINATION_JNDI_NAME | The JNDI name of the JMS destination as configured on the external JNDI store. |
 
 
 
