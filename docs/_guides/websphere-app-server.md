@@ -10,9 +10,9 @@ links:
 
 ## Overview
 
-This document demonstrates how to integrate Solace Java Message Service (JMS) with the WebSphere Application Server V7 and V8 for production and consumption of JMS messages. The goal of this document is to outline best practices to enable efficient use of both the application server and Solace JMS.
+This document shows you how to integrate the Solace Java Message Service (JMS) with the WebSphere Application Server V7 and V8 for production and consumption of JMS messages. We'll outline best practices to allow efficient use of both the application server and Solace JMS.
 
-The target audience is developers using the WebSphere Application Server who have general knowledge of both it and JMS. This document focuses on the steps required to integrate the two, and provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter using the web console application of WebSphere versions 7 and 8.  For detailed information on either Solace JMS, or the WebSphere Application Server, refer to the documents referenced below.
+The target audience is developers using the WebSphere Application Server who have general knowledge of both it and JMS. This document focuses on the steps required to integrate the two, and provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter using the web console application of WebSphere versions 7 and 8.  For detailed information on either Solace JMS or the WebSphere Application Server, refer to the documents referenced below.
 
 This document is divided into the following sections:
 
@@ -642,9 +642,9 @@ The full source code for this example is available in the following sources:
 
 ### Building the samples
 
-Instructions here are provided for "Eclipse IDE for Java EE Developers" with "WebSphere Application Server Developer Tools for Eclipse" installed from Eclipse Marketplace. Adjust the steps accordingly if your environment differs.
+Instructions are provided for "Eclipse IDE for Java EE Developers" with "WebSphere Application Server Developer Tools for Eclipse" installed from Eclipse Marketplace. Adjust the steps accordingly if your environment differs.
 
-Here are the steps to create and build your project:
+Follow these steps to create and build your project:
 
 1. Clone this project from GitHub
 ```
@@ -657,7 +657,7 @@ cd solace-integration-guides/src/websphere/EJBSample-WAS/ejbModule/
 
 1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
 
-You have now built the sample application as deployable JAR or EAR archive, take note of the file and directory location.
+You have now built the sample application as a deployable JAR or EAR archive, take note of the file and directory location.
 
 ### Deploying the sample application
 
@@ -820,7 +820,7 @@ To enable viewing of the Solace resource adapter MBean and other JVM performance
 
 ### Authentication
 
-The integration example illustrated in this guide uses the authentication information specified in the custom properties of the Solace Resource Adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace 'MessageVPN' information for a connection is always retrieved from the Solace Resource Adapter configured properties (or the configured properties of the respective J2C resource).
+The integration example illustrated in this guide uses the authentication information specified in the custom properties of the Solace Resource Adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace 'MessageVPN' information for a connection is always retrieved from the Solace Resource Adapter configured properties, or the configured properties of the respective J2C resource.
 
 WebSphere supports configuration of Container-Managed authentication for J2C resources.  The administrator of an EJB application can configure message broker sign-on credentials using a J2C authentication alias that is assigned to either a J2C activation specification or J2C connection factory.  Solace JCA resource adapter supports authentication using the 'DefaultPrincipalMapping' mapping configuration alias. Refer to [WAS-REF] for more details on configuring J2C authentication data aliases.
 
@@ -834,9 +834,9 @@ Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default sc
 
 ### Using SSL Communication
 
-This section outlines how to update the message broker and WebSphere Application Server configuration to switch the client connection to using secure connections with the message broker. For the purposes of illustration, this section uses a server certificate on the message broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} and [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} outline the extra configuration items required to switch from basic authentication to client certificates.
+This section outlines how to update the message broker and WebSphere Application Server configuration to switch the client connection to using secure connections with the message broker. Forpurposes of illustration, this section uses a server certificate on the message broker and basic client authentication. It's possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} and [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} outline the extra configuration items required to switch from basic authentication to client certificates.
 
-To change a WebSphere Application Server from using a plain text connection to a secure connection, first the message broker configuration must be updated and the Solace JMS configuration within the WebSphere Application Server must be updated as outlined in the next sections.
+To change a WebSphere Application Server from using a plain text connection to a secure connection, the message broker configuration must first be updated, and the Solace JMS configuration within the WebSphere Application Server must be updated as outlined in the next sections.
 
 #### Configuring the message broker
 
@@ -850,7 +850,7 @@ The following subsections outline how to configure these items.
 
 ##### Configure the Server Certificate
 
-Before starting, here is some background detail on the server certificate required by the message broker. This is from the [Solace-FP] section “Setting a Server Certificate”
+Before starting, here is some background information on the server certificate required by the message broker. This is from the [Solace-FP] section “Setting a Server Certificate”
 
 ```
   To enable the exchange of information through TLS/SSL-encrypted SMF service, 
@@ -884,7 +884,7 @@ Then set the server certificate for the message broker.
 <br/>
 ##### Configure TLS/SSL Service Listen Port
 
-By default, the message broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the message broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.
+By default, the message broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the message broker, and should therefore be performed during a maintenance window when client disconnection is acceptable. This example assumes that the new port should be 55403.
 
 ```
 (config)# service smf
@@ -900,7 +900,7 @@ Do you want to continue (y/n)? y
 <br/>
 ##### Enable TLS/SSL within the Message VPN 
 
-By default within Solace message VPNs both the plain-text and SSL services are enabled. If the Message VPN defaults remain unchanged, then this section can be skipped. However, if within the current application VPN, this service has been disabled, then for secure communication to succeed it should be enabled. The steps below show how to enable SSL within the SMF service to allow secure client connections from the WebSphere Application Server. 
+By default, within Solace Message VPNs both plain-text and SSL services are enabled. If the Message VPN defaults remain unchanged, then this section can be skipped. However, if within the current application VPN, this service has been disabled, then for secure communication to succeed it should be enabled. The steps below show how to enable SSL within the SMF service to allow secure client connections from the WebSphere Application Server. 
 
 ```
 (config)# message-vpn solace_VPN
@@ -1007,7 +1007,7 @@ Steps to update the ‘extendedProps’ custom property of J2C Connection Factor
 
 ### Working with XA Transactions
 
-This section demonstrates how to configure the message broker to support the XA transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over XA transactions using both Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
+This section demonstrates how to configure the message broker to support XA transaction processing capabilities of the Solace JCA Resource Adapter.  Also, code examples are provided showing JMS message consumption and production over XA transactions using both Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
 XA transactions are supported in the general-availability release of SolOS version 7.1 and above.  The Solace JCA Resource Adapter provides XA Transaction support in version 7.2 and above.
 
@@ -1029,7 +1029,7 @@ To enable XA transaction support for specific JMS connection factories the custo
 
 #### XA Transactions – Sample Code
 
-The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both Bean-Managed and Container-Managed Transactions (BMT and CMT respectively) in GitHub:
+The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both BMT and CMT in GitHub:
 
 * [EJBSample-WAS-XA-BMT/ejbModule]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/){:target="_blank"}
 * [EJBSample-WAS-XA-CMT/ejbModule]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/){:target="_blank"}
@@ -1038,7 +1038,7 @@ For building and deployment instructions refer to the "Sample Application Code" 
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
-The following code is similar to the above "ConsumerMDB" example but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
+The following code is similar to the above "ConsumerMDB" example, but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
 
 ```java
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
@@ -1068,7 +1068,7 @@ public class XAConsumerMDB implements MessageListener {
 }
 ```
 
-The full source code for this example is available in the following source:
+The full source code for this example is available here:
 
 *    [XAConsumerMDB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAConsumerMDB.java){:target="_blank"}
 
@@ -1076,7 +1076,7 @@ Note that it is important to limit the maximum number of XAConsumerMDB in the po
 
 ##### Sending Messages to Solace over XA Transaction – CMT Sample Code
 
-The following code is similar to the "ProducerSB" EJB example from above but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean 'XAProducerSB' method 'sendMessage()' requires that the caller have an existing XA Transaction context.  In this example, the 'sendMessage()' method is called from the MDB - 'XAConsumerMDB' in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
+The following code is similar to the "ProducerSB" EJB example from above, but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean 'XAProducerSB' method 'sendMessage()' requires that the caller have an existing XA Transaction context.  In this example, the 'sendMessage()' method is called from the MDB - 'XAConsumerMDB' in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
 
 ```java
 @Stateless(name = "XAProducerSB")
@@ -1098,13 +1098,13 @@ public class XAProducerSB implements Producer, ProducerLocal {
 :
 ```
     
-The full source code for this example is available in the following source:
+The full source code for this example is available here:
 
 *    [XAProducerSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-CMT/ejbModule/com/solace/sample/XAProducerSB.java){:target="_blank"}
 
 ##### Sending Messages to Solace over XA Transaction – BMT Sample Code
 
-EJB code can use the UserTransaction interface (Bean-Managed) to provision and control the lifecycle of an XA transaction.  The EJB container will not provision XA transactions when the EJB class's 'TransactionManagement' type is designated as 'BEAN' managed.  In the following example, the session Bean 'XAProducerBMTSB' starts a new XA Transaction and performs an explicit 'commit()' operation after successfully sending the message.  If a runtime error is detected, then an explicit 'rollback()' operation is executed.  If the rollback operation fails, then the EJB code throws an EJBException() to allow the EJB container to handle the error.  
+EJB code can use the UserTransaction interface (Bean-Managed) to provision and control the lifecycle of an XA transaction.  The EJB container won't provision XA transactions when the EJB class's 'TransactionManagement' type is designated as 'BEAN' managed.  In the following example, the session Bean 'XAProducerBMTSB' starts a new XA Transaction and performs an explicit 'commit()' operation after successfully sending the message.  If a runtime error is detected, then an explicit 'rollback()' operation is executed.  If the rollback operation fails, then the EJB code throws an EJBException() to allow the EJB container to handle the error.  
 
 ```java
 @Stateless(name = "XAProducerBMTSB")
@@ -1129,13 +1129,13 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
 :
 ```
     
-The full source code for this example is available in the following source:
+The full source code for this example is available here:
 
 *    [XAProducerBMTSB.java]({{ site.repository }}/blob/master/src/websphere/EJBSample-WAS-XA-BMT/ejbModule/com/solace/sample/XAProducerBMTSB.java){:target="_blank"}
 
 ##### Enabling Local Transaction Support for EJBs
 
-A developer can override the use of XA Transactions (the default transactional mode of the Solace JCA Resource Adapter) and force the use of Local Transactions for specific EJBs. Note, configuring Local Transactions for an EJB instructs the Transaction Manager in WebSphere to request the use of a Local Transaction from the Solace JCA Resource Adapter (and hence the use of Local Transaction support provided by the message broker).
+You can override the use of XA Transactions (the default transactional mode of the Solace JCA Resource Adapter) and force the use of Local Transactions for specific EJBs. Note, configuring Local Transactions for an EJB instructs the Transaction Manager in WebSphere to request the use of a Local Transaction from the Solace JCA Resource Adapter; hence, the use of Local Transaction support provided by the message broker.
 
 The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean ‘ProducerSB’ to use Local Transactions instead of XA Transactions.  Refer to [WAS-REF] for further details on WebSphere specific EJB deployment descriptor files.
 
@@ -1153,9 +1153,9 @@ The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures
 ```
 
 
-### Working with the Solace Disaster Recovery Solution
+### Working with Solace Disaster Recovery
 
-The [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “Data Center Replication” contains a sub-section on “Application Implementation” which details items that need to be considered when working with Solace's Data Center Replication feature. This integration guide will show how the following items required to have a WebSphere Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
+The [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “Data Center Replication” contains a sub-section on “Application Implementation” which details items that need to be considered when working with Solace's Data Center Replication feature. This integration guide will show how the following items required to have a WebSphere Application Server successfully connect to a backup data center using Solace Data Center Replication.
 
 #### Configuring a Host List within the WebSphere Application Server
 
@@ -1165,11 +1165,11 @@ As described in [Solace Feature Guide]({{ site.links-docs-features }}){:target="
 tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
 ```
 
-The active site and standby site addresses are provided as a comma-separated list of `Connection URIs`.  When connecting, the Solace JMS connection will first try the active site and if it is unable to successfully connect to the active site, then it will try the standby site. This is discussed in much more detail in the referenced Solace documentation
+The active site and standby site addresses are provided as a comma-separated list of `Connection URIs`.  When connecting, the Solace JMS connection will first try the active site, and if it's unable to successfully connect to the active site, it will try the standby site. This is discussed in much more detail in the referenced Solace documentation
 
 #### Configuring reasonable JMS Reconnection Properties within Solace JNDI
 
-In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
+In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. The length of time is application specific depending on individual disaster recovery procedures, and can range from minutes to hours depending on the application. In general it's best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it's also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
 
 The reconnect retries is tuned in the message broker CLI as follows:
 
@@ -1199,7 +1199,7 @@ To enable WebSphere to attempt to re-activate the de-activated MDB, configure th
 When a disaster recovery switch-over occurs, the Solace JMS API must establish a new connection to the message brokers in the standby data center. Because this is a new connection there are some special considerations worth noting. The [Solace-FG] contains the following notes:
 Java and JMS APIs
 
-For client applications using the Java or JMS APIs, any sessions on which the clients have published Guaranteed messages will be destroyed after the switch‑over. To indicate the disconnect and loss of publisher flow:
+For client applications using the Java or JMS APIs, any sessions on which the clients have published Guaranteed messages will be destroyed after switch‑over. To indicate the disconnect and loss of publisher flow:
 
 ```
   The Java API will generate an exception from the 
@@ -1212,18 +1212,18 @@ For client applications using the Java or JMS APIs, any sessions on which the cl
 
 Upon receiving these exceptions the client application will know to create a new session.
 
-After a new session is established, the client application can republish any Guaranteed messages that had been sent but not acked on the previous session, as these message might not have been persisted and replicated.
+After a new session is established, the client application can republish any Guaranteed messages that had been sent, but not acked, on the previous session, as these message might not have been persisted and replicated.
 
-To avoid out-of-order messages, the application must maintain an unacked list that is added to before message publish and removed from on receiving an ack from the message broker. If a connection is re‑established to a different host in the hostlist, the unacked list must be resent before any new messages are published.
+To avoid out-of-order messages, the application must maintain an unacked list that is added to before message publishing, and removed from on receiving an ack from the message broker. If a connection is re‑established to a different host in the hostlist, the unacked list must be resent before any new messages are published.
 
-Note: When sending persistent messages using the JMS API, a producer's send message will not return until an acknowledgment is received from the message broker. Once received, it is safe to remove messages from the unacked list.
+Note: When sending persistent messages using the JMS API, a producer's send message will not return until an acknowledgment is received from the message broker. Once received, it's safe to remove messages from the unacked list.
 
 Alternatively, if the application has a way of determining the last replicated message—perhaps by reading from a last value queue—then the application can use that to determine where to start publishing.
 For integration with WebSphere, it's important to consider this interaction in the context of a Message Driven Bean and Session Bean.
 
 ##### Receiving Messages in a Message Driven Bean
 
-There is no special processing required during a disaster recovery switch-over specifically for applications receiving messages. After successfully reconnecting to the standby site, it is possible that the application will receive some duplicate messages. The application should apply normal duplicate detection handling for these messages.
+There is no special processing required during a disaster recovery switch-over specifically for applications receiving messages. After successfully reconnecting to the standby site, it's possible that the application will receive some duplicate messages. The application should apply normal duplicate detection handling for these messages.
 
 ##### Sending Messages from a Session Bean
 
@@ -1235,9 +1235,9 @@ For WebSphere applications that are sending messages, there is nothing specifica
 
 ### Using an external JNDI store for Solace JNDI lookups
 
-By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the Solace message broker.
+By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the message broker.
 
-It is possible to use an external JNDI provider such as an external LDAP server instead, and provision the Solace JNDI objects there.
+It's possible to use an external JNDI provider such as an external LDAP server instead, and provision the Solace JNDI objects there.
 
 The following configuration changes are required to use an external JNDI provider:
 
@@ -1266,7 +1266,3 @@ The following table summarizes the values used for custom properties if using an
 | **Name** | **Value** | **Description** |
 | connectionFactoryJndiName | CONFIGURED_CF_JNDI_NAME | The JNDI name of the JMS connection factory as configured on the external JNDI store. |
 | destination | CONFIGURED_DESTINATION_JNDI_NAME | The JNDI name of the JMS destination as configured on the external JNDI store. |
-
-
-
-
