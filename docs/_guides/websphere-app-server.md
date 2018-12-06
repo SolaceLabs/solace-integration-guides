@@ -5,7 +5,7 @@ summary: The WebSphere Application Server provides a comprehensive framework for
 icon: ibm-websphere.png
 links:
    - label: Example Source Code - WebSphere
-     link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/WebSphere
+     link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/websphere
 ---
 
 ## Overview
