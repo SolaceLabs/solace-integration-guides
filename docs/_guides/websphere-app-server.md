@@ -665,7 +665,7 @@ cd solace-integration-guides/src/websphere/EJBSample-WAS/ejbModule/
 
 1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
 
-You have now built the sample application as a deployable JAR or EAR archive, take note of the file and directory location.
+You have now built the sample application as a deployable JAR or EAR archive. Take note of the file and directory location.
 
 ### Deploying the sample application
 
@@ -1046,7 +1046,7 @@ For building and deployment instructions refer to the [Sample Application Code](
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
-The following code is similar to the above "ConsumerMDB" example, but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
+The following code is similar to the basic "ConsumerMDB" example, but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
 
 ```java
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
@@ -1099,11 +1099,12 @@ public class XAProducerSB implements Producer, ProducerLocal {
     public XAProducerSB() {
     }
 
-    @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(value = TransactionAttributeType.REQUIRED)
     @Override
     public void sendMessage() throws JMSException {
-:
-:
+        :
+        :
+}
 ```
     
 The full source code for this example is available here:
@@ -1229,12 +1230,13 @@ Refer to the [Configuring the Solace Resource Adapter properties](#configuring-t
 The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
 
 | **Name** | **Value** | **Description** |
-| PROVIDER_PROTOCOL://IP:Port | ConnectionURL | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
+| ConnectionURL | PROVIDER_PROTOCOL://IP:Port | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
 | messageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
 | UserName | jndi_provider_username | The username credential on the external JNDI store (not on the message broker) |
 | Password | jndi_provider_password | The password credential on the external JNDI store (not on the message broker) |
 | ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` implementing the 3rd party provider InitialContextFactory class with your provider's class name. Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter properties section](#configuring-the-solace-resource-adapter-properties).
-||| **Important**: the jar library implementing the 3rd party provider InitialContextFactory class must be placed in the application server's class path. |
+
+**Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path.
 
 <br/>
 

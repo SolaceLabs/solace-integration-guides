@@ -23,6 +23,8 @@ links-docs-webadmin: https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manage
 links-docs-replication: https://docs.solace.com/Features/Data-Center-Replication.htm
 links-docs-replication-client-config: https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration
 links-was-reference: https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html
+links-jboss-modules: https://jboss-modules.github.io/jboss-modules/manual
+links-jboss-modules-file-system: https://jboss-modules.github.io/jboss-modules/manual/#basic-repository
 
 #----------------------------------------------------
 # Generally don't modify items below this point
