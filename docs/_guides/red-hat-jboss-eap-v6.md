@@ -612,7 +612,7 @@ The structure of all variants is the same:
   * ProducerLocal.java - "Producer"'s local EJB interface to call `sendMessage()`
 
 * EJB XML descriptor under `ejbModule/META-INF/`
-  * ejb-jar.xml - deployment descriptor providing required EJB configuration information
+  * ejb-jar.xml - descriptor providing EJB configuration and mappings
 
 ### Receiving messages from Solace – Sample Code
 
