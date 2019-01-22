@@ -40,6 +40,8 @@ These links contain information related to this guide:
 * [WebLogic Application Server Information Library](http://www.oracle.com/technetwork/middleware/weblogic/documentation/index.html){:target="_blank"}
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112){:target="_blank"}
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Integrating with WebLogic Application Server
 
 Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace JMS message router.  There are two options for integrating Solace with WebLogic for use by Java enterprise applications including embedded and stand-alone deployment.  This section will cover instructions on configuring the Resource Adapter Archive (RAR) file for stand-alone deployment, and configuring Solace as a Foreign JMS Provider
@@ -86,54 +88,47 @@ The following Solace message router resources are required for the integration s
 
 <table>
     <tr>
-    <th>Resource</th>
-    <th>Value</th>
-    <th>Description</th>
+      <th>Resource</th>
+      <th>Value</th>
+      <th>Description</th>
     </tr>
     <tr>
-    <td>Solace Message Router IP:Port</td>
-    <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
+      <td>Solace Message Router Host</td>
+      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
     </tr>
     <tr>
-    <td>Message VPN</td>
-    <td>solace_VPN</td>
-    <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
+      <td>Message VPN</td>
     </tr>
     <tr>
-    <td>Client Username</td>
-    <td>solace_user</td>
-    <td>The client username.</td>
+      <td>Client Username</td>
     </tr>
     <tr>
-    <td>Client Password</td>
-    <td>solace_password</td>
-    <td>Optional client password. </td>
+      <td>Client Password</td>
     </tr>
     <tr>
-    <td>Solace Queue</td>
-    <td>solace_requests</td>
-    <td>Solace destination for messages consumed by JEE enterprise application</td>
+      <td>Solace Queue</td>
+      <td>solace_requests</td>
+      <td>Solace destination for messages consumed by JEE enterprise application</td>
     </tr>
     <tr>
-    <td>Solace Queue</td>
-    <td>solace_replies</td>
-    <td>Solace destination for messages produced by JEE enterprise application</td>
+      <td>Solace Queue</td>
+      <td>solace_replies</td>
+      <td>Solace destination for messages produced by JEE enterprise application</td>
     </tr>
     <tr>
-    <td>JNDI Connection Factory</td>
-    <td>JNDI/Sol/CF</td>
-    <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
+      <td>JNDI Connection Factory</td>
+      <td>JNDI/Sol/CF</td>
+      <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
     </tr>
     <tr>
-    <td>JNDI Queue Name</td>
-    <td>JNDI/Sol/Q/requests</td>
-    <td>The JNDI name of the queue used in the samples</td>
+      <td>JNDI Queue Name</td>
+      <td>JNDI/Sol/Q/requests</td>
+      <td>The JNDI name of the queue used in the samples</td>
     </tr>
     <tr>
-    <td>JNDI Queue Name</td>
-    <td>JNDI/Sol/Q/replies</td>
-    <td>The JNDI name of the queue used in the samples</td>
+      <td>JNDI Queue Name</td>
+      <td>JNDI/Sol/Q/replies</td>
+      <td>The JNDI name of the queue used in the samples</td>
     </tr>
 </table>
 
@@ -202,9 +197,7 @@ The following entities on the Solace message router need to be configured at a m
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace message router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace message router CLI see [Solace-CLI]. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace-FG] section “User Authentication and Authorization”.
-
-Also note that this configuration can also be easily performed using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace’s browser-based administration console packaged with the Solace PubSub+ message broker. This is in fact the recommended approach for configuring a Solace message router. This document uses CLI as the reference to remain concise.
+{% include_relative assets/solaceConfig.md %}
 
 #### Creating a Message VPN
 

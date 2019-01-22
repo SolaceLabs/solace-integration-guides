@@ -45,6 +45,8 @@ These documents contain information related to the feature defined in this docum
 * This document is based on SolOS version 7.1.1, though earier versions (such as SolOS 6.2) should work without any changes.
 * Setup steps in this guide were tested on CentOS 6.3 CentOS 7.0 (both 64 Bit Minimal install).  Command syntax and file locations would vary on other flavors of Linux.
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Nagios Setup
 
 ### Prerequisites

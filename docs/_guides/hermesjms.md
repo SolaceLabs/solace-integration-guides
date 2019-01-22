@@ -18,6 +18,8 @@ This guide assumes that:
 -	The necessary configuration on the Solace Message Router is done. Configuration includes the creation of elements such as the message-VPN and the JMS Connection Factory.
 -	If SSL connectivity is desired, you will need to ensure that the Solace Message Router is correctly configured with SSL certificate(s), and that you have obtained a copy of the trust store, and keystore (if necessary) from your administrator.
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Setup Steps
 
 ### Modify HermesJMS startup 
@@ -28,7 +30,7 @@ This guide assumes that:
 
 #### OS X
 Step 1. Open the Applications directory in Finder. Right-click on the HermesJMS icon and select “Show Package Contents”. 
-  
+
 ![]({{ site.baseurl }}/images/hermesjms/Picture1.png)
 
 Step 2. Go into the Contents subdirectory.
@@ -88,15 +90,15 @@ Step 8. Add the following properties for the Connection Factory:
     </tr>
     <tr>
     <td>providerURL</td>
-    <td>smf://HOST_IP[:PORT]</td>
+    <td>smf://SOLACE_HOST_IP[:PORT]</td>
     </tr>
     <tr>
     <td>securityPrincipal</td>
-    <td>CLIENT_USER_NAME@MSG_VPN_NAME</td>
+    <td>SOLACE_CLIENT_USERNAME@SOLACE_MSG_VPN_NAME</td>
     </tr>
     <tr>
     <td>securityCredentials</td>
-    <td>PASSWORD</td>
+    <td>SOLACE_CLIENT_PASSWORD</td>
     </tr>
 </table>
   
@@ -109,7 +111,7 @@ Step 9. Hit “OK” to finish creating the new Hermes JMS session.
 a)	Right-click on jms/sessions/SolaceSession tree node in the “Sessions” area and select New…/Add queue…
 
 ![]({{ site.baseurl }}/images/hermesjms/create-queue-1.png)
-
+
 b)	Input the following properties:
 
 <table>

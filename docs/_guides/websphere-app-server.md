@@ -37,6 +37,8 @@ This document is divided into the following sections:
 * [WebSphere Application Server Information Library]({{ site.links-was-reference }}){:target="_top"}
 * [Java Connector Architecture v1.5](https://jcp.org/en/jsr/detail?id=112 ){:target="_blank"}
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Integrating with WebSphere Application Server
 
 Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ message broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
@@ -71,16 +73,52 @@ To illustrate this integration example, all named resources created on the Solac
 
 The following Solace PubSub+ message broker resources are required for the integration sample in this document.
 
-| **Resource** | **Value** | **Description** |
-| Solace PubSub+ Message Broker IP:Port | __IP:Port__ | The IP address and port of the message broker message backbone. This is the address client's use when connecting to the message broker to send and receive message. This document uses a value of __IP:PORT__. |
-| Message VPN | solace_VPN | A Message VPN, or virtual message broker, to scope the integration on the message broker. |
-| Client Username | solace_user | The client username. |
-| Client Password | solace_password |  Optional client password. |
-| Solace Queue | solace_requests | Solace destination for messages consumed by JEE enterprise application |
-| Solace Queue | solace_replies | Solace destination for messages produced by JEE enterprise application |
-| JNDI Connection Factory | JNDI/Sol/CF | The JNDI Connection factory for controlling Solace JMS connection properties |
-| JNDI Queue Name | JNDI/Sol/Q/requests | The JNDI name of the queue used in the samples |
-| JNDI Queue Name | JNDI/Sol/Q/replies | The JNDI name of the queue used in the samples |
+<table>
+    <tr>
+      <th>Resource</th>
+      <th>Value</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Solace Message Router Host</td>
+      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+    </tr>
+    <tr>
+      <td>Message VPN</td>
+    </tr>
+    <tr>
+      <td>Client Username</td>
+    </tr>
+    <tr>
+      <td>Client Password</td>
+    </tr>
+    <tr>
+      <td>Solace Queue</td>
+      <td>solace_requests</td>
+      <td>Solace destination for messages consumed by JEE enterprise application</td>
+    </tr>
+    <tr>
+      <td>Solace Queue</td>
+      <td>solace_replies</td>
+      <td>Solace destination for messages produced by JEE enterprise application</td>
+    </tr>
+    <tr>
+      <td>JNDI Connection Factory</td>
+      <td>JNDI/Sol/CF</td>
+      <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
+    </tr>
+    <tr>
+      <td>JNDI Queue Name</td>
+      <td>JNDI/Sol/Q/requests</td>
+      <td>The JNDI name of the queue used in the samples</td>
+    </tr>
+    <tr>
+      <td>JNDI Queue Name</td>
+      <td>JNDI/Sol/Q/replies</td>
+      <td>The JNDI name of the queue used in the samples</td>
+    </tr>
+</table>
+
 
 #### Application Server Resource Naming Convention
 
@@ -110,9 +148,7 @@ The following entities on the Solace PubSub+ message broker need to be configure
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the message broker configuration.
 
-The recommended approach for configuring a message broker is using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace's browser-based administration console packaged with the Solace PubSub+ message broker. This document uses CLI as the reference to remain concise - look for related settings if using the administration console.
-
-For reference, the CLI commands in this guide are from SolOS version 7.2 but will generally be forward compatible. For more details related to message broker CLI see [Solace-CLI]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [User Authentication and Authorization]({{ site.links-docs-user-authenticate-authorize }}){:target="_top"}.
+{% include_relative assets/solaceConfig.md %}
 
 #### Creating a Message VPN
 
@@ -237,7 +273,7 @@ The following Java system property must be configured in the application server 
   -DpasswordDecoderMethodName=decodePassword
 ```
 
-The above properties allow the resource adapter to decrypt authentication credentials encrypted by WebSphere before sending them to the Solace appliance.
+The above properties allow the resource adapter to decrypt authentication credentials encrypted by WebSphere before sending them to the Solace message broker.
 
 Steps to configure application server JVM properties:
 
@@ -288,7 +324,7 @@ Connecting to the message broker through the Solace JMS Resource Adapter require
 
 The above information is specified across one or more J2C entities depending on your application’s JMS message flow (Inbound, Outbound, or both).  Configuration of a J2C connection factory is required for outbound message flow, while configuration of a J2C activation specification is required for inbound message flow.
 
-The Solace Resource Adapter includes several custom properties for specifying connectivity and authentication details to the Solace appliance.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple message brokers.
+The Solace Resource Adapter includes several custom properties for specifying connectivity and authentication details to the Solace message broker.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple message brokers.
 
 Please refer to [WAS-REF]({{ site.links-was-reference }}){:target="_top"} and [JCA-1.5](https://jcp.org/en/jsr/detail?id=112 ){:target="_blank"}
  for more details on configuring general JEE authentication options. The [Authentication](#authentication) section below discusses configuration of Solace specific authentication in more detail. 

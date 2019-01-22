@@ -34,6 +34,8 @@ These links contain information related to this guide:
 * [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html){:target="_blank"}
 * [Flink SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html){:target="_blank"}
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Integrating with Flink Streaming
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in [src/flink-jms-connector]({{ site.repository }}/blob/master/src/flink-jms-connector){:target="_blank"}.
 
@@ -62,24 +64,17 @@ The following Solace Message Router resources are required.
     <th>Description</th>
     </tr>
     <tr>
-    <td>Solace Message Router IP:Port</td>
-    <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
+      <td>Solace Message Router Host</td>
+      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
     </tr>
     <tr>
-    <td>Message VPN</td>
-    <td>Solace_Flink_VPN</td>
-    <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
+      <td>Message VPN</td>
     </tr>
     <tr>
-    <td>Client Username</td>
-    <td>flink_user</td>
-    <td>The client username.</td>
+      <td>Client Username</td>
     </tr>
     <tr>
-    <td>Client Password</td>
-    <td>flink_password</td>
-    <td>Optional client password. </td>
+      <td>Client Password</td>
     </tr>
     <tr>
     <td>Solace Queue</td>
@@ -184,9 +179,7 @@ The Solace Message Router needs to be configured with the following configuratio
 * Guaranteed messaging endpoints for receiving messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
-
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
+{% include_relative assets/solaceConfig.md %}
 
 #### Creating a Message VPN
 

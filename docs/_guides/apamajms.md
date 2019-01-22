@@ -40,6 +40,8 @@ These links contain information related to this guide:
 * [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/docs/){:target="_blank"}
 * [Connecting Apama Applications to External Components](http://www.apamacommunity.com/documents/10.0.0.1/apama_10.0.0.1_connecting-apama-applications.pdf){:target="_blank"}
 
+{% include_relative assets/solaceMessaging.md %}
+
 ## Integrating with Apama Streaming Analytics
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Apama CEP Correlator. The full code is freely available on Github as part of this project in [src/apama-solace-sample]({{ site.repository }}/blob/master/src/apama-solace-sample){:target="_blank"}.
 
@@ -63,44 +65,39 @@ This integration guide will demonstrate creation of Solace JMS custom receiver a
 
 The following Solace Message Router resources are required.
 
-
 <table>
-    <tr>
+  <tr>
     <th>Resource</th>
     <th>Value</th>
     <th>Description</th>
-    </tr>
-    <tr>
-    <td>Solace Message Router IP:Port</td>
-    <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
+    <td>Solace Message Router Host</td>
+    <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+  </tr>
+  <tr>
     <td>Message VPN</td>
-    <td>apama</td>
-    <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
     <td>Client Username</td>
-    <td>apama_user</td>
-    <td>The client username.</td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
     <td>Client Password</td>
-    <td>empty</td>
-    <td>Optional client password. </td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
     <td>Solace Queue</td>
     <td>apama</td>
     <td>Solace destination of persistent messages consumed</td>
-    </tr>
-    <tr>
+  </tr>
+  <tr>
     <td>JNDI Connection Factory</td>
     <td>jms/cf/apama</td>
     <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
-    </tr>
+  </tr>
 </table>
+
+<br/>
+
 
 ###	Step 1 – Obtain access to Solace message router and JMS API
 
@@ -114,7 +111,7 @@ The Solace JMS jars are required.  They can be obtained on [Solace Developer Por
 
 The easiest way to integrate Solace and Apama is using the client libraries available via public Maven Repositories, for example:
 
-``` xml
+```xml
   <dependencies>
     <dependency>
       <groupId>com.solacesystems</groupId>
@@ -158,9 +155,7 @@ The Solace Message Router needs to be configured with the following configuratio
 * Guaranteed messaging endpoints for receiving messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
-
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
+{% include_relative assets/solaceConfig.md %}
 
 #### Creating a Message VPN
 
