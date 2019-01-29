@@ -6,11 +6,15 @@ repository: https://github.com/SolaceLabs/solace-integration-guides
 # Also see _includes/intro.html to customize the description which gets included in index.html.
 
 # Links
+links-vmr-setup: https://docs.solace.com/Solace-SW-Broker-Set-Up/Setting-Up-SW-Brokers.htm
+links-solaceCloud-setup: //cloud.solace.com/create-messaging-service/
 links-dev-portal: http://dev.solace.com
 links-docs-jms: http://docs.solace.com/Solace-JMS-API/JMS-home.htm
 links-docs-jms-api: http://docs.solace.com/API-Developer-Online-Ref-Documentation/jms/index.html
+links-docs-jms-properties: https://docs.solace.com/Solace-JMS-API/JMS-Properties-Reference.htm
 links-docs-features: https://docs.solace.com/Features/Core-Concepts.htm
 links-docs-router-config: http://docs.solace.com/Router-Configuration.htm
+links-docs-config-server-cert: https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm
 links-docs-cli: https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm
 links-docs-user-authenticate-authorize: https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm
 links-docs-client-authenticate-authorize: https://docs.solace.com/Features/Client-authentication-and-authorization.htm
@@ -25,6 +29,17 @@ links-docs-replication-client-config: https://docs.solace.com/Features/Data-Cent
 links-was-reference: https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html
 links-jboss-modules: https://jboss-modules.github.io/jboss-modules/manual
 links-jboss-modules-file-system: https://jboss-modules.github.io/jboss-modules/manual/#basic-repository
+links-springfw-four: https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/
+links-springfw-five: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/
+links-springfw-five-java-based-container: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/core.html#beans-java
+links-springfw-five-async-reception: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-asynchronousMessageReception
+links-springfw-five-jms-template: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-jmstemplate
+links-springfw-five-jms-dest-mgmt: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-destinations
+links-springfw-four-logging: https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/htmlsingle/#overview-logging 
+
+
+
+
 
 #----------------------------------------------------
 # Generally don't modify items below this point

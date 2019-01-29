@@ -44,16 +44,16 @@ There are several ways you can get access to Solace Messaging and find these req
 
 ![]({{ site.baseurl }}/assets/images/connectivity-info.png)
 
-### Option 2: Start a Solace VMR
+### Option 2: Start a Solace PubSub+ Software Message Broker
 
-* Follow [these instructions]({{ site.docs-vmr-setup }}){:target="_top"} to start the Solace VMR in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace VMR.
+* Follow [these instructions]({{ site.links-vmr-setup }}){:target="_top"} to start the Solace software message broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software message broker.
 * The messaging connectivity information are the following:
-    * Host: \<public_ip> (IP address assigned to the VMR in tutorial instructions)
+    * Host: \<public_ip> (IP address assigned to the software message broker in tutorial instructions)
     * Message VPN: default
     * Client Username: sampleUser (can be any value)
     * Client Password: samplePassword (can be any value)
 
-    Note: By default, the Solace VMR "default" message VPN has authentication disabled.
+    Note: By default, the Solace software message broker "default" message VPN has authentication disabled.
 
 ### Option 3: Get access to a Solace appliance
 
