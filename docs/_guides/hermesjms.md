@@ -29,7 +29,7 @@ This guide assumes that:
 * In the HermesJMS distribution you will find a bin directory with the startup files, hermes.bat and hermes.sh. Edit the file you use to start HermesJMS and add the system property definition `-DSolace_JMS_Browser_Timeout_In_MS=1000` to the Java command. 
 
 #### OS X
-Step 1. Open the Applications directory in Finder. Right-click on the HermesJMS icon and select “Show Package Contents”. 
+Step 1. Open the Applications directory in Finder. Right-click on the HermesJMS icon and select "Show Package Contents". 
 
 ![]({{ site.baseurl }}/images/hermesjms/Picture1.png)
 
@@ -43,7 +43,7 @@ Step 3. Double-click to edit the Info.plist file with the (optionally installed)
 
 
 ### Start HermesJMS and create a new Hermes JMS session
-Step 1. Right-click on jms/sessions tree node in the “Sessions” area and select New…/New session… Call it “SolaceSession”. Make sure to uncheck `Use Consumer and Transacted.`
+Step 1. Right-click on jms/sessions tree node in the "Sessions" area and select New…/New session… Call it "SolaceSession". Make sure to uncheck `Use Consumer and Transacted.`
 
 ![]({{ site.baseurl }}/images/hermesjms/create-session-1.png)
 
@@ -51,15 +51,15 @@ Step 2. You will be presented with a Preferences dialog which contains 4 tabs. S
 
 ![]({{ site.baseurl }}/images/hermesjms/create-session-2.png)
 
-Step 3. Add a new Classpath group, by right clicking on “Classpath Groups” and selecting Add Group from the popup menu. Type “SolaceJMS” in the Classpath group name text field and hit OK. 
+Step 3. Add a new Classpath group, by right clicking on "Classpath Groups" and selecting Add Group from the popup menu. Type "SolaceJMS" in the Classpath group name text field and hit OK. 
   
 ![]({{ site.baseurl }}/images/hermesjms/create-session-3.png)
 
-Step 4. Now, add all of the jars in the lib directory of the Solace JMS distribution package, and hit “OK”. A confirmation dialog will be presented (see below). Hit “Don’t scan” to proceed.
+Step 4. Now, add all of the jars in the lib directory of the Solace JMS distribution package, and hit "OK". A confirmation dialog will be presented (see below). Hit "Don’t scan" to proceed.
   
 ![]({{ site.baseurl }}/images/hermesjms/create-session-4.png)
 
-Step 5. Hit “Apply” to save the configuration.
+Step 5. Hit "Apply" to save the configuration.
 
 ![]({{ site.baseurl }}/images/hermesjms/create-session-5.png)
 
@@ -69,7 +69,7 @@ Step 6. Switch to the Sessions tab to start configuring the ConnectionFactory.
 
 Step 7. Select the following settings in the drop-down menu for the Connection Factory.
   * For Class,  select hermes.JNDIConnectionFactory
-  * For Loader, select SolaceJMS which was previously configured. Sometimes the drop-down menu has not been updated with the SolaceJMS option. If this happens, close the dialog with “OK” and reopen by right clicking the “SolaceJMS” and selecting “edit”.
+  * For Loader, select SolaceJMS which was previously configured. Sometimes the drop-down menu has not been updated with the SolaceJMS option. If this happens, close the dialog with "OK" and reopen by right clicking the "SolaceJMS" and selecting "edit".
   
 ![]({{ site.baseurl }}/images/hermesjms/create-session-7.png)
 
@@ -104,11 +104,11 @@ Step 8. Add the following properties for the Connection Factory:
   
 ![]({{ site.baseurl }}/images/hermesjms/create-session-8.png)
  
-Step 9. Hit “OK” to finish creating the new Hermes JMS session.
+Step 9. Hit "OK" to finish creating the new Hermes JMS session.
    
 ### Create a new Hermes Queue
 
-a)	Right-click on jms/sessions/SolaceSession tree node in the “Sessions” area and select New…/Add queue…
+a)	Right-click on jms/sessions/SolaceSession tree node in the "Sessions" area and select New…/Add queue…
 
 ![]({{ site.baseurl }}/images/hermesjms/create-queue-1.png)
 
@@ -131,7 +131,7 @@ b)	Input the following properties:
 
 ![]({{ site.baseurl }}/images/hermesjms/create-queue-2.png)
 
-c)	Hit “OK” to finish creating the new Hermes JMS queue.
+c)	Hit "OK" to finish creating the new Hermes JMS queue.
 
 ###	Test the setup
 
@@ -141,7 +141,7 @@ a)	To browse the message in the queue added in the previous setup, simply double
 
 ###	Configure Hermes JMS session to connect securely over SSL
 
-a)	Using your preferred text editor, create a new file to pass additional user properties to HermesJMS. For this example, the name of the properties file will be “solace.jms.properties”.
+a)	Using your preferred text editor, create a new file to pass additional user properties to HermesJMS. For this example, the name of the properties file will be "solace.jms.properties".
 
 b)	Insert the following two lines of text into your file. Note that the text should be modified to point to the location of your trust store, and must also contain the password of your trust store.
 
@@ -150,19 +150,19 @@ Solace_JMS_SSL_TrustStore=C:\\JMS\\HermesJMS\\truststore.jks
 Solace_JMS_SSL_TrustStorePassword=myTrustStorePassword
 ```
 
-c)	Edit the Hermes JMS session in [Start HemesJMS](#start-hermesjms-and-create-a-new-hermes-jms-session) to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the “Sessions” area and select Edit…
+c)	Edit the Hermes JMS session in [Start HemesJMS](#start-hermesjms-and-create-a-new-hermes-jms-session) to have the session connect securely over SSL. Right-click on jms/sessions/SolaceSession tree node in the "Sessions" area and select Edit…
 
 ![]({{ site.baseurl }}/images/hermesjms/connect-ssl-1.png)
 
 d)	Edit the providerURL property to connect to `smfs://<message router IP>:[<SSL port>]`.
 
-e)	Add “userPropertiesFile” property to the connection factory. This value of this property must be the full file name of the solace.jms.properties file that was created earlier in step (a).
+e)	Add "userPropertiesFile" property to the connection factory. This value of this property must be the full file name of the solace.jms.properties file that was created earlier in step (a).
 
 ![]({{ site.baseurl }}/images/hermesjms/connect-ssl-2.png)
 
 ###	Configure Hermes JMS session to connect using client certificate authentication
 
-a)	[“Configure Hermes JMS session to connect securely over SSL”](#configure-hermes-jms-session-to-connect-securely-over-ssl) must be done prior to enabling client certificate authentication.
+a)	["Configure Hermes JMS session to connect securely over SSL"](#configure-hermes-jms-session-to-connect-securely-over-ssl) must be done prior to enabling client certificate authentication.
 
 b)	Edit the solace.jms.properties custom user property file to specify additional properties, modifying them to point to your actual files, and passwords as necessary.
 

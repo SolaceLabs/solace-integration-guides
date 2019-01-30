@@ -97,7 +97,7 @@ The following Solace message broker resources are required for the integration s
     </tr>
     <tr>
       <td>Solace Message Router Host</td>
-      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -165,7 +165,7 @@ The following entities on the Solace message broker need to be configured at a m
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “solace_VPN” on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the JBoss Application Server configuration when connecting to the Solace messaging appliance. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called "solace_VPN" on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the JBoss Application Server configuration when connecting to the Solace messaging appliance. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 (config)# create message-vpn solace_VPN
@@ -187,7 +187,7 @@ This section outlines how to create a message-VPN called “solace_VPN” on the
 
 This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of “solace_user” will be required by the JBoss Application Server when connecting to the Solace message broker.
+The chosen client username of "solace_user" will be required by the JBoss Application Server when connecting to the Solace message broker.
 
 ```
 (config)# client-profile default message-vpn solace_VPN
@@ -207,7 +207,7 @@ The chosen client username of “solace_user” will be required by the JBoss Ap
 
 #### Setting up Guaranteed Messaging Endpoints
 
-This integration guide shows receiving messages and sending reply messages within the JBoss Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. The queue names chosen are “solace_requests” and “solace_replies”.
+This integration guide shows receiving messages and sending reply messages within the JBoss Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. The queue names chosen are "solace_requests" and "solace_replies".
 
 ```
 (config)# message-spool message-vpn solace_VPN
@@ -824,7 +824,7 @@ Please refer to [JBOSS-REF] for details on modifying the default behavior of JND
 
 ## Working with Solace High Availability (HA)
 
-The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
@@ -925,7 +925,7 @@ The following sections outline how to configure these items.
 
 ##### Configure the Server Certificate
 
-Before, starting, here is some background detail on the server certificate required by the Solace message broker. This is from the [Solace-Docs] section “Setting a Server Certificate”
+Before, starting, here is some background detail on the server certificate required by the Solace message broker. This is from the [Solace-Docs] section "Setting a Server Certificate"
 
 ```
 To enable the exchange of information through TLS/SSL-encrypted SMF service, you must set the TLS/SSL server certificate file that the Solace message broker is to use. This server certificate is presented to a client during the TLS/SSL handshakes. A server certificate used by an appliance must be an x509v3 certificate and it must include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
@@ -933,7 +933,7 @@ To enable the exchange of information through TLS/SSL-encrypted SMF service, you
 The single server certificate file set for the appliance can have a maximum chain depth of three (that is, the single certificate file can contain up to three certificates in a chain that can be used for the certificate verification).
 ```
 
-To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named “mycert.pem”.
+To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
 
 ```
 # copy sftp://[<username>@]<ip-addr>/<remote-pathname>/mycert.pem /certs
@@ -993,13 +993,13 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 <URI Scheme>://[username]:[password]@<IP address>[:port]
 ```
 
-Recall from Section 3.3, originally, the “ConnectionURL” was as follows:
+Recall from Section 3.3, originally, the "ConnectionURL" was as follows:
 
 ```
 smf://___IP:PORT___
 ```
 
-This specified a URI scheme of “smf” which is the plaint-text method of communicating with the Solace message broker. This should be updated to “smfs” to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "smf" which is the plaint-text method of communicating with the Solace message broker. This should be updated to "smfs" to switch to secure communication giving you the following configuration:
 
 ```
 smfs://___IP:PORT___
@@ -1044,7 +1044,7 @@ A trust store password may also be specified. This password allows the Solace JM
 Solace_JMS_SSL_TrustStorePassword=___Password___
 ```
 
-There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: “jks” for Java Key Store or “pkcs12”. Setting the trust store format is done through the parameter ‘Solace_JMS_SSL_TrustStoreFormat’:
+There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: "jks" for Java Key Store or "pkcs12". Setting the trust store format is done through the parameter ‘Solace_JMS_SSL_TrustStoreFormat’:
 
 ```
 Solace_JMS_SSL_TrustStoreFormat=jks
@@ -1119,7 +1119,7 @@ To enable XA Recovery for specific JCA connection factories in JBoss the custome
 
 Steps to enable XA-recovery for a JCA connection factory:
 
-Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:1.1’ subsystem of the JBoss application server configuration and add or update the ‘recovery’ sign-on credentials.  The user-name and password values may be specified using replaceable JBoss property names (Example: ‘${solace.recovery.user}’).  Note the property ‘solace.recovery.user’ may be defined in the JBoss Server Bootstrap Script Configuration file (Example: <JBOSS_HOME>/bin/standalone.conf by setting JAVA_OPTS=”$JAVA_OPTS –Dsolace.recovery.user=solace_user”):
+Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘urn:jboss:domain:resource-adapters:1.1’ subsystem of the JBoss application server configuration and add or update the ‘recovery’ sign-on credentials.  The user-name and password values may be specified using replaceable JBoss property names (Example: ‘${solace.recovery.user}’).  Note the property ‘solace.recovery.user’ may be defined in the JBoss Server Bootstrap Script Configuration file (Example: <JBOSS_HOME>/bin/standalone.conf by setting JAVA_OPTS="$JAVA_OPTS –Dsolace.recovery.user=solace_user"):
 
 ```xml
   <connection-definitions>
@@ -1255,7 +1255,7 @@ The full source code for this example is available here:
 
 ### Working with Solace Disaster Recovery
 
-The [Solace-FG] section “Data Center Replication” contains a sub-section on “Application Implementation” which details items that need to be considered when working with Solace’s Data Center Replication feature. This integration guide will show how the following items required to have a JBoss Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
+The [Solace-FG] section "Data Center Replication" contains a sub-section on "Application Implementation" which details items that need to be considered when working with Solace’s Data Center Replication feature. This integration guide will show how the following items required to have a JBoss Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
 
 * Configuring a Host List within the JBoss Application Server
 * Configuring JMS Reconnection Properties within Solace JNDI
@@ -1274,7 +1274,7 @@ The active site and standby site addresses are provided as a comma-separated lis
 
 #### Configuring reasonable JMS Reconnection Properties within Solace JNDI
 
-In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
+In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the "reconnect retries" parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of "-1" to force the Solace JMS API to reconnect indefinitely.
 
 The reconnect retries is tuned in the Solace message broker CLI as follows:
 

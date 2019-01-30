@@ -81,7 +81,7 @@ The following Solace PubSub+ message broker resources are required for the integ
     </tr>
     <tr>
       <td>Solace Message Router Host</td>
-      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -176,7 +176,7 @@ This section outlines how to create a message-VPN called `solace_VPN` on the mes
 #### Configuring Client Usernames & Profiles
 
 This section outlines how to update the default client-profile and how to create a client username for connecting to the message broker For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions for the XA-transactions capable Solace JCA Resource Adapter.
-The chosen client username of “solace_user” will be required by the WebSphere Application Server when connecting to the message broker
+The chosen client username of "solace_user" will be required by the WebSphere Application Server when connecting to the message broker
 
 ```
 (config)# client-profile default message-vpn solace_VPN
@@ -196,7 +196,7 @@ The chosen client username of “solace_user” will be required by the WebSpher
 
 #### Setting up Guaranteed Messaging Endpoints
 
-This integration guide shows receiving messages and sending reply messages within the WebSphere Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. The queue names chosen are “solace_requests” and “solace_replies”.
+This integration guide shows receiving messages and sending reply messages within the WebSphere Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. The queue names chosen are "solace_requests" and "solace_replies".
 
 ```
 (config)# message-spool message-vpn solace_VPN
@@ -751,7 +751,7 @@ In general, refer to [WAS-REF]({{ site.links-was-reference }}){:target="_top"} f
 
 ## Working with Solace High Availability (HA)
 
-The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
@@ -894,7 +894,7 @@ The following subsections outline how to configure these items.
 
 ##### Configure the Server Certificate
 
-Before starting, here is some background information on the server certificate required by the message broker. This is from the [Solace-FP] section “Setting a Server Certificate”
+Before starting, here is some background information on the server certificate required by the message broker. This is from the [Solace-FP] section "Setting a Server Certificate"
 
 ```
   To enable the exchange of information through TLS/SSL-encrypted SMF service, 
@@ -910,7 +910,7 @@ Before starting, here is some background information on the server certificate r
   three certificates in a chain that can be used for the certificate verification).
 ```
 
-To configure the server certificate, first copy the server certificate to the message broker. For the purposes of this example, assume the server certificate file is named “mycert.pem”.
+To configure the server certificate, first copy the server certificate to the message broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
 
 ```
 # copy sftp://[<username>@]<ip-addr>/<remote-pathname>/mycert.pem /certs
@@ -973,13 +973,13 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 <URI Scheme>://[username]:[password]@<IP address>[:port]
 ```
 
-Recall from above, originally, the “ConnectionURL” was as follows:
+Recall from above, originally, the "ConnectionURL" was as follows:
 
 ```
 tcp://___IP:PORT___
 ```
 
-This specified a URI scheme of “smf” which is the plaint-text method of communicating with the message broker. This should be updated to “smfs” to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "smf" which is the plaint-text method of communicating with the message broker. This should be updated to "smfs" to switch to secure communication giving you the following configuration:
 
 ```
 tcps://___IP:PORT___
@@ -1004,7 +1004,7 @@ A trust store password may also be specified. This password allows the Solace JM
 Solace_JMS_SSL_TrustStorePassword=___Password___
 ```
 
-There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: “jks” for Java Key Store or “pkcs12”. Setting the trust store format is done through the parameter 'solace_JMS_SSL_TrustStoreFormat':
+There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: "jks" for Java Key Store or "pkcs12". Setting the trust store format is done through the parameter 'solace_JMS_SSL_TrustStoreFormat':
 
 ```
 Solace_JMS_SSL_TrustStoreFormat=jks
@@ -1214,7 +1214,7 @@ The active site and standby site addresses are provided as a comma-separated lis
 
 #### Configuring reasonable JMS Reconnection Properties within Solace JNDI
 
-In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. The length of time is application specific depending on individual disaster recovery procedures, and can range from minutes to hours depending on the application. In general it's best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it's also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
+In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. The length of time is application specific depending on individual disaster recovery procedures, and can range from minutes to hours depending on the application. In general it's best to tune the reconnection by changing the "reconnect retries" parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it's also possible to use a value of "-1" to force the Solace JMS API to reconnect indefinitely.
 
 The reconnect retries is tuned for the respective JNDI connection factory on the message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
 

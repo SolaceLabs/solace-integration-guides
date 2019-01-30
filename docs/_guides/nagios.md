@@ -12,7 +12,7 @@ links:
 
 Nagios (previously NetSaint) is an open-source monitoring and alerting system that’s widely used to monitor systems, networks and infrastructure. Objects monitored by Nagios are split into two categories: hosts (physical machines) and services (particular functionalities). Nagios does not perform any host or service checks on its own and relies on plugins to do this. This makes it a very modular and flexible solution. 
 
-Extending this “monitoring by plugin” paradigm of Nagios, Solace provides a set of plugin scripts that perform the message router and VPN monitoring. Following Nagios convention, the plugins add host (router) and service (VPN resources) categories.
+Extending this "monitoring by plugin" paradigm of Nagios, Solace provides a set of plugin scripts that perform the message router and VPN monitoring. Following Nagios convention, the plugins add host (router) and service (VPN resources) categories.
 
 Nagiograph parses output and performance data from Nagios plugins and generates graphs and HTML pages for reporting. Nagiograph stores data in RRD (Round Robin Database) files as time series data. RRDTool is an Open source parser that integrates into Shell scripts, Perl, Python, Ruby, Tcl, etc. 
 The following picture illustrates different components and high level data flow.
@@ -178,7 +178,7 @@ nagios (pid 4155) is running...
 
 ### Verification
 
-The above script adds another host by name “localhost-gr” with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.
+The above script adds another host by name "localhost-gr" with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.
 
 ![]({{ site.baseurl }}/images/nagios/nagios-graph-install.png)
 
@@ -256,7 +256,7 @@ Clicking on the graph icon to the right of the service name brings up the graphs
 
 ## NSCA Setup
 
-NSCA (Nagios Service check Acceptor) is a daemon that can accept the requests on behalf of Nagios and update the external command file. Nagios would periodically check the external command file and process them.  This “passive check” is a way to push the external status and alerts into Nagios instead of Nagios pulling the status for configured hosts and services “actively”.  The passive check offers more fine grained intervals and useful for near real time status updates and alerting. 
+NSCA (Nagios Service check Acceptor) is a daemon that can accept the requests on behalf of Nagios and update the external command file. Nagios would periodically check the external command file and process them.  This "passive check" is a way to push the external status and alerts into Nagios instead of Nagios pulling the status for configured hosts and services "actively".  The passive check offers more fine grained intervals and useful for near real time status updates and alerting. 
 
 ![]({{ site.baseurl }}/images/nagios/ncsa-setup-1.png)
 
@@ -409,7 +409,7 @@ systemctl start  nagios-nrpe-server
 
 #### Server Configuration
 
-Step 1. Add config file per client under nagios objects directory. A sample config file for ubuntu server is given in “Setup Scripts and Config Files” section. 
+Step 1. Add config file per client under nagios objects directory. A sample config file for ubuntu server is given in "Setup Scripts and Config Files" section. 
 
 Step 2. Update nagios.cfg (/etc/nagios by default) and add the client config file. 
 
@@ -481,7 +481,7 @@ This section walks thru the steps to add a sample solace artifiact monitoring to
 
 #### Add Custom Data Input method. 
 
-Select “Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Router. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the “Input String” and defined in the “Input Fields” section below. Similarly output expected form the script should be defined in the “Output Fields” section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
+Select "Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Router. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the "Input String" and defined in the "Input Fields" section below. Similarly output expected form the script should be defined in the "Output Fields" section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
 
 ##### Data Input
 
@@ -515,13 +515,13 @@ Now add each message router as a device so graphs for this message router can al
 
 ##### Add Data Source List
 
-Use “Data Souce List” link above the Device screen and using “Add” link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message router. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
+Use "Data Souce List" link above the Device screen and using "Add" link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message router. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-7.png)
 
 ##### Add Graph List
 
-Using “Graph List” link above the device screen, add new graph link by clicking “New” link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool
+Using "Graph List" link above the device screen, add new graph link by clicking "New" link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-8.png)
 

@@ -110,13 +110,13 @@ The Solace Message Router needs to be configured with the following configuratio
 * Guaranteed messaging endpoints for receiving messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
+For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section "User Authentication and Authorization".
 
 Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “default” on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the NiFi configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called "default" on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the NiFi configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
         (config)# create message-vpn default
         (config-msg-vpn)# authentication
@@ -136,7 +136,7 @@ This section outlines how to create a message-VPN called “default” on the So
 
 This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Router. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of “nifi” will be required by the NiFi application when connecting to the Solace Message Router.
+The chosen client username of "nifi" will be required by the NiFi application when connecting to the Solace Message Router.
 
         (config)# client-profile default message-vpn default
         (config-client-profile)# message-spool allow-guaranteed-message-receive
@@ -153,7 +153,7 @@ The chosen client username of “nifi” will be required by the NiFi applicatio
 
 #### Setting up Guaranteed Messaging Endpoints
 
-This integration guide shows publishing messaegs to a queue consumed by NiFi and receiving messages from a queue published by NiFi application. For illustration purposes, this queues are chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen are “toNifi” and “fromNifi”.
+This integration guide shows publishing messaegs to a queue consumed by NiFi and receiving messages from a queue published by NiFi application. For illustration purposes, this queues are chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen are "toNifi" and "fromNifi".
 
         (config)# message-spool message-vpn default
         (config-message-spool)# create queue toNifi
@@ -613,7 +613,7 @@ The received messages are from NiFi - hence some of the JMS properties are fille
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 

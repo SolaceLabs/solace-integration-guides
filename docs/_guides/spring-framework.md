@@ -73,7 +73,7 @@ The following Solace PubSub+ Refer to section "Get Solace Messaging resources ar
     </tr>
     <tr>
       <td>Solace Message Router Host</td>
-      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -103,8 +103,7 @@ The following Solace PubSub+ Refer to section "Get Solace Messaging resources ar
 
 #### Spring Framework Configuration Resources
 
-The following Spring container configuration is referenced in the integration steps. These items are explained in detail in the [Spring-REF]. The Section 8.1 SolResources.xml contains the full Spring configuration file for these resources and how each of these resources relates to integration with Solace is explained in the subsequent sections as these resources are introduced.
-
+The following Spring container configuration is referenced in the integration steps. These items are explained in detail in the [Integration part of the Spring Framework documentation]({{ site.links-springfw-five-integration }}){:target="_top"}. [SolResources.xml]({{ site.repository }}/blob/master/src/spring-framework/resources/SolResources.xml){:target="_blank"} available from the GitHub project contains the full Spring configuration file for these resources, and how each of these resources relates to integration with Solace is explained in the subsequent sections as these resources are introduced.
 
 | Resource | Value |
 | --
@@ -115,8 +114,8 @@ The following Spring container configuration is referenced in the integration st
 | org.springframework.jndi.JndiObjectFactoryBean | destination |
 | org.springframework.jms.core.JmsTemplate | jmsTemplate |
 | org.springframework.jms.listener.DefaultMessageListenerContainer | jmsContainer |
-| com.solacesystems.integration.spring.MessageConsumer | messageConsumer |
-| com.solacesystems.integration.spring.MessageProducer | messageProducer |
+| com.solace.integration.spring.MessageConsumer | messageConsumer |
+| com.solace.integration.spring.MessageProducer | messageProducer |
 
 ### Step 1 – Configuring the Solace Message Broker
 
@@ -131,7 +130,7 @@ The Solace message broker needs to be configured with the following configuratio
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “Solace_Spring_VPN” on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Spring configuration when connecting to the Solace messaging message broker. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called "Solace_Spring_VPN" on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Spring configuration when connecting to the Solace messaging message broker. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 > home
@@ -155,7 +154,7 @@ This section outlines how to create a message-VPN called “Solace_Spring_VPN”
 #### Configuring Client Usernames & Profiles
 
 This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
-The chosen client username of “spring_user” will be required by the Spring Framework when connecting to the Solace message broker.
+The chosen client username of "spring_user" will be required by the Spring Framework when connecting to the Solace message broker.
 
 ```
 (config)# client-profile default message-vpn Solace_Spring_VPN
@@ -174,7 +173,7 @@ The chosen client username of “spring_user” will be required by the Spring F
 
 #### Setting up Guaranteed Messaging Endpoints
 
-This integration guide shows receiving messages within the Spring Framework from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is “Q/requests”.
+This integration guide shows receiving messages within the Spring Framework from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is "Q/requests".
 
 ```
 (config)# message-spool message-vpn Solace_Spring_VPN
@@ -226,11 +225,11 @@ They are configured as follows:
 
 The following configuration is required to successfully establish a connection from Spring to the Solace message broker.
 
-The example configuration below uses XML-based container configuration to illustrate the integration. The “___IP:PORT___” should be updated to reference the actual Solace message broker message-backbone VRF IP.
+The example configuration below uses XML-based container configuration to illustrate the integration. The "___IP:PORT___" should be updated to reference the actual Solace message broker message-backbone VRF IP.
 
-In Solace JMS, the “java.naming.security.principal” often uses the format <username>@<message-vpn>. This allows specification of the Solace message broker client username (“spring_user”) and message-vpn (“Solace_Spring_VPN”) created in the previous section. Both of these items are mandatory in order to connect to the Solace message broker.
+In Solace JMS, the "java.naming.security.principal" often uses the format <username>@<message-vpn>. This allows specification of the Solace message broker client username ("spring_user") and message-vpn ("Solace_Spring_VPN") created in the previous section. Both of these items are mandatory in order to connect to the Solace message broker.
 
-The “java.naming.security.credentials” is optional and provides the Solace message broker client password for use when authenticating with the Solace message broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the [Authentication section](#authentication).
+The "java.naming.security.credentials" is optional and provides the Solace message broker client password for use when authenticating with the Solace message broker. In this example a password is not used and so this parameter is left commented in the configuration. For further details see the [Authentication section](#authentication).
 
 ```xml
   <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
@@ -274,7 +273,7 @@ The following table explains each bean configuration and its purpose when connec
 | Bean Id	| Description |
 | --
 | solaceJndiTemplate | This template outlines general connection details for reaching the Solace JNDI hosted on the Solace message broker. The Solace JNDI is used to look up parameters for client connections and for destinations.
-| solaceConnectionFactory | This references a specific connection factory within the Solace JNDI that will be used when creating new connections. The value for “jndiName” is the connection factory name as configured in the Solace JNDI. In the previous section this was configured as “JNDI/CF/spring”
+| solaceConnectionFactory | This references a specific connection factory within the Solace JNDI that will be used when creating new connections. The value for "jndiName" is the connection factory name as configured in the Solace JNDI. In the previous section this was configured as "JNDI/CF/spring"
 | solaceCachedConnectionFactory	| The cached connection factory allows for re-use of the Solace connection when sending messages or receiving messages synchronously. For efficient integration within the Spring Framework, it is essential that connection caching be enabled and configured correctly. There are more details on this in Section 4 Performance Considerations including discussion of the sessionCacheSize attribute. It is this connection factory that is used by the producer when connecting.
 | solaceSingleConnectionFactory	| The single connection factory should be used with asynchronous consumers using a listener container. It is generally preferable to let the listener container itself handle appropriate caching within its lifecycle. It is this connection factory that is used by the consumer when connecting.
 
@@ -307,7 +306,7 @@ The following table explains the configuration and its purpose when receiving me
 
 | Bean Id	| Description |
 | --
-| destination	| This configuration defines a JMS destination that the consumer will bind to for receiving messages. For the purposes of demonstrating integration, it is the same destination as used when sending messages. The destination is found in JNDI by looking up the name “JNDI/Q/requests” which was previously configured on the Solace message broker JNDI as a queue destination.
+| destination	| This configuration defines a JMS destination that the consumer will bind to for receiving messages. For the purposes of demonstrating integration, it is the same destination as used when sending messages. The destination is found in JNDI by looking up the name "JNDI/Q/requests" which was previously configured on the Solace message broker JNDI as a queue destination.
 | messageConsumer	| This configuration identifies the POJO code responsible for processing an incoming JMS message. 
 | jmsContainer | The JmsContainer links the MessageConsumer with a JMS destination and JMS cached connection using the `DefaultMessageListenerContainer` from the Spring Framework. This enables messages to be correctly received and processed efficiently within the Spring Framework.
 
@@ -385,7 +384,7 @@ The following table explains the configuration and its purpose when publishing t
 
 | Bean Id	| Description |
 | --
-| destination	| This configuration defines a JMS destination for use in sending. The destination is found in JNDI by looking up the name “JNDI/Q/requests” which was previously configured on the Solace message broker JNDI as a queue destination.
+| destination	| This configuration defines a JMS destination for use in sending. The destination is found in JNDI by looking up the name "JNDI/Q/requests" which was previously configured on the Solace message broker JNDI as a queue destination.
 | jmsTemplate	| The jmsTemplate is the core component of the Spring framework integration with JMS. It contains the reference to the connection factory, a default destination for sending and parameters for customizing the JMS producer from within the Spring framework. A full list of available parameters is documented in [Spring-API].
 | messageProducer	| The message producer is a reference to the producer Java code that will be used to send messages to the Solace message broker. This configuration connects that Java code to the correct JmsTemplate configuration. 
 
@@ -489,11 +488,11 @@ Section [Integrating with Spring Framework](#integrating-with-spring-framework) 
 
 #### Producers and Synchronous Consumers
 
-In Spring, this object caching for producers and synchronous consumers is controlled by the `CachingConnectionFactory`. A CachingConnectionFactory contains a single JMS Connection which is reused across all JmsTemplates. In order to enable session caching within the JMS Connection, the `sessionCacheSize` parameter must be set to specify the number of JMS Session objects to cache for reuse.
+In Spring, this object caching for producers and synchronous consumers is controlled by the `CachingConnectionFactory`. A `CachingConnectionFactory` contains a single JMS Connection which is reused across all `JmsTemplates`. In order to enable session caching within the JMS Connection, the `sessionCacheSize` parameter must be set to specify the number of JMS Session objects to cache for reuse.
 
 One behavior worth noting is that as outlined in the Spring documentation, if the pool of cached sessions is fully utilized and a further request for a cached `Session` is made, then the requested `Session` will be created and disposed on demand. If you couple this behavior with the fact that the default value is 1 for `sessionCacheSize` it is important to configure this to a value that is applicable to the end application to avoid the undesirable behavior of create and dispose on each call to send a message during periods of high demand. This value should be set to the maximum concurrency required by the application.
 
-The following configuration sample illustrates how to set the various CachingConnectionFactory cache sizes.
+The following configuration sample illustrates how to set the various `CachingConnectionFactory` cache sizes.
 
 ```xml
   <bean id="solaceCachedConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
@@ -504,7 +503,7 @@ The following configuration sample illustrates how to set the various CachingCon
 
 ####	Asynchronous Consumers using Message Listener Containers
 
-For asynchronous reception similar to Java EE’s message-driven bean style, Spring provides a number of message listener containers, including the DefaultMessageListenerContainer. The listener container handles appropriate caching itself within its lifecycle. For this reason, it is not necessary to use a CachingConnectionFactory with the consumer. To cache the consumer property, it is important to use a cache level name of `CACHE_CONSUMER`.
+For asynchronous reception similar to Java EE’s message-driven bean style, Spring provides a number of message listener containers, including the `DefaultMessageListenerContainer`. The listener container handles appropriate caching itself within its lifecycle. For this reason, it is not necessary to use a `CachingConnectionFactory` with the consumer. To cache the consumer property, it is important to use a cache level name of `CACHE_CONSUMER`.
 
 
 ```xml
@@ -565,7 +564,7 @@ The following is an example of how to configure a `DynamicDestinationResolver`.
   </bean>
 ```
 
-And to send messages, the following Java code will use the DynamicDestinationResolver to send messages to a topic of “T/dynamic/topic”.
+And to send messages, the following Java code will use the `DynamicDestinationResolver` to send messages to a topic of "T/dynamic/topic".
 
 ```java
 public class DynamicMessageProducer {
@@ -618,7 +617,7 @@ The following is an example of how to configure a `JndiDestinationResolver`.
   </bean>
 ```
 
-And to send messages, the following Java code will use the JndiDestinationResolver to send messages to a JNDI destination of “JNDI/T/requests”.
+And to send messages, the following Java code will use the `JndiDestinationResolver` to send messages to a JNDI destination of "JNDI/T/requests".
 
 ```java
 public class JndiMessageProducer {
@@ -645,7 +644,7 @@ public class JndiMessageProducer {
 
 ## Working with Solace High Availability
 
-The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
@@ -714,7 +713,7 @@ With this you can get output in a format similar to the following which can help
 
 ### Authentication
 
-JMS Client authentication is handled by the Solace message broker. The Solace message broker supports a variety of authentications schemes as described in [Solace documentation “Client Authentication and Authorization”]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The required JMS authentication properties can be set in the JndiTemplate configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of “spring_user” and password of “spring_password”.
+JMS Client authentication is handled by the Solace message broker. The Solace message broker supports a variety of authentications schemes as described in [Solace documentation "Client Authentication and Authorization"]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The required JMS authentication properties can be set in the `JndiTemplate` configuration depending on which authentication scheme is being used. The following example shows how to enable basic authentication using a username of "spring_user" and password of "spring_password".
 
 ```xml
 <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
@@ -757,7 +756,7 @@ To enable the exchange of information through TLS/SSL-encrypted SMF service, you
 
 The single server certificate file set for the message broker can have a maximum chain depth of three (that is, the single certificate file can contain up to three certificates in a chain that can be used for the certificate verification).
 
-To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named “mycert.pem”.
+To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
 
 ```
 # copy sftp://[<username>@]<ip-addr>/<remote-pathname>/mycert.pem /certs
@@ -805,7 +804,7 @@ By default within Solace message VPNs both the plain-text and SSL services are e
 
 ####	Configuring the Spring Framework
 
-The configuration in the Spring Framework requires updating the SolaceJndiTemplate bean in two ways.
+The configuration in the Spring Framework requires updating the `SolaceJndiTemplate` bean in two ways.
 
 *	Updating the provider URL to specify the protocol as secure (tcps)
 *	Adding the required parameters for the secure connection
@@ -816,13 +815,13 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 
 `<URI Scheme>://[username]:[password]@<IP address>[:port]`
 
-Recall from Section “Step 2 – Spring Framework – Connecting”, originally, the “java.naming.provider.url” was as follows:
+Recall from Section "Step 2 – Spring Framework – Connecting", originally, the "java.naming.provider.url" was as follows:
 
 `<entry key="java.naming.provider.url" value="tcp://___IP:PORT___" />`
 
-This specified a URI scheme of “tcp” which is the plaint-text method of communicating with the Solace message broker. This should be updated to “tcps” to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "tcp" which is the plaint-text method of communicating with the Solace message broker. This should be updated to "tcps" to switch to secure communication giving you the following configuration:
 
-`<entry key="java.naming.provider.url" value="smfs://___IP:PORT___" />`
+`<entry key="java.naming.provider.url" value="tcps://___IP:PORT___" />`
 
 #####	Adding SSL Related Configuration
 
@@ -836,7 +835,7 @@ It is also required to provide a trust store password. This password allows the 
 
 `<entry key="Solace_JMS_SSL_TrustStorePassword" value="___TrustStore_Password___" />`
 
-There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: “jks” for Java Key Store or “pkcs12”. Setting the trust store format is done through the following parameter.
+There are multiple formats for the trust store file. By default Solace JMS assumes a format of Java Key Store (JKS). So if the trust store file follows the JKS format then this parameter may be omitted. Solace JMS supports two formats for the trust store: "jks" for Java Key Store or "pkcs12". Setting the trust store format is done through the following parameter.
 
 `<entry key="Solace_JMS_SSL_TrustStoreFormat" value="jks" />`
 
@@ -851,7 +850,7 @@ This integration example will use basic authentication. So the required paramete
 
 #####	Spring Configuration Bean
 
-The following example bean outlines all of the required Spring Framework configuration changes to the SolaceJndiTemplate where the user should substitute appropriate values for:
+The following example bean outlines all of the required Spring Framework configuration changes to the `SolaceJndiTemplate` where the user should substitute appropriate values for:
 
 *	`___IP:PORT___`
 *	`___TrustStore_Path_or_URL___`
@@ -862,7 +861,7 @@ The following example bean outlines all of the required Spring Framework configu
   lazy-init="default" autowire="default">
   <property name="environment">
     <map>
-      <entry key="java.naming.provider.url" value="smfs://___IP:PORT___" />
+      <entry key="java.naming.provider.url" value="tcps://___IP:PORT___" />
       <entry key="java.naming.factory.initial"
              value="com.solacesystems.jndi.SolJNDIInitialContextFactory" />
       <entry key="java.naming.security.principal" value="spring_user" /> 
@@ -907,7 +906,7 @@ For the `java.naming.provider.url` both the active site IP address and standby s
 
 ####	Configuring reasonable JMS Reconnection Properties within Solace JNDI
 
-In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the “reconnect retries” parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of “-1” to force the Solace JMS API to reconnect indefinitely.
+In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the "reconnect retries" parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of "-1" to force the Solace JMS API to reconnect indefinitely.
 
 The reconnect retries is tuned in the Solace message broker CLI as follows:
 

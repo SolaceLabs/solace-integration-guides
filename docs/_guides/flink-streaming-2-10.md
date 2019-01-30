@@ -65,7 +65,7 @@ The following Solace Message Router resources are required.
     </tr>
     <tr>
       <td>Solace Message Router Host</td>
-      <td colspan="2" rowspan="4">Refer to section "Get Solace Messaging" for values</td>
+      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
       <td>Message VPN</td>
@@ -183,7 +183,7 @@ The Solace Message Router needs to be configured with the following configuratio
 
 #### Creating a Message VPN
 
-This section outlines how to create a message-VPN called “Solace_Flink_VPN” on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Flink configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
+This section outlines how to create a message-VPN called "Solace_Flink_VPN" on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Flink configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
 
 ```
 (config)# create message-vpn Solace_Flink_VPN
@@ -205,7 +205,7 @@ This section outlines how to create a message-VPN called “Solace_Flink_VPN” 
 
 This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Router. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of “flink_user” will be required by the Flink application when connecting to the Solace Message Router.
+The chosen client username of "flink_user" will be required by the Flink application when connecting to the Solace Message Router.
 
 ```
 (config)# client-profile default message-vpn Solace_Flink_VPN
@@ -223,7 +223,7 @@ The chosen client username of “flink_user” will be required by the Flink app
 ```
 
 #### Setting up Guaranteed Messaging Endpoints
-This integration guide shows receiving messages within the Flink application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is “Q/requests”.
+This integration guide shows receiving messages within the Flink application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is "Q/requests".
 
 ```
 (config)# message-spool message-vpn Solace_Flink_VPN
@@ -380,7 +380,7 @@ Note that the JMSTranslator exposes an outputType() method that returns the Clas
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 

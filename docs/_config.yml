@@ -29,9 +29,11 @@ links-docs-replication-client-config: https://docs.solace.com/Features/Data-Cent
 links-was-reference: https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html
 links-jboss-modules: https://jboss-modules.github.io/jboss-modules/manual
 links-jboss-modules-file-system: https://jboss-modules.github.io/jboss-modules/manual/#basic-repository
-links-springfw-four: https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/
+links-springfw-four: https://docs.spring.io/spring/docs/4.3.0.RELEASE/spring-framework-reference/html/
 links-springfw-five: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/
 links-springfw-five-java-based-container: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/core.html#beans-java
+links-springfw-five-integration: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html
+links-springfw-five-jms: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#remoting-jms
 links-springfw-five-async-reception: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-asynchronousMessageReception
 links-springfw-five-jms-template: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-jmstemplate
 links-springfw-five-jms-dest-mgmt: https://docs.spring.io/spring/docs/5.1.4.RELEASE/spring-framework-reference/integration.html#jms-destinations
