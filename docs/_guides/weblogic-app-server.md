@@ -199,25 +199,7 @@ The following entities on the Solace message router need to be configured at a m
 
 {% include_relative assets/solaceConfig.md %}
 
-#### Creating a Message VPN
-
-This section outlines how to create a message-VPN called "solace_VPN" on the Solace message router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the WebLogic Application Server configuration when connecting to the Solace Message Router. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
-
-```
-(config)# create message-vpn solace_VPN
-(config-msg-vpn)# authentication
-(config-msg-vpn-auth)# user-class client
-(config-msg-vpn-auth-user-class)# basic auth-type none
-(config-msg-vpn-auth-user-class)# exit
-(config-msg-vpn-auth)# exit
-(config-msg-vpn)# no shutdown
-(config-msg-vpn)# exit
-(config)#
-(config)# message-spool message-vpn solace_VPN
-(config-message-spool)# max-spool-usage 2000
-(config-message-spool)# exit
-(config)#
-```
+{% include_relative assets/solaceVpn.md content="solace_VPN" %}
 
 #### Configuring Client Usernames & Profiles
 

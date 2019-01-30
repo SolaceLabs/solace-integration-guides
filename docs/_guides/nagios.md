@@ -87,7 +87,7 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 ```
 yum -y install nagios nagios-plugins-all nagios-plugins-nrpe nrpe 
 ```
-
+
 ### Post install setup
 
 #### HTTP Setup
@@ -175,14 +175,14 @@ nagios (pid 4155) is running...
 # systemctl restart httpd
 # systemctl restart nagios
 ```
-
+
 ### Verification
 
 The above script adds another host by name "localhost-gr" with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.
 
 ![]({{ site.baseurl }}/images/nagios/nagios-graph-install.png)
 
-
+
 Clicking on the graph symbols to the right of service name brings up a graph with various time bracket. A sample graph for one of the services (HTTP) for a day is shown below:
 
 ![]({{ site.baseurl }}/images/nagios/nagios-graphs.png)
@@ -281,7 +281,7 @@ $ ./configure
  NSCA group: nagios
 
 $ make all
-```
+```
 
 ### Post install setup
 
@@ -478,7 +478,7 @@ Installation of Cacti and dependencies is a topic of its own and beyond the scop
 ### Post Install Setup
 
 This section walks thru the steps to add a sample solace artifiact monitoring to Cacti using web admin. Similar to Nagios, Cacti uses external scripts for gathering the monitoring info. In this example, Queue Depth is used for illustration which can be replaced with any monitoring using right scripts.
-
+
 #### Add Custom Data Input method. 
 
 Select "Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Router. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the "Input String" and defined in the "Input Fields" section below. Similarly output expected form the script should be defined in the "Output Fields" section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
@@ -499,13 +499,13 @@ Select "Script/Command’ as Input Type and type in the external script name tha
 
 Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (router name, vpn name, queue name and credentials). 
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-4.png)
+![]({{ site.baseurl }}/images/nagios/cacti-setup-4.png)
 
 #### Add a custom Graph Template
 
 Now create a Graph Template and associate the Data Template defined earlier with the graph template (using Graph Template Items).
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-5.png)
+![]({{ site.baseurl }}/images/nagios/cacti-setup-5.png)
 
 #### Add Solace Message Router as Device
 
@@ -524,7 +524,7 @@ Use "Data Souce List" link above the Device screen and using "Add" link, add the
 Using "Graph List" link above the device screen, add new graph link by clicking "New" link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-8.png)
-
+
 ### Verification 
 
 #### Basic Install
@@ -534,20 +534,20 @@ Once you have basic Cacti setup up and running, you should be able to access the
 
 After configuration, you would be able to see basic system metrics for the localhost that would look similar to this
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-9.png)
-
+![]({{ site.baseurl }}/images/nagios/cacti-setup-9.png)
+
 #### Solace host check
 
 Once Solce router is added as a device, from he Devices link, you would be able view the router with basic health test such as ping status.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-10.png)
-
+
 #### Solace VPN Metrics Sample
 
 Once VPN artifiact checkings are added, you should be able to view them under Graphs tab. Here is a sample of queue statistics showing queue depth for a single queue on a VPN.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-11.png)
-
+
 As with any other Cacti graph,  aggrecation over a peroid is  available by clicking on the graph. Here is an example of aggregation of  queue stats over various window period, from hour to year.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-12.png)
@@ -614,7 +614,7 @@ Check Iptables routes:
 # service iptables save
 # service iptables restart
 ```
-
+
 ### Troubleshooting
 
 #### Nagios not starting up

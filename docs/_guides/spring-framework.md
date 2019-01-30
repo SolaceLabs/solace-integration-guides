@@ -128,48 +128,7 @@ The Solace message broker needs to be configured with the following configuratio
 
 {% include_relative assets/solaceConfig.md %}
 
-#### Creating a Message VPN
-
-This section outlines how to create a message-VPN called "Solace_Spring_VPN" on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Spring configuration when connecting to the Solace messaging message broker. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
-
-```
-> home
-> enable
-# configure
-(config)# create message-vpn Solace_Spring_VPN
-(config-msg-vpn)# authentication
-(config-msg-vpn-auth)# user-class client
-(config-msg-vpn-auth-user-class)# basic auth-type none
-(config-msg-vpn-auth-user-class)# exit
-(config-msg-vpn-auth)# exit
-(config-msg-vpn)# no shutdown
-(config-msg-vpn)# exit
-(config)#
-(config)# message-spool message-vpn Solace_Spring_VPN
-(config-message-spool)# max-spool-usage 2000
-(config-message-spool)# exit
-(config)#
-```
-
-#### Configuring Client Usernames & Profiles
-
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
-The chosen client username of "spring_user" will be required by the Spring Framework when connecting to the Solace message broker.
-
-```
-(config)# client-profile default message-vpn Solace_Spring_VPN
-(config-client-profile)# message-spool allow-guaranteed-message-receive
-(config-client-profile)# message-spool allow-guaranteed-message-send
-(config-client-profile)# message-spool allow-transacted-sessions
-(config-client-profile)# exit
-(config)#
-(config)# create client-username spring_user message-vpn Solace_Spring_VPN
-(config-client-username)# acl-profile default	
-(config-client-username)# client-profile default
-(config-client-username)# no shutdown
-(config-client-username)# exit
-(config)#
-```
+{% include_relative assets/solaceVpn.md content="Solace_Spring_VPN" %}
 
 #### Setting up Guaranteed Messaging Endpoints
 
