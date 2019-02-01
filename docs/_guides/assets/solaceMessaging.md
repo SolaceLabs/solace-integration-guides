@@ -1,7 +1,7 @@
 
 ## Get Solace Messaging
 
-This tutorial requires access Solace messaging and requires that you know several connectivity properties about your Solace messaging. Specifically you need to know the following:
+This tutorial requires access to Solace PubSub+ message broker and requires that you know several connectivity properties about your message broker. Specifically you need to know the following:
 
 <table>
   <tr>
@@ -12,12 +12,12 @@ This tutorial requires access Solace messaging and requires that you know severa
   <tr>
     <td>Host</td>
     <td>String</td>
-    <td>This is the address clients use when connecting to the Solace messaging to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
+    <td>This is the address clients use when connecting to the message broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
   </tr>
   <tr>
     <td>Message VPN</td>
     <td>String</td>
-    <td>The Solace message broker Message VPN that this client should connect to. </td>
+    <td>The message broker Message VPN that this client should connect to. </td>
   </tr>
   <tr>
     <td>Client Username</td>
@@ -31,7 +31,7 @@ This tutorial requires access Solace messaging and requires that you know severa
   </tr>
 </table>
 
-There are several ways you can get access to Solace Messaging and find these required properties.
+There are several ways you can get access to Solace messaging and find these required properties.
 
 ### Option 1: Use Solace Cloud
 
@@ -55,9 +55,9 @@ There are several ways you can get access to Solace Messaging and find these req
 
     Note: By default, the Solace software message broker "default" message VPN has authentication disabled.
 
-### Option 3: Get access to a Solace appliance
+### Option 3: Get access to a Solace PubSub+ appliance
 
-* Contact your Solace appliance administrators and obtain the following:
+* Contact your Solace PubSub+ appliance administrators and obtain the following:
     * A Solace Message-VPN where you can produce and consume direct and persistent messages
-    * The host name or IP address of the Solace appliance hosting your Message-VPN
-    * A username and password to access the Solace appliance
+    * The host name or IP address of the appliance hosting your Message-VPN
+    * A username and password to access the appliance

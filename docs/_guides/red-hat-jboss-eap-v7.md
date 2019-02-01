@@ -57,7 +57,7 @@ This EJB sample consists of two enterprise beans, a Message Driven Bean and a Se
 
 The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS message broker. 
 
-* Step 1 - Configure the Solace message broker
+* Step 1 - Configure the Solace PubSub+ message broker
 * Step 2 – Deploy the Solace Resource Adapter to the JBoss Application Server
 * Step 3 – Connect to Solace JMS provider
   * Configure resource adapter
@@ -87,7 +87,7 @@ To illustrate this integration example, all named resources created on the Solac
 
 #### Solace Resources
 
-The following Solace message broker resources are required for the integration sample in this document.
+The following message broker resources are required for the integration sample in this document.
 
 <table>
     <tr>
@@ -154,12 +154,12 @@ The following JBoss Application Server resources are required for the integratio
 
 ### Step 1 –Solace JMS provider Configuration
 
-The following entities on the Solace message broker need to be configured at a minimum to enable JMS to send and receive messages within the JBoss Application Server. 
+The following entities on the message broker need to be configured at a minimum to enable JMS to send and receive messages within the JBoss Application Server. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace message broker.
+* A Message VPN, or virtual message broker, to scope the integration on the Solace PubSub+ message broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving and sending messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace message broker configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the message broker configuration.
 
 {% include_relative assets/solaceConfig.md %}
 
