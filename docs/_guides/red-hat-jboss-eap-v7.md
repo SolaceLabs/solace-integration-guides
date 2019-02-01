@@ -1,7 +1,7 @@
 ---
 layout: guides
 title: Red Hat JBoss EAP v7
-summary: The JBoss Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace message broker.   
+summary: The JBoss Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace PubSub+ message broker.   
 icon: red-hat-jboss-eap.png
 links:
    - label: Example Source Code - JBoss EAP v7
@@ -55,7 +55,7 @@ In order to illustrate JBoss Application Server integration, the following secti
 
 This EJB sample consists of two enterprise beans, a Message Driven Bean and a Session Bean.  The MDB is configured to receive a message on a `requests` Queue.  When the MDB receives a message it then calls a method of the Session Bean to send a reply message to a `replies` Queue.  The EJB sample requires configuration of various J2C entities in JBoss to support usage of the Solace JCA compliant resource adapter.
 
-The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS message broker. 
+The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS. 
 
 * Step 1 - Configure the Solace PubSub+ message broker
 * Step 2 – Deploy the Solace Resource Adapter to the JBoss Application Server
@@ -156,7 +156,7 @@ The following JBoss Application Server resources are required for the integratio
 
 The following entities on the message broker need to be configured at a minimum to enable JMS to send and receive messages within the JBoss Application Server. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace PubSub+ message broker.
+* A Message VPN, or virtual message broker, to scope the integration on the message broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving and sending messages.
 * Appropriate JNDI mappings enabling JMS clients to connect to the message broker configuration.
@@ -167,9 +167,9 @@ The following entities on the message broker need to be configured at a minimum 
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of "solace_user" will be required by the JBoss Application Server when connecting to the Solace message broker.
+The chosen client username of "solace_user" will be required by the JBoss Application Server when connecting to the message broker.
 
 ```
 (config)# client-profile default message-vpn solace_VPN

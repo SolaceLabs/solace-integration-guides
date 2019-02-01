@@ -46,7 +46,7 @@ There are several ways you can get access to Solace messaging and find these req
 
 ### Option 2: Start a Solace PubSub+ Software Message Broker
 
-* Follow [these instructions]({{ site.links-vmr-setup }}){:target="_top"} to start the Solace software message broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software message broker.
+* Follow [these instructions]({{ site.links-vmr-setup }}){:target="_top"} to start the software message broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software message broker.
 * The messaging connectivity information are the following:
     * Host: \<public_ip> (IP address assigned to the software message broker in tutorial instructions)
     * Message VPN: default
