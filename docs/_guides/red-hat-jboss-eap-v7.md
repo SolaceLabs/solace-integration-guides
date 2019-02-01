@@ -96,7 +96,7 @@ The following Solace message broker resources are required for the integration s
       <th>Description</th>
     </tr>
     <tr>
-      <td>Solace Message Router Host</td>
+      <td>Solace Message Broker Host</td>
       <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
@@ -1077,11 +1077,11 @@ This section demonstrates how to configure the Solace message broker to support 
 
 XA transactions are supported in the general-availability release of SolOS version 7.1.  The Solace JCA Resource Adapter, by default, provides XA Transaction support for Enterprise Java Beans.  
 
-In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, SolOS version 7.1 provides XA transaction administration facilities in the event that customers must perform manual failure recovery. Refer to the document [Solace-JMS-REF] for full details on administering and configuring XA Transaction support on the Solace Message Router.
+In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, SolOS version 7.1 provides XA transaction administration facilities in the event that customers must perform manual failure recovery. Refer to the document [Solace-JMS-REF] for full details on administering and configuring XA Transaction support on the Solace Message Broker.
 
-#### Enabling XA Support for JMS Connection Factories – Solace Message Router
+#### Enabling XA Support for JMS Connection Factories – Solace Message Broker
 
-To enable XA transaction support for specific JMS connection factories the customer must configure XA support for the respective JNDI connection factory on the Solace Message Router:  
+To enable XA transaction support for specific JMS connection factories the customer must configure XA support for the respective JNDI connection factory on the Solace Message Broker:  
 
 ```
 (config)# jndi message-vpn solace_VPN

@@ -12,7 +12,7 @@ links:
 
 Nagios (previously NetSaint) is an open-source monitoring and alerting system that’s widely used to monitor systems, networks and infrastructure. Objects monitored by Nagios are split into two categories: hosts (physical machines) and services (particular functionalities). Nagios does not perform any host or service checks on its own and relies on plugins to do this. This makes it a very modular and flexible solution. 
 
-Extending this "monitoring by plugin" paradigm of Nagios, Solace provides a set of plugin scripts that perform the message router and VPN monitoring. Following Nagios convention, the plugins add host (router) and service (VPN resources) categories.
+Extending this "monitoring by plugin" paradigm of Nagios, Solace provides a set of plugin scripts that perform the message broker and VPN monitoring. Following Nagios convention, the plugins add host (message broker) and service (VPN resources) categories.
 
 Nagiograph parses output and performance data from Nagios plugins and generates graphs and HTML pages for reporting. Nagiograph stores data in RRD (Round Robin Database) files as time series data. RRDTool is an Open source parser that integrates into Shell scripts, Perl, Python, Ruby, Tcl, etc. 
 The following picture illustrates different components and high level data flow.
@@ -29,7 +29,7 @@ These documents contain information related to the feature defined in this docum
 
 * [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace Message Router Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 
 ### Prerequisites
@@ -37,8 +37,8 @@ These documents contain information related to the feature defined in this docum
 #### Requirements
 
 * The installation and setup steps require that you have root access on the CentOS server 
-* The installation and setup steps also require that you have CLI access to the Solace Message Router
-* The Solace Message Router should be reachable over network from the CentOS server running Nagios
+* The installation and setup steps also require that you have CLI access to the Solace Message Broker
+* The Solace Message Broker should be reachable over network from the CentOS server running Nagios
 
 #### Assumptions
 
@@ -212,7 +212,7 @@ cpan> exit
 
 #### Create Sample file
 
-Create a sample router Config. This file used by the setup script (below) to create commands for this config. This step can also be repeated for other routers/vpns using the command mk_nagiossolacecfg script. 
+Create a sample message broker Config. This file used by the setup script (below) to create commands for this config. This step can also be repeated for other brokers/vpns using the command mk_nagiossolacecfg script. 
 
 ```
 # cat cfg/solace-vmr2.cfg 
@@ -233,7 +233,7 @@ Run the setup_nagiossolace script. This will setup both Nagiosgraph and the sola
 ```
 # ./mk_nagiossolacecfg cfg/solace-vmr2.cfg 
 
-Generating Nagios config for Solace Message Router ...
+Generating Nagios config for Solace Message Broker ...
    Using cfgfile cfg/solace-vmr2.cfg
    Using template file cfg/solace-templaterouter-no_bi_bridge.cfg
 Generating  config ...
@@ -244,7 +244,7 @@ Setting up config files ...
 
 ### Verification
 
-If the sample router info is successfully configured, a host entry matching the message router hostname from Config file will be added to the web page. 
+If the sample message broker info is successfully configured, a host entry matching the message broker hostname from Config file will be added to the web page. 
 
 A sample entry is shown below:
 
@@ -481,7 +481,7 @@ This section walks thru the steps to add a sample solace artifiact monitoring to
 
 #### Add Custom Data Input method. 
 
-Select "Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Router. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the "Input String" and defined in the "Input Fields" section below. Similarly output expected form the script should be defined in the "Output Fields" section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
+Select "Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Broker. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the "Input String" and defined in the "Input Fields" section below. Similarly output expected form the script should be defined in the "Output Fields" section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
 
 ##### Data Input
 
@@ -497,7 +497,7 @@ Select "Script/Command’ as Input Type and type in the external script name tha
 
 #### Add Custom Data Template
 
-Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (router name, vpn name, queue name and credentials). 
+Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (message broker name, vpn name, queue name and credentials). 
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-4.png)
 
@@ -507,15 +507,15 @@ Now create a Graph Template and associate the Data Template defined earlier with
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-5.png)
 
-#### Add Solace Message Router as Device
+#### Add Solace Message Broker as Device
 
-Now add each message router as a device so graphs for this message router can all be grouped under here. This will also allow to run host specific services like ping test.
+Now add each message broker as a device so graphs for this message broker can all be grouped under here. This will also allow to run host specific services like ping test.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-6.png)
 
 ##### Add Data Source List
 
-Use "Data Souce List" link above the Device screen and using "Add" link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message router. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
+Use "Data Souce List" link above the Device screen and using "Add" link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message broker. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-7.png)
 
@@ -538,7 +538,7 @@ After configuration, you would be able to see basic system metrics for the local
 
 #### Solace host check
 
-Once Solce router is added as a device, from he Devices link, you would be able view the router with basic health test such as ping status.
+Once Solace message broker is added as a device, from he Devices link, you would be able view the message broker with basic health test such as ping status.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-10.png)
 
@@ -574,9 +574,9 @@ and push @s, [ 'if_stats',
                 ['rx-bytes', COUNTER, int $4 ] ];
 ```
 
-#### Adding additional routers / VPNs
+#### Adding additional message brokers / VPNs
 
-Use cfg/samplerouter.cfg as template to create additional router, VPN or VPN bridge configuration. Run mk_nagiossolacecfg to generate required solace plugin Config files.
+Use cfg/samplerouter.cfg as template to create additional message broker, VPN or VPN bridge configuration. Run mk_nagiossolacecfg to generate required solace plugin Config files.
 
 Alternatively, the files can be edited or added in /etc/nagios/objects dir manually. The corresponding entries need to be added into /etc/nagios/nagios.cfg file.
 

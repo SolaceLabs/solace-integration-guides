@@ -17,7 +17,7 @@ This tutorial requires access Solace messaging and requires that you know severa
   <tr>
     <td>Message VPN</td>
     <td>String</td>
-    <td>The Solace message router Message VPN that this client should connect to. </td>
+    <td>The Solace message broker Message VPN that this client should connect to. </td>
   </tr>
   <tr>
     <td>Client Username</td>

@@ -80,7 +80,7 @@ The following Solace PubSub+ message broker resources are required for the integ
       <th>Description</th>
     </tr>
     <tr>
-      <td>Solace Message Router Host</td>
+      <td>Solace Message Broker Host</td>
       <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
