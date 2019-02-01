@@ -1,8 +1,8 @@
 #### Creating a Message VPN
 
-If you are using Solace Cloud you can skip this step because a message-VPN is already assigned - for the name refer to the "Message VPN" in the connection details page.
+If you are using Solace Cloud you can skip this step because a message-VPN is already assigned. For the name, refer to the "Message VPN" in the connection details page.
 
-This section outlines how to create a message-VPN called "{{ include.content }}" on the Solace message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Spring configuration when connecting to the Solace messaging message broker. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
+This section outlines how to create a message-VPN called "{{ include.content }}" on the message broker with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Spring configuration when connecting to the messaging message broker. In practice, appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case.
 
 
 
