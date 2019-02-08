@@ -13,7 +13,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 
-@Stateless(name = "ProducerSB")
+@Stateless(name = "XAProducerBMTSB")
 @TransactionManagement(value = TransactionManagementType.BEAN)
 public class XAProducerBMTSB implements Producer, ProducerLocal {
     @Resource(name = "myCF")

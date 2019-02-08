@@ -15,7 +15,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.Session;
 
-@Stateless(name = "ProducerSB")
+@Stateless(name = "XAProducerSB")
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
 public class XAProducerSB implements Producer, ProducerLocal {
 

@@ -5,7 +5,7 @@
 	<display-name>EJBSample</display-name>
 	<enterprise-beans>
 		<session>
-			<ejb-name>ProducerSB</ejb-name>
+			<ejb-name>XAProducerBMTSB</ejb-name>
 			<business-local>com.solace.sample.ProducerLocal</business-local>
 			<business-remote>com.solace.sample.Producer</business-remote>
 			<ejb-class>com.solace.sample.XAProducerBMTSB</ejb-class>

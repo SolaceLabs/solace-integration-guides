@@ -25,7 +25,7 @@ import com.solace.sample.Producer;
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "JNDI/Sol/Q/requests") })
 public class XAConsumerMDB implements MessageListener {
 
-    @EJB(beanName = "XAProducerSB", beanInterface = Producer.class)
+    @EJB(beanName = "XAProducerBMTSB", beanInterface = Producer.class)
     Producer sb;
 
     /**
