@@ -5,8 +5,7 @@
   - flink-streaming-2-10
   - hermesjms
   - nagios
-  - red-hat-jboss-eap-v6
-  - red-hat-jboss-eap-v7
+  - red-hat-jboss-eap
   - red-hat-jboss-fuse-v6
   - weblogic-app-server
   - websphere-app-server

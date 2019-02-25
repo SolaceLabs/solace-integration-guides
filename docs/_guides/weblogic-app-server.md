@@ -840,20 +840,10 @@ To enable secure connections to the Solace message broker, the following configu
 
 ##### Configure the Server Certificate
 
-Before, starting, here is some background detail on the server certificate required by the Solace message broker. This is from the [Solace-FP] section "Setting a Server Certificate"
+Before starting, here is some background information on the server certificate required by the message broker. This is from the [Solace documentation](https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm ):
 
 ```
-  To enable the exchange of information through TLS/SSL-encrypted SMF service, 
-  you must set the TLS/SSL server certificate file that the Solace message broker
-  is to use. This server certificate is presented to a client during the TLS/SSL
-  handshakes. A server certificate used by an message broker must be an x509v3 
-  certificate and it must include a private key. The server certificate and key
-  use an RSA algorithm for private key generation, encryption and decryption, 
-  and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
-
-  The single server certificate file set for the message broker can have a maximum
-  chain depth of three (that is, the single certificate file can contain up to 
-  three certificates in a chain that can be used for the certificate verification).
+To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace PubSub+ message broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
 ```
 
 To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
