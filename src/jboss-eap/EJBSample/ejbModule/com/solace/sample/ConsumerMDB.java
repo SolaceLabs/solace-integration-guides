@@ -4,12 +4,18 @@ import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.MessageDriven;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
 import com.solace.sample.Producer;
 
+@TransactionManagement(value = TransactionManagementType.BEAN)
+@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 /**
  * Message-Driven Bean implementation class for: ConsumerMDB
  */

@@ -665,7 +665,7 @@ The full source code for this example is available in the following sources:
 
 ### Building the samples
 
-Instructions are provided for "Eclipse IDE for Java EE Developers" with "WebSphere Application Server Developer Tools for Eclipse" installed from Eclipse Marketplace. Adjust the steps accordingly if your environment differs.
+Instructions are provided for "Eclipse IDE for Java EE Developers". Adjust the steps accordingly if your environment differs.
 
 Follow these steps to create and build your project:
 
@@ -674,9 +674,13 @@ Follow these steps to create and build your project:
 git clone https://github.com/SolaceLabs/solace-integration-guides.git
 cd solace-integration-guides/src/websphere/EJBSample-WAS/ejbModule/
 ```
-1. Create a new "EJB project" in Eclipse, set the target runtime to WebSphere Application Server. Optionally check the "Add your project to an EAR" to create an Enterprise Archive instead of an EJB JAR.
+1. Create a new "EJB project" in Eclipse. Optionally check the "Add your project to an EAR" to create an Enterprise Archive instead of an EJB JAR.
 
 1. Replace the new project `ejbModule` directory contents (created empty) with the contents of the `ejbModule` directory of this repo, then refresh your project in the IDE.
+
+1. Add JEE API 5 or later jar library to the project build path. This can be your application server's JEE library or download and include a general one, such as from [org.apache.openejb » javaee-api](https://mvnrepository.com/artifact/org.apache.openejb/javaee-api ).
+
+1. Note: Depending on your  WebSphere target runtime version, the JRE System Library version configured in Eclipse Java Build Path libraries may need to be lower than Java v8.
 
 1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
 

@@ -448,7 +448,7 @@ The following table summarizes the values used for the Resource Adapter configur
 
 | **Name** | **Value** | **Description** |
 | ConnectionURL | tcp://__IP:Port__ | Update the value '__IP:Port__' with the actual message broker message-backbone VRF IP |
-| messageVPN | solace_VPN | The value corresponding to the Solace message VPN |
+| MessageVPN | solace_VPN | The value corresponding to the Solace message VPN |
 | UserName | solace_user | The client Solace username credentials |
 | Password | default | Client password |
 
@@ -506,7 +506,7 @@ This example uses a Message-Driven-Bean to receive messages from the Solace JMS 
 
 In JBoss EAP, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace message broker as well as other configuration options.  
 
-Note the values for the attributes (‘propertyValue’) can take the form ‘${propertyName}’ where JBoss replaces the values if the spec-descriptor-property-replacement and / or jboss-descriptor-property-replacement JBoss server configuration properties are set to ‘true’ in the ‘urn:jboss:domain:ee’ subsystem (Refer to [JBOSS-REF] for further details).
+Note: the actual values for the attributes (‘propertyValue’) can take the form of a variable like ‘${propertyName}’ where JBoss replaces the values if the spec-descriptor-property-replacement and / or jboss-descriptor-property-replacement JBoss server configuration properties are set to ‘true’ in the ‘urn:jboss:domain:ee’ subsystem (Refer to the [JBoss documentation](https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/6.2/html/security_guide/enablingdisabling_descriptor_based_property_replacement1 ) for further details).
 
 ```
 @MessageDriven(
@@ -578,7 +578,7 @@ This example uses an EJB Session Bean to send reply messages using the Solace re
 
 #### Configuration
 
-The connection factory used in this example was configured in section [Connecting to Solace JMS provider](#step-3–connecting-to-solace-jms-provider).  In addition to the connection factory, we must configure a JMS destination for sending reply messages.
+The connection factory used in this example was configured in section [Connecting to Solace JMS provider](#step-3--–connecting-to-solace-jms-provider).  In addition to the connection factory, we must configure a JMS destination for sending reply messages.
 
 Steps to create a JCA administered object (of type Queue)
 
@@ -756,7 +756,7 @@ The full source code for this example is available in the following sources:
 
 ### Building the samples
 
-Instructions are provided for "Eclipse IDE for Java EE Developers" with "JBoss Tools" installed from Eclipse Marketplace. Adjust the steps accordingly if your environment differs.
+Instructions are provided for "Eclipse IDE for Java EE Developers". Adjust the steps accordingly if your environment differs.
 
 Follow these steps to create and build your project:
 
@@ -768,6 +768,8 @@ cd solace-integration-guides/src/jboss-eap/EJBSample/ejbModule/
 1. Create a new "EJB project" in Eclipse, set the target runtime to JBoss EAP. Optionally check the "Add your project to an EAR" to create an Enterprise Archive instead of an EJB JAR.
 
 1. Replace the new project `ejbModule` directory contents (created empty) with the contents of the `ejbModule` directory of this repo, then refresh your project in the IDE.
+
+1. Add JEE API 5 or later jar library to the project build path. This can be your application server's JEE library or download and include a general one, such as from [org.apache.openejb » javaee-api](https://mvnrepository.com/artifact/org.apache.openejb/javaee-api ).
 
 1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
 
@@ -881,7 +883,7 @@ Note: the version of the subsystem, “V.V” depends on your JBoss EAP version.
 
 ### Authentication
 
-The integration example illustrated in [Connecting to Solace JMS provider](#step-3–connecting-to-solace-jms-provider) of this guide uses the authentication information specified in the custom properties of the Solace resource adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace ‘MessageVPN’ information for a connection is always retrieved from the Solace resource adapter configured properties (or from the configured properties of one of the JCA entities – connection factory, administered object or activation specification).
+The integration example illustrated in [Connecting to Solace JMS provider](#step-3--–connecting-to-solace-jms-provider) of this guide uses the authentication information specified in the custom properties of the Solace resource adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace ‘MessageVPN’ information for a connection is always retrieved from the Solace resource adapter configured properties (or from the configured properties of one of the JCA entities – connection factory, administered object or activation specification).
 
 JBoss supports configuration of Container-Managed authentication for JCA connection factories.  The JAAS login module ConfiguredIdentityLoginModule can be used to provide EJB Container-supplied sign-on credentials to the Solace message broker. Refer to [JBOSS-SEC] for more details on configuring EJB Security.
 
@@ -899,7 +901,7 @@ This section outlines how to update the Solace message broker and JBoss Applicat
 
 To change a JBoss Application Server from using a plain text connection to a secure connection, first the Solace message broker configuration, then the Solace JMS configuration within the JBoss Application Server must be updated as outlined in the next sections.
 
-#### Configuring the Solace Message BrokerMessage Broker
+#### Configuring the Solace Message Broker
 
 To enable secure connections to the Solace message broker, the following configuration must be updated on the Solace message broker.
 
@@ -977,7 +979,7 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 <URI Scheme>://[username]:[password]@<IP address>[:port]
 ```
 
-Recall from section [Connecting to Solace JMS provider](#step-3–connecting-to-solace-jms-provider), originally, the "ConnectionURL" was as follows:
+Recall from section [Connecting to Solace JMS provider](#step-3--–connecting-to-solace-jms-provider), originally, the "ConnectionURL" was as follows:
 
 ```
 smf://___IP:PORT___
@@ -1135,6 +1137,7 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
          </recover-credential>
        </recovery>
     </connection-definition>
+  </connection-definitions>
 ```
 
 #### XA Transactions – Sample Code
@@ -1176,7 +1179,7 @@ The full source code for this example is available here:
 
 ##### Sending Messages to Solace over XA Transaction – CMT Sample Code
 
-The following code is similar to the EJB example from section [Sending Messages to Solace – Sample code](#sending-messages-to-solace-samples-code) but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean ‘XAProducerSB’ method ‘SendMessage()’ requires that the caller have an existing XA Transaction context.  In this example, the ‘SendMessage()’ method is called from the MDB - ‘XAConsumerMDB’ in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
+The following code is similar to the EJB example from section [Sending Messages to Solace – Sample code](#sending-messages-to-solace) but configures Container-Managed XA Transaction support for outbound messaging.  In this example, the Session Bean ‘XAProducerSB’ method ‘SendMessage()’ requires that the caller have an existing XA Transaction context.  In this example, the ‘SendMessage()’ method is called from the MDB - ‘XAConsumerMDB’ in the above example where the EJB container has created an XA Transaction context for the inbound message.  When the method sendMessage() completes the EJB container will either finalize the XA transaction or perform a rollback operation.
 
 ```java
 @Stateless(name = "ProducerSB")
@@ -1316,18 +1319,20 @@ The following configuration changes are required to use an external JNDI provide
 
 ##### Solace JMS Resource Adapter configuration
 
-Refer to section [Connecting to Solace JMS provider](#step-3–connecting-to-solace-jms-provider) to compare to the default setup.
+Update the `<config-property>` entries under the Solace Resource Adapter in the JBoss server configuration – ‘urn:jboss:domain:resource-adapters’ subsystem.
+
+Refer to section [Connecting to Solace JMS provider](#step-3--–connecting-to-solace-jms-provider) to compare to the default setup.
 
 The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
 
 | **Name** | **Value** | **Description** |
-| PROVIDER_PROTOCOL://IP:Port | ConnectionURL | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
-| messageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
+| ConnectionURL | PROVIDER_PROTOCOL://IP:Port | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
+| MessageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
 | UserName | jndi_provider_username | The username credential on the external JNDI store (not on the message broker) |
 | Password | jndi_provider_password | The password credential on the external JNDI store (not on the message broker) |
 | ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` with your provider's class name implementing "javax.naming.spi.InitialContextFactory". Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter properties section](#configuring-the-solace-resource-adapter-properties).
 
-**Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path. For JBoss EAP v6 the recommended approach is to make use of [JBoss Modules](({{ site.links-jboss-modules }}){:target="_top"}): declare a dependency from Solace Resource Adapter module file (`<JBoss_Home>/modules/com/solacesystems/ra/main/module.xml`) to the module where the jar library is located. Example for the LDAP `com.sun.jndi.ldap.LdapCtxFactory`:
+**Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path. For JBoss EAP v6 the recommended approach is to make use of [JBoss Modules]({{ site.links-jboss-modules }}){:target="_top"}: declare a dependency from Solace Resource Adapter module file (`<JBoss_Home>/modules/com/solacesystems/ra/main/module.xml`) to the module where the jar library is located. Example for the LDAP `com.sun.jndi.ldap.LdapCtxFactory`:
 
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1342,22 +1347,35 @@ The following table summarizes the values used for the resource adapter’s bean
 </module>
 ```
 
-In this case the implementation jar library is already located in the standard included "sun.jdk" module under `<JBoss_Home>/modules/system/layers/base`, at `sun\jdk`. For libraries that are not included in JBoss define a module in the [Filesystem module repository](({{ site.links-jboss-modules-file-system }}){:target="_top"}).
+In this case the implementation jar library is already located in the standard included "sun.jdk" module under `<JBoss_Home>/modules/system/layers/base`, at `sun\jdk`. For libraries that are not included in JBoss, define a module in the [Filesystem module repository]({{ site.links-jboss-modules-file-system }}){:target="_top"}.
 
 
 <br/>
 
-##### Connection Factories, Activation Specifications and Administered Objects configuration
+##### Connection Factories and Administered Objects configuration
 
-Refer to the relevant sections to compare to the default setup.
+Update `<connection-definitions>` and `<admin-objects>` sections under the Solace Resource Adapter in the JBoss server configuration – ‘urn:jboss:domain:resource-adapters’ subsystem.
+
+Refer to sections [Connecting to Solace JMS provider](#step-3--–connecting-to-solace-jms-provider) and [Receiving inbound messages using Solace JMS provider](#step-4-–-receiving-inbound-messages-using-solace-jms-provider) to compare to the default setup.
 
 The following table summarizes the values used for custom properties if using an external JNDI store:
 
-| **Name** | **Value** | **Description** |
-| connectionFactoryJndiName | CONFIGURED_CF_JNDI_NAME | The JNDI name of the JMS connection factory as configured on the external JNDI store. |
-| destination | CONFIGURED_DESTINATION_JNDI_NAME | The JNDI name of the JMS destination as configured on the external JNDI store. |
+| **config-property Name** | **Value** | **Description** |
+| connectionFactoryJndiName | \<CONFIGURED_CF_JNDI_NAME\> | The JNDI name of the JMS connection factory as configured on the external JNDI store. |
+| destination | \<CONFIGURED_REPLY_QUEUE_JNDI_NAME\> | The JNDI name of the JMS destination as configured on the external JNDI store. |
 
+Where \<NAME\> is the configured defined name for the object in the external JNDI store.
 
+##### Activation Specification configuration
+
+Update the Activation Configuration in the Message Driven Bean source code ("ConsumerMDB.java") with the defined \<NAME\> for the object in the external JNDI store:
+
+```java
+@MessageDriven(activationConfig = {
+        @ActivationConfigProperty(propertyName = "connectionFactoryJndiName", propertyValue = "<CONFIGURED_CF_JNDI_NAME>"),
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"),
+        @ActivationConfigProperty(propertyName = "destination", propertyValue = "<CONFIGURED_REQUEST_QUEUE_JNDI_NAME>") })
+```
 
 
 ## Configuration Reference
