@@ -407,6 +407,7 @@ Note: the version of the subsystem, "V.V" depends on your JBoss EAP version.
         <config-property name="UserName"/>    
         <config-property name="Password"/>
         <config-property name="ConnectionURL"/>
+        <config-property name="ExtendedProps"/>
         <connection-definitions/>
         <admin-objects/>
      </resource-adapter>
@@ -422,9 +423,11 @@ The above information is specified across one or more JMS entities depending on 
 
 The Solace resource adapter includes several custom properties for specifying connectivity and authentication details (Application-Managed credentials) to the Solace message broker.  Setting these properties at the Resource Adapter level makes the information available to all child JCA entities like Connection Factory, Activation Specification and Administered Objects.  The properties can also be overridden at the specific JCA entity level allowing connectivity to multiple Solace message brokers.
 
-Steps to configure the Solace JCA Resource Adapter:
+#### <a name="RAConf">Steps to configure the Solace JCA Resource Adapter
 
 Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-adapters’ subsystem and edit the configuration properties of the Solace Resource Adapter.  Update the values for the configuration properties  ‘ConnectionURL’, ‘UserName’, ‘Password’, and ‘MessageVPN’:
+
+Note: ‘ExtendedProps’ is a placeholder for advanced configuration and will not be used here.
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
@@ -434,14 +437,18 @@ Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-
     <config-property name="MessageVPN">solace_VPN</config-property>
     <config-property name="UserName">UserName</config-property>
     <config-property name="Password">Password</config-property>
+    <config-property name="ExtendedProps"></config-property>
     <connection-definitions/>
     <admin-objects/>
 </resource-adapter>
 ```
 
 Step 2 - ‘ConnectionURL’ property has the format ‘smf://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message broker message-backbone VRF IP ).
+
 Step 3 - Specify a value for the ‘UserName’ property that corresponds to the Solace username (use the value ‘solace_user’ for this example).
+
 Step 4 - Specify a value for the ‘Password’ property that corresponds to the Solace username’s password, use the value ‘solace_password’ 
+
 Step 5 - Specify a value for the ‘MessageVPN’ property and specify the value corresponding to the Solace message VPN (use the value ‘solace_VPN’ for this example).
 
 The following table summarizes the values used for the Resource Adapter configuration properties.
@@ -451,8 +458,38 @@ The following table summarizes the values used for the Resource Adapter configur
 | MessageVPN | solace_VPN | The value corresponding to the Solace message VPN |
 | UserName | solace_user | The client Solace username credentials |
 | Password | default | Client password |
+| ExtendedProps |  | Comma-seperated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
 
-Steps to configure a JCA connection factory (This example is for non-transacted messaging; refer to the section Working with XA Transactions for details on configuring XA enabled JCA connection factories):
+Extended Properties Supported Values:
+
+* Solace_JMS_Authentication_Scheme 
+* Solace_JMS_CompressionLevel 
+* Solace_JMS_JNDI_ConnectRetries 
+* Solace_JMS_JNDI_ConnectRetriesPerHost 
+* Solace_JMS_JNDI_ConnectTimeout 
+* Solace_JMS_JNDI_ReadTimeout 
+* Solace_JMS_JNDI_ReconnectRetries 
+* Solace_JMS_JNDI_ReconnectRetryWait 
+* Solace_JMS_SSL_ValidateCertificateDate 
+* Solace_JMS_SSL_ValidateCertificate 
+* Solace_JMS_SSL_CipherSuites 
+* Solace_JMS_SSL_KeyStore 
+* Solace_JMS_SSL_KeyStoreFormat 
+* Solace_JMS_SSL_KeyStorePassword 
+* Solace_JMS_SSL_PrivateKeyAlias 
+* Solace_JMS_SSL_PrivateKeyPassword 
+* Solace_JMS_SSL_ExcludedProtocols 
+* Solace_JMS_SSL_TrustStore 
+* Solace_JMS_SSL_TrustStoreFormat 
+* Solace_JMS_SSL_TrustStorePassword
+* Solace_JMS_SSL_TrustedCommonNameList
+* java.naming.factory.initial
+
+For example: 'solace_JMS_CompressionLevel=9'
+
+#### Steps to configure a JCA connection factory
+
+(This example is for non-transacted messaging; refer to the section Working with XA Transactions for details on configuring XA enabled JCA connection factories)
 
 Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘resource-adapters’ subsystem of the JBoss application server configuration, and add a new connection-definition entry:
 
@@ -1321,7 +1358,7 @@ The following configuration changes are required to use an external JNDI provide
 
 Update the `<config-property>` entries under the Solace Resource Adapter in the JBoss server configuration – ‘urn:jboss:domain:resource-adapters’ subsystem.
 
-Refer to section [Connecting to Solace JMS provider](#ConnToSolJMS) to compare to the default setup.
+Refer to section [Solace Resource Adapter configuration section]((#RAConf) to compare to the default setup.
 
 The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
 
@@ -1330,7 +1367,7 @@ The following table summarizes the values used for the resource adapter’s bean
 | MessageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
 | UserName | jndi_provider_username | The username credential on the external JNDI store (not on the message broker) |
 | Password | jndi_provider_password | The password credential on the external JNDI store (not on the message broker) |
-| ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` with your provider's class name implementing "javax.naming.spi.InitialContextFactory". Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter properties section](#configuring-the-solace-resource-adapter-properties).
+| ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` with your provider's class name implementing "javax.naming.spi.InitialContextFactory". Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter configuration section](#RAConf).
 
 **Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path. For JBoss EAP v6 the recommended approach is to make use of [JBoss Modules]({{ site.links-jboss-modules }}){:target="_top"}: declare a dependency from Solace Resource Adapter module file (`<JBoss_Home>/modules/com/solacesystems/ra/main/module.xml`) to the module where the jar library is located. Example for the LDAP `com.sun.jndi.ldap.LdapCtxFactory`:
 

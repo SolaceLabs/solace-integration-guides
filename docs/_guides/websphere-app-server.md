@@ -347,7 +347,7 @@ The following table summarizes the values used for the resource adapter's bean p
 | MessageVPN | solace_VPN | A Message VPN, or virtual message broker, to scope the integration on the message broker. |
 | UserName | solace_user | The client username credentials on the message broker |
 | Password |  | Optional password of the Client Username on the message broker |
-| ExtendedProps |  | Comma-seperated list for advanced control of the connection.  For this example, leave empty.  Supported values are shown below. |
+| ExtendedProps |  | Comma-seperated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
 
 Extended Properties Supported Values:
 
