@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:jms="http://www.springframework.org/schema/jms"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans.xsd
+   http://www.springframework.org/schema/jms 
+   http://www.springframework.org/schema/jms/spring-jms-3.1.xsd">
+
+  <!-- The section is used to configure all of the JNDI Initial Context information 
+    to connect in the JMS JNDI Provider -->
+  <bean id="solaceJndiTemplate" class="org.springframework.jndi.JndiTemplate"
+    lazy-init="default" autowire="default">
+    <property name="environment">
+      <map>
+        <entry key="java.naming.provider.url" value="tcp://___IP:PORT___" />
+        <entry key="java.naming.factory.initial"
+               value="com.solacesystems.jndi.SolJNDIInitialContextFactory" />
+        <entry key="java.naming.security.principal" 
+               value="spring_user@Solace_Spring_VPN" />
+        <entry key="java.naming.security.credentials" 
+               value="spring_password" />
+      </map>
+    </property>
+  </bean>
+  <bean id="solaceConnectionFactory" class="org.springframework.jndi.JndiObjectFactoryBean"
+    lazy-init="default" autowire="default">
+    <property name="jndiTemplate" ref="solaceJndiTemplate" />
+    <property name="jndiName" value="JNDI/CF/spring" />
+  </bean>
+  <bean id="solaceCachedConnectionFactory" class="org.springframework.jms.connection.CachingConnectionFactory">
+    <property name="targetConnectionFactory" ref="solaceConnectionFactory" />
+    <property name="sessionCacheSize" value="10" />
+  </bean>
+  <bean id="solaceSingleConnectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">
+    <property name="targetConnectionFactory" ref="solaceConnectionFactory" />
+  </bean>
+
+  <bean id="destination" class="org.springframework.jndi.JndiObjectFactoryBean">
+    <property name="jndiTemplate" ref="solaceJndiTemplate" />
+    <property name="jndiName" value="JNDI/Q/requests" />
+  </bean>
+  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="solaceCachedConnectionFactory" />
+    <property name="defaultDestination" ref="destination" />
+    <property name="deliveryPersistent" value="true" />
+    <property name="explicitQosEnabled" value="true" />
+  </bean>
+  <bean id="messageProducer" class="com.solace.integration.spring.MessageProducer">
+    <property name="jmsTemplate" ref="jmsTemplate" />
+  </bean>
+
+  <bean id="messageConsumer" class="com.solace.integration.spring.MessageConsumer">
+  </bean>
+  <bean id="jmsContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="solaceSingleConnectionFactory" />
+    <property name="destination" ref="destination" />
+    <property name="messageListener" ref="messageConsumer" />
+    <property name="cacheLevelName" value="CACHE_CONSUMER" />
+  </bean>
+</beans>

@@ -12,7 +12,7 @@ links:
 
 Nagios (previously NetSaint) is an open-source monitoring and alerting system that’s widely used to monitor systems, networks and infrastructure. Objects monitored by Nagios are split into two categories: hosts (physical machines) and services (particular functionalities). Nagios does not perform any host or service checks on its own and relies on plugins to do this. This makes it a very modular and flexible solution. 
 
-Extending this “monitoring by plugin” paradigm of Nagios, Solace provides a set of plugin scripts that perform the message router and VPN monitoring. Following Nagios convention, the plugins add host (router) and service (VPN resources) categories.
+Extending this "monitoring by plugin" paradigm of Nagios, Solace provides a set of plugin scripts that perform the message broker and VPN monitoring. Following Nagios convention, the plugins add host (message broker) and service (VPN resources) categories.
 
 Nagiograph parses output and performance data from Nagios plugins and generates graphs and HTML pages for reporting. Nagiograph stores data in RRD (Round Robin Database) files as time series data. RRDTool is an Open source parser that integrates into Shell scripts, Perl, Python, Ruby, Tcl, etc. 
 The following picture illustrates different components and high level data flow.
@@ -29,7 +29,7 @@ These documents contain information related to the feature defined in this docum
 
 * [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace Message Router Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 
 ### Prerequisites
@@ -37,13 +37,15 @@ These documents contain information related to the feature defined in this docum
 #### Requirements
 
 * The installation and setup steps require that you have root access on the CentOS server 
-* The installation and setup steps also require that you have CLI access to the Solace Message Router
-* The Solace Message Router should be reachable over network from the CentOS server running Nagios
+* The installation and setup steps also require that you have CLI access to the Solace Message Broker
+* The Solace Message Broker should be reachable over network from the CentOS server running Nagios
 
 #### Assumptions
 
 * This document is based on SolOS version 7.1.1, though earier versions (such as SolOS 6.2) should work without any changes.
 * Setup steps in this guide were tested on CentOS 6.3 CentOS 7.0 (both 64 Bit Minimal install).  Command syntax and file locations would vary on other flavors of Linux.
+
+{% include_relative assets/solaceMessaging.md %}
 
 ## Nagios Setup
 
@@ -85,7 +87,7 @@ rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-6.rpm
 ```
 yum -y install nagios nagios-plugins-all nagios-plugins-nrpe nrpe 
 ```
-
+
 ### Post install setup
 
 #### HTTP Setup
@@ -173,14 +175,14 @@ nagios (pid 4155) is running...
 # systemctl restart httpd
 # systemctl restart nagios
 ```
-
+
 ### Verification
 
-The above script adds another host by name “localhost-gr” with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.
+The above script adds another host by name "localhost-gr" with graphics enabled that can be used to test the Nagiosgraph install. Sample page is shown below.
 
 ![]({{ site.baseurl }}/images/nagios/nagios-graph-install.png)
 
-
+
 Clicking on the graph symbols to the right of service name brings up a graph with various time bracket. A sample graph for one of the services (HTTP) for a day is shown below:
 
 ![]({{ site.baseurl }}/images/nagios/nagios-graphs.png)
@@ -210,7 +212,7 @@ cpan> exit
 
 #### Create Sample file
 
-Create a sample router Config. This file used by the setup script (below) to create commands for this config. This step can also be repeated for other routers/vpns using the command mk_nagiossolacecfg script. 
+Create a sample message broker Config. This file used by the setup script (below) to create commands for this config. This step can also be repeated for other brokers/vpns using the command mk_nagiossolacecfg script. 
 
 ```
 # cat cfg/solace-vmr2.cfg 
@@ -231,7 +233,7 @@ Run the setup_nagiossolace script. This will setup both Nagiosgraph and the sola
 ```
 # ./mk_nagiossolacecfg cfg/solace-vmr2.cfg 
 
-Generating Nagios config for Solace Message Router ...
+Generating Nagios config for Solace Message Broker ...
    Using cfgfile cfg/solace-vmr2.cfg
    Using template file cfg/solace-templaterouter-no_bi_bridge.cfg
 Generating  config ...
@@ -242,7 +244,7 @@ Setting up config files ...
 
 ### Verification
 
-If the sample router info is successfully configured, a host entry matching the message router hostname from Config file will be added to the web page. 
+If the sample message broker info is successfully configured, a host entry matching the message broker hostname from Config file will be added to the web page. 
 
 A sample entry is shown below:
 
@@ -254,7 +256,7 @@ Clicking on the graph icon to the right of the service name brings up the graphs
 
 ## NSCA Setup
 
-NSCA (Nagios Service check Acceptor) is a daemon that can accept the requests on behalf of Nagios and update the external command file. Nagios would periodically check the external command file and process them.  This “passive check” is a way to push the external status and alerts into Nagios instead of Nagios pulling the status for configured hosts and services “actively”.  The passive check offers more fine grained intervals and useful for near real time status updates and alerting. 
+NSCA (Nagios Service check Acceptor) is a daemon that can accept the requests on behalf of Nagios and update the external command file. Nagios would periodically check the external command file and process them.  This "passive check" is a way to push the external status and alerts into Nagios instead of Nagios pulling the status for configured hosts and services "actively".  The passive check offers more fine grained intervals and useful for near real time status updates and alerting. 
 
 ![]({{ site.baseurl }}/images/nagios/ncsa-setup-1.png)
 
@@ -279,7 +281,7 @@ $ ./configure
  NSCA group: nagios
 
 $ make all
-```
+```
 
 ### Post install setup
 
@@ -407,7 +409,7 @@ systemctl start  nagios-nrpe-server
 
 #### Server Configuration
 
-Step 1. Add config file per client under nagios objects directory. A sample config file for ubuntu server is given in “Setup Scripts and Config Files” section. 
+Step 1. Add config file per client under nagios objects directory. A sample config file for ubuntu server is given in "Setup Scripts and Config Files" section. 
 
 Step 2. Update nagios.cfg (/etc/nagios by default) and add the client config file. 
 
@@ -476,10 +478,10 @@ Installation of Cacti and dependencies is a topic of its own and beyond the scop
 ### Post Install Setup
 
 This section walks thru the steps to add a sample solace artifiact monitoring to Cacti using web admin. Similar to Nagios, Cacti uses external scripts for gathering the monitoring info. In this example, Queue Depth is used for illustration which can be replaced with any monitoring using right scripts.
-
+
 #### Add Custom Data Input method. 
 
-Select “Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Router. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the “Input String” and defined in the “Input Fields” section below. Similarly output expected form the script should be defined in the “Output Fields” section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
+Select "Script/Command’ as Input Type and type in the external script name that would collect the metrics from the Solace Message Broker. Note that <path_cacti> is a predefined variable that can be used. The input arguments for the script need to be both declared on the "Input String" and defined in the "Input Fields" section below. Similarly output expected form the script should be defined in the "Output Fields" section. This is used mostly as a placeholder and Cacti doesn’t do any validation on Output Field.
 
 ##### Data Input
 
@@ -495,34 +497,34 @@ Select “Script/Command’ as Input Type and type in the external script name t
 
 #### Add Custom Data Template
 
-Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (router name, vpn name, queue name and credentials). 
+Using the Data Input method defined above, define a data template for a specifc queue. Use New Data Souce Item to declare info for the specific queue (message broker name, vpn name, queue name and credentials). 
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-4.png)
+![]({{ site.baseurl }}/images/nagios/cacti-setup-4.png)
 
 #### Add a custom Graph Template
 
 Now create a Graph Template and associate the Data Template defined earlier with the graph template (using Graph Template Items).
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-5.png)
+![]({{ site.baseurl }}/images/nagios/cacti-setup-5.png)
 
-#### Add Solace Message Router as Device
+#### Add Solace Message Broker as Device
 
-Now add each message router as a device so graphs for this message router can all be grouped under here. This will also allow to run host specific services like ping test.
+Now add each message broker as a device so graphs for this message broker can all be grouped under here. This will also allow to run host specific services like ping test.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-6.png)
 
 ##### Add Data Source List
 
-Use “Data Souce List” link above the Device screen and using “Add” link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message router. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
+Use "Data Souce List" link above the Device screen and using "Add" link, add the the endpoint stats here. Also shown here is another data source for ping latency for the message broker. These steps will ensure Cacti will generate the correspoinding RRD files for these resources.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-7.png)
 
 ##### Add Graph List
 
-Using “Graph List” link above the device screen, add new graph link by clicking “New” link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool
+Using "Graph List" link above the device screen, add new graph link by clicking "New" link. Link the Data Source for the specific queue created earlier. This step will ensure graphs are generated from the RRD file using rrdgraph tool
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-8.png)
-
+
 ### Verification 
 
 #### Basic Install
@@ -532,20 +534,20 @@ Once you have basic Cacti setup up and running, you should be able to access the
 
 After configuration, you would be able to see basic system metrics for the localhost that would look similar to this
 
-![]({{ site.baseurl }}/images/nagios/cacti-setup-9.png)
-
+![]({{ site.baseurl }}/images/nagios/cacti-setup-9.png)
+
 #### Solace host check
 
-Once Solce router is added as a device, from he Devices link, you would be able view the router with basic health test such as ping status.
+Once Solace message broker is added as a device, from he Devices link, you would be able view the message broker with basic health test such as ping status.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-10.png)
-
+
 #### Solace VPN Metrics Sample
 
 Once VPN artifiact checkings are added, you should be able to view them under Graphs tab. Here is a sample of queue statistics showing queue depth for a single queue on a VPN.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-11.png)
-
+
 As with any other Cacti graph,  aggrecation over a peroid is  available by clicking on the graph. Here is an example of aggregation of  queue stats over various window period, from hour to year.
 
 ![]({{ site.baseurl }}/images/nagios/cacti-setup-12.png)
@@ -572,9 +574,9 @@ and push @s, [ 'if_stats',
                 ['rx-bytes', COUNTER, int $4 ] ];
 ```
 
-#### Adding additional routers / VPNs
+#### Adding additional message brokers / VPNs
 
-Use cfg/samplerouter.cfg as template to create additional router, VPN or VPN bridge configuration. Run mk_nagiossolacecfg to generate required solace plugin Config files.
+Use cfg/samplerouter.cfg as template to create additional message broker, VPN or VPN bridge configuration. Run mk_nagiossolacecfg to generate required solace plugin Config files.
 
 Alternatively, the files can be edited or added in /etc/nagios/objects dir manually. The corresponding entries need to be added into /etc/nagios/nagios.cfg file.
 
@@ -612,7 +614,7 @@ Check Iptables routes:
 # service iptables save
 # service iptables restart
 ```
-
+
 ### Troubleshooting
 
 #### Nagios not starting up

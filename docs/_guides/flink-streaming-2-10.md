@@ -29,10 +29,12 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"}
 * [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace Message Router Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 * [Flink Streaming Documentation](https://ci.apache.org/projects/flink/flink-docs-release-1.2/dev/datastream_api.html){:target="_blank"}
 * [Flink SourceFunction Class Documentation](https://ci.apache.org/projects/flink/flink-docs-master/api/java/org/apache/flink/streaming/api/functions/source/SourceFunction.html){:target="_blank"}
+
+{% include_relative assets/solaceMessaging.md %}
 
 ## Integrating with Flink Streaming
 This is a discussion of an approach for consuming messages from a Java Messaging Service (JMS) bus in Flink containers. The full code is freely available on Github as part of this project in [src/flink-jms-connector]({{ site.repository }}/blob/master/src/flink-jms-connector){:target="_blank"}.
@@ -41,8 +43,8 @@ The general Flink Streaming support for connectors is documented in the [Flink S
 
 This integration guide demonstrates how to configure a Flink Streaming application to receive JMS messages using a custom receiver. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace message router and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
-* Step 2 - Configuration of the Solace Message Router.
+* Step 1 - Obtain access to Solace message broker and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
+* Step 2 - Configuration of the Solace Message Broker.
 * Step 3 - Coding a Flink JMS SourceFunction.
 * Step 4 - Deploying Flink JMS SourceFunction.
 
@@ -52,7 +54,7 @@ This integration guide will demonstrate creation of Solace JMS custom receiver a
 
 #### Solace Resources
 
-The following Solace Message Router resources are required.
+The following Solace Message Broker resources are required.
 
 
 <table>
@@ -62,24 +64,17 @@ The following Solace Message Router resources are required.
     <th>Description</th>
     </tr>
     <tr>
-    <td>Solace Message Router IP:Port</td>
-    <td>__IP:Port__</td>
-    <td>The IP address and port of the Solace Message Router message backbone. This is the address client’s use when connecting to the Solace Message Router to send and receive message. This document uses a value of __IP:PORT__.</td>
+      <td>Solace Message Broker Host</td>
+      <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
-    <td>Message VPN</td>
-    <td>Solace_Flink_VPN</td>
-    <td>A Message VPN, or virtual message broker, to scope the integration on the Solace message router.</td>
+      <td>Message VPN</td>
     </tr>
     <tr>
-    <td>Client Username</td>
-    <td>flink_user</td>
-    <td>The client username.</td>
+      <td>Client Username</td>
     </tr>
     <tr>
-    <td>Client Password</td>
-    <td>flink_password</td>
-    <td>Optional client password. </td>
+      <td>Client Password</td>
     </tr>
     <tr>
     <td>Solace Queue</td>
@@ -98,11 +93,11 @@ The following Solace Message Router resources are required.
     </tr>
 </table>
 
-###	Step 1 – Obtain access to Solace message router and JMS API
+###	Step 1 – Obtain access to Solace message broker and JMS API
 
-The Solace messaging router can be obtained one of 2 ways.     
-1.	If you are in an organization that is an existing Solace customer, it is likely your organization already has Solace Message Routers and corporate policies about their use.  You will have to contact your middleware operational team in regards to access to a Solace Message Router.
-2.	If you are new to Solace or your company does not have development message routers, you can obtain a trail Solace Virtual Message Router (VMR) from the [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"}. For help getting started with your Solace VMR you can refer to [Solace VMR Getting Started Guides]({{ site.links-vmr-getstarted }}){:target="_top"}.
+The Solace message broker can be obtained one of 2 ways.     
+1.	If you are in an organization that is an existing Solace customer, it is likely your organization already has Solace Message Brokers and corporate policies about their use.  You will have to contact your middleware operational team in regards to access to a Solace Message Broker.
+2.	If you are new to Solace or your company does not have development message brokers, you can obtain a trail Solace Virtual Message Broker (VMR) from the [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"}. For help getting started with your Solace VMR you can refer to [Solace VMR Getting Started Guides]({{ site.links-vmr-getstarted }}){:target="_top"}.
 
 The Solace JMS jars are required.  They can be obtained on [Solace Developer Portal Downloads]({{ site.links-downloads }}){:target="_top"} or from [Maven Central]({{ site.links-jms-maven }}){:target="_blank"}.
 
@@ -175,44 +170,24 @@ Or if you downloaded the libraries and are referencing them directly, the follow
     </tr>
 </table>
 
-### Step 2 – Configuring the Solace Message Router
+### Step 2 – Configuring the Solace Message Broker
 
-The Solace Message Router needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application. 
+The Solace Message Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Flink application. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Router.
+* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Router configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Broker configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 6.2 but will generally be forward compatible. For more details related to Solace Message Router CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section “User Authentication and Authorization”.
+{% include_relative assets/solaceConfig.md %}
 
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Router. This document uses CLI as the reference to remain concise.
-
-#### Creating a Message VPN
-
-This section outlines how to create a message-VPN called “Solace_Flink_VPN” on the Solace Message Router with authentication disabled and 2GB of message spool quota for Guaranteed Messaging. This message-VPN name is required in the Flink configuration when connecting to the Solace message router. In practice appropriate values for authentication, message spool and other message-VPN properties should be chosen depending on the end application’s use case. 
-
-```
-(config)# create message-vpn Solace_Flink_VPN
-(config-msg-vpn)# authentication
-(config-msg-vpn-auth)# user-class client
-(config-msg-vpn-auth-user-class)# basic auth-type none
-(config-msg-vpn-auth-user-class)# exit
-(config-msg-vpn-auth)# exit
-(config-msg-vpn)# no shutdown
-(config-msg-vpn)# exit
-(config)#
-(config)# message-spool message-vpn Solace_Flink_VPN
-(config-message-spool)# max-spool-usage 2000
-(config-message-spool)# exit
-(config)#
-```
+{% include_relative assets/solaceVpn.md content="Solace_Flink_VPN" %}
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Router. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of “flink_user” will be required by the Flink application when connecting to the Solace Message Router.
+The chosen client username of "flink_user" will be required by the Flink application when connecting to the Solace Message Broker.
 
 ```
 (config)# client-profile default message-vpn Solace_Flink_VPN
@@ -230,7 +205,8 @@ The chosen client username of “flink_user” will be required by the Flink app
 ```
 
 #### Setting up Guaranteed Messaging Endpoints
-This integration guide shows receiving messages within the Flink application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is “Q/requests”.
+
+This integration guide shows receiving messages within the Flink application from a single JMS Queue. For illustration purposes, this queue is chosen to be an exclusive queue with a message spool quota of 2GB matching quota associated with the message VPN. The queue name chosen is "Q/requests".
 
 ```
 (config)# message-spool message-vpn Solace_Flink_VPN
@@ -246,7 +222,7 @@ This integration guide shows receiving messages within the Flink application fro
 
 #### Setting up Solace JNDI References
 
-To enable the JMS clients to connect and look up the Queue destination required by Flink, there are two JNDI objects required on the Solace Message Router:
+To enable the JMS clients to connect and look up the Queue destination required by Flink, there are two JNDI objects required on the Solace Message Broker:
 
 * A connection factory: JNDI/CF/flink
 * A queue destination: JNDI/Q/receive
@@ -387,12 +363,12 @@ Note that the JMSTranslator exposes an outputType() method that returns the Clas
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section “Establishing Connection and Creating Sessions” provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message router in the case of a HA failover of a Solace Message Router. By default Solace JMS connections will reconnect to the standby message router in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a Solace Message Broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
 ```
-Note: When using HA redundant message routers, a fail-over from one message router to its mate will typically
+Note: When using HA redundant message brokers, a fail-over from one message broker to its mate will typically
 occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 ```
 
