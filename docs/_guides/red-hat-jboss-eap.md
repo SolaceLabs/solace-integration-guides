@@ -212,6 +212,7 @@ This integration guide shows receiving messages and sending reply messages withi
 To enable the JMS clients to connect and look up the Queue destination required by JBoss Application Server, there are three JNDI objects required on the Solace message broker:
 
 * A connection factory: JNDI/Sol/CF
+  * Note: Ensure `direct-transport` is disabled for JMS persistent messaging.
 * A queue destination: JNDI/Sol/Q/requests
 * A queue destination: JNDI/Sol/Q/replies
 
@@ -1126,7 +1127,8 @@ In addition to the standard XA Recovery functionality provided through the Solac
 
 #### Enabling XA Support for JMS Connection Factories – Solace Message Broker<a name="enabling-xa-support"></a>
 
-When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker:
+When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
+
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -1291,7 +1293,11 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
                throw new EJBException(
                 "rollback failed: " + ex.getMessage(), ex);
             }
-	}}
+        }
+        :
+        :
+    }
+}
 ```
     
 The full source code for this example is available here:

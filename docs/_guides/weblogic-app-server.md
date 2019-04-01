@@ -24,7 +24,7 @@ This document is divided into the following sections to cover the Solace JMS int
 * Debugging Tips 
 * Advanced Topics including:
   * Using SSL Communication
-  * Working with XA Transactions
+  * Working with Transactions
   * Working with Solace Disaster Recovery
 
 ### Related Documentation
@@ -249,11 +249,13 @@ This integration guide shows receiving messages and sending reply messages withi
 To enable the JMS clients to connect and look up the queue destination required by WebLogic Application Server, there are three JNDI objects required on the Solace message broker:
 
 * A connection factory: JNDI/Sol/CF
-  * Note: Ensure ‘direct-transport’ is disabled for JMS persistent messaging.
+  * Note: Ensure `direct-transport` is disabled for JMS persistent messaging.
 * A queue destination: JNDI/Sol/Q/requests
 * A queue destination: JNDI/Sol/Q/replies
 
 They are configured as follows:
+
+Note: this will configure a connection factory without XA support as the default for the XA property is False. See section [Enabling XA Support for JMS Connection Factories](#enabling-xa-support ) for XA configuration.
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -955,17 +957,19 @@ The integration examples in this guide use basic authentication (the default aut
 Solace_JMS_Authentication_Scheme=AUTHENTICATION_SCHEME_BASIC
 ```
 
-### Working with XA Transactions
+### Working with Transactions<a name="working-with-transactions"></a>
 
-This section demonstrates how to configure the Solace message broker to support the XA transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over XA transactions using both Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
+This section demonstrates how to configure the Solace message broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
-XA transactions are supported in the general-availability release of SolOS version 7.1 and above.  The Solace JCA Resource Adapter provides XA Transaction support in version 7.2 and above.
+Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions. XA transactions are supported from the general-availability release of SolOS version 7.1.
 
-In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, SolOS version 7.1 provides XA transaction administration facilities in the event that customers must perform manual failure recovery. Refer to the document [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for full details on administering and configuring XA Transaction support on the Solace Message Broker.
+Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.
+
+In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, the Solace message broker provides XA transaction administration facilities in the event that customers must perform manual failure recovery. For full details refer to the [Solace documentation on administering and configuring XA Transaction](https://docs.solace.com/Configuring-and-Managing/Performing-Heuristic-Actions.htm ) on the Solace message broker.
 
 #### Enabling XA Support for JMS Connection Factories
 
-To enable XA transaction support for specific JMS connection factories the customer must configure XA support for the respective JNDI connection factory on the Solace Message Broker:  
+When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -977,9 +981,9 @@ To enable XA transaction support for specific JMS connection factories the custo
 (config-jndi)#
 ```
 
-#### XA Transactions – Sample Code
+#### Transactions – Sample Code
 
-The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both Bean-Managed and Container-Managed Transactions (BMT and CMT respectively).
+The following examples demonstrate how to receive and send messages using EJB transactions. Examples are given for both BMT and CMT in GitHub:
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
