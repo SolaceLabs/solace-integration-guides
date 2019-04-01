@@ -24,7 +24,7 @@ This document is divided into the following sections to cover the Solace JMS int
 * [Debugging Tips ](#debugging-tips-for-solace-jms-api-integration)
 * Advanced Topics including:
   * [Using SSL Communication](#using-ssl-communication)
-  * [Working with XA Transactions](#working-with-xa-transactions)
+  * [Working with Transactions](#working-with-transactions)
   * [Working with Solace Disaster Recovery](#working-with-solace-disaster-recovery)
   * [Using an external JNDI store for Solace JNDI lookups](#using-an-external-jndi-store-for-solace-jndi-lookups)
 
@@ -45,7 +45,7 @@ These links contain information related to this guide:
 
 {% include_relative assets/solaceMessaging.md %}
 
-## Integrating with JBoss Application Server
+## Integrating with JBoss Application Server<a name="integrating-with-jboss-application-server"></a>
 
 Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ message broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
 
@@ -207,7 +207,7 @@ This integration guide shows receiving messages and sending reply messages withi
 (config)#
 ```
 
-#### Setting up Solace JNDI References
+#### Setting up Solace JNDI References<a name="setting-up-solace-jndi-references"></a>
 
 To enable the JMS clients to connect and look up the Queue destination required by JBoss Application Server, there are three JNDI objects required on the Solace message broker:
 
@@ -216,6 +216,8 @@ To enable the JMS clients to connect and look up the Queue destination required 
 * A queue destination: JNDI/Sol/Q/replies
 
 They are configured as follows:
+
+Note: this will configure a connection factory without XA support as the default for the XA property is False. See section [Enabling XA Support for JMS Connection Factories](#enabling-xa-support ) for XA configuration.
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -324,6 +326,8 @@ When using Solace JMS version 10.0.2 or earlier, the sol-common and sol-jcsmp JA
 ```
 
 Step 4 - Perform one of the following two steps:
+
+Note: this step is required if using transactions and can be skipped otherwise.
 
 (Option 1) Update the ‘module.xml’ file in the JBoss JTS subsystem to refer to the Solace Resource Adapter module as a dependency (So that the JTS subsystem has access to the classes of the Solace RA for XA Recovery).
 
@@ -489,14 +493,13 @@ For example: 'solace_JMS_CompressionLevel=9'
 
 #### Steps to configure a JCA connection factory
 
-(This example is for non-transacted messaging; refer to the section Working with XA Transactions for details on configuring XA enabled JCA connection factories)
+Note: This example is for non-transacted messaging; refer to the section Working with Transactions for details on configuring `<connection-definitions>` for XA enabled JCA connection factories)
 
 Step 1 - Edit the configuration properties of the Solace Resource Adapter in the ‘resource-adapters’ subsystem of the JBoss application server configuration, and add a new connection-definition entry:
 
 ```xml
 <resource-adapter id="com.solacesystems.ra">
   <module slot="main" id="com.solacesystems.ra"/>
-  <transaction-support>XATransaction</transaction-support>
   :
   <connection-definitions>
     <connection-definition 
@@ -603,7 +606,7 @@ The following table summarizes important values used for the Activation specific
 | connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the message broker. |
 | destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the message broker. |
 | destinationType | javax.jms.Queue | The JMS class name for the desired destination type. |
-| batchSize | 1 | For non-transacted MDBs, the batchSize() is an optimization to read-in 'batchSize' number of messages at a time from the Connection for distribution to MDB threads. Note, for MDB's that are configured to be transacted (XA), the batchSize property is ignored (internally set to '1'). |
+| batchSize | 1 | For non-transacted MDBs, the batchSize() is an optimization to read-in 'batchSize' number of messages at a time from the Connection for distribution to MDB threads. Note, for MDB's that are configured to be transacted, the batchSize property is ignored (internally set to '1'). |
 | maxPoolSize | 8 | The maximum size of the MDB Session Pool.  One Session services one MDB thread |
 | reconnectAttempts | 1 | The number of times to attempt to re-activation of the MDB after activation failure |
 | reconnectInterval | 30 | The number of seconds between MDB re-activation attempts |
@@ -624,7 +627,6 @@ Step 1 - Edit the Solace Resource Adapter definition in the ‘resource-adapters
 ```xml
 <resource-adapter id="com.solacesystems.ra">
   <module slot="main" id="com.solacesystems.ra"/>
-  <transaction-support>XATransaction</transaction-support>
   :
   <admin-objects>
     <admin-object class-name="com.solacesystems.jms.ra.outbound.QueueProxy" 
@@ -655,8 +657,8 @@ Source code for an Enterprise Java Beans (EJB) application for JBoss, implementi
 There are three variants:
 
 * [EJBSample/ejbModule]({{ site.repository }}/blob/master/src/jboss-eap/EJBSample/ejbModule){:target="_blank"} - used in this basic application sample.
-* EJBSample-XA-BMT/ejbModule - used in the [Working with XA Transactions](#working-with-xa-transactions) sample.
-* EJBSample-XA-CMT/ejbModule - used in the [Working with XA Transactions](#working-with-xa-transactions) sample.
+* EJBSample-XA-BMT/ejbModule - used in the [Working with Transactions](#working-with-transactions) sample.
+* EJBSample-XA-CMT/ejbModule - used in the [Working with Transactions](#working-with-transactions) sample.
 
 The structure of all variants is the same:
 
@@ -830,9 +832,9 @@ Once a message has been sent to the `solace_requests` queue it will be delivered
 
 You can check the messages in the `solace_replies` queue using the using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace's browser-based administration console.
 
-You can also check how the message has been processed in WebSphere logs as described in section "Debugging Tips for Solace JMS API Integration".
+You can also check how the message has been processed in JBoss logs as described in section [Debugging Tips](#debugging-tips-for-solace-jms-api-integration).
  
-## Performance Considerations
+## Performance Considerations<a name="performance-considerations"></a>
 
 The Solace JCA Resource Adapter relies on the JBoss Application Server for managing the pool of JCA connections.  Tuning performance for outbound messaging can in part be accomplished by balancing the maximum number of pooled connections available against the number of peak concurrent outbound messaging clients. 
 
@@ -844,7 +846,7 @@ Note, in order to use the JNDI caching mechanisms within JBoss you must use JMS 
 
 Please refer to [JBOSS-REF] for details on modifying the default behavior of JNDI caching.
 
-## Working with Solace High Availability (HA)
+## Working with Solace High Availability (HA)<a name="working-with-solace-high-availability-ha"></a>
 
 The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
 
@@ -879,12 +881,11 @@ To configure JNDI connection properties for JNDI lookups, set the corresponding 
 * Solace_JMS_JNDI_ReconnectRetries = 20 
 * Solace_JMS_JNDI_ReconnectRetryWait 3000 (milliseconds)
 
-## Debugging Tips for Solace JMS API Integration
+## Debugging Tips for Solace JMS API Integration<a name="debugging-tips-for-solace-jms-api-integration"></a>
 
 The key component for debugging integration issues with the Solace JMS API is to enable API logging. Enabling API logging from JBoss Application Server is described below.
 
 ### How to enable Solace JMS API logging
-
 
 Logging and the logging levels for Solace Resource Adapter Java packages can be enabled using Log4J style configuration in the JBoss ‘urn:jboss:domain:logging’ subsystem.  You can enable logging for one or more of the Solace Resource Adapter Java packages listed below.
 
@@ -932,7 +933,7 @@ Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default sc
 
 * ExtendedProps - solace_JMS_Authentication_Scheme=AUTHENTICATION_SCHEME_BASIC
 
-### Using SSL Communication
+### Using SSL Communication<a name="using-ssl-communication"></a>
 
 This section outlines how to update the Solace message broker and JBoss Application Server configuration to switch the client connection to using secure connections with the Solace message broker. For the purposes of illustration, this section uses a server certificate on the Solace message broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-Docs] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.
 
@@ -1035,10 +1036,9 @@ Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-
 ```xml
 <resource-adapter id="com.solacesystems.ra">
     <module slot="main" id="com.solacesystems.ra"/>
-    <transaction-support>XATransaction</transaction-support>
-
+    :
     <config-property name="ConnectionURL">smfs://__IP:Port__</config-property>
-
+    
     <config-property name="MessageVPN">solace_VPN</config-property>
     <config-property name="UserName">solace_user</config-property>
     <config-property name="Password">Password</config-property>
@@ -1114,17 +1114,19 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
 
 Step 2 - Specify or supplement the value for the ‘ExtendedProps’ configuration property to: ‘Solace_JMS_SSL_TrustStore=___Path_or_URL___;Solace_JMS_SSL_TrustStorePassword=___Password___;Solace_JMS_SSL_TrustStoreFormat=jks’  (Update the values ‘__Path_or_URL__’ and ‘__Password__’ accordingly)
 
-### Working with XA Transactions
+### Working with Transactions<a name="working-with-transactions"></a>
 
-This section demonstrates how to configure the Solace message broker to support the XA transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over XA transactions using both Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
+This section demonstrates how to configure the Solace message broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
-XA transactions are supported in the general-availability release of SolOS version 7.1.  The Solace JCA Resource Adapter, by default, provides XA Transaction support for Enterprise Java Beans.  
+Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions. XA transactions are supported from the general-availability release of SolOS version 7.1.
 
-In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, SolOS version 7.1 provides XA transaction administration facilities in the event that customers must perform manual failure recovery. Refer to the document [Solace-JMS-REF] for full details on administering and configuring XA Transaction support on the Solace Message Broker.
+Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.
 
-#### Enabling XA Support for JMS Connection Factories – Solace Message Broker
+In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, the Solace message broker provides XA transaction administration facilities in the event that customers must perform manual failure recovery. For full details refer to the [Solace documentation on administering and configuring XA Transaction](https://docs.solace.com/Configuring-and-Managing/Performing-Heuristic-Actions.htm ) on the Solace message broker.
 
-To enable XA transaction support for specific JMS connection factories the customer must configure XA support for the respective JNDI connection factory on the Solace Message Broker:  
+#### Enabling XA Support for JMS Connection Factories – Solace Message Broker<a name="enabling-xa-support"></a>
+
+When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker:
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -1177,9 +1179,9 @@ Step 1 - Edit the configuration properties of the Solace Resource Adapter in the
   </connection-definitions>
 ```
 
-#### XA Transactions – Sample Code
+#### Transactions – Sample Code
 
-The following examples demonstrate how to receive and send messages using XA transactions.  Examples are given for both BMT and CMT in GitHub:
+The following examples demonstrate how to receive and send messages using EJB transactions. Examples are given for both BMT and CMT in GitHub:
 
 * [EJBSample-XA-BMT/ejbModule]({{ site.repository }}/blob/master/src/jboss-eap/EJBSample-XA-BMT/ejbModule/){:target="_blank"}
 * [EJBSample-XA-CMT/ejbModule]({{ site.repository }}/blob/master/src/jboss-eap/EJBSample-XA-CMT/ejbModule/){:target="_blank"}
@@ -1188,11 +1190,10 @@ For building and deployment instructions refer to the [Sample Application Code](
 
 ##### Receiving messages from Solace over XA transaction – CMT Sample Code
 
-The following code is similar to the basic "ConsumerMDB" example, but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` annotation.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
+The following code is similar to the basic "ConsumerMDB" example, but specifies Container-Managed XA Transaction support for inbound messages - see in the `@TransactionManagement` and `@TransactionAttribute` annotations.  In this example, the Message-Driven-Bean (MDB) - 'XAConsumerMDB' is configured such that the EJB container will provision and start an XA transaction prior to calling the onMessage() method and finalize or rollback the transaction when onMessage() exits (Rollback typically occurs when an unchecked exception is caught by the Container).
 
 ```java
 @TransactionManagement(value = TransactionManagementType.CONTAINER)
-@TransactionAttribute(value = TransactionAttributeType.REQUIRED)
 
 @MessageDriven(activationConfig = {
     ... }   // skipping details here
@@ -1203,6 +1204,7 @@ public class XAConsumerMDB implements MessageListener {
 
     public XAConsumerMDB() { }
 
+    @TransactionAttribute(value = TransactionAttributeType.REQUIRED)
     public void onMessage(Message message) {
         :
         :
@@ -1251,14 +1253,17 @@ The full source code for this example is available here:
 EJB code can use the UserTransaction interface (Bean-Managed) to provision and control the lifecycle of an XA transaction.  The EJB container will not provision XA transactions when the EJB class’s ‘TransactionManagement’ type is designated as ‘BEAN’ managed.  In the following example, the session Bean ‘XAProducerBMTSB’ starts a new XA Transaction and performs an explicit ‘commit()’ operation after successfully sending the message.  If a runtime error is detected, then an explicit ‘rollback()’ operation is executed.  If the rollback operation fails, then the EJB code throws an EJBException() to allow the EJB container to handle the error.  
 
 ```java
-@Stateless(name = "ProducerSB")
-@TransactionManagement(value = TransactionManagementType.BEAN)
+@Stateless(name = "XAProducerBMTSB")
+@TransactionManagement(value=TransactionManagementType.BEAN)
 public class XAProducerBMTSB implements Producer, ProducerLocal {
     @Resource(name = "myCF")
     ConnectionFactory myCF;
 
     @Resource(name = "myReplyQueue")
     Queue myReplyQueue;
+
+    @Resource
+    SessionContext sessionContext;
 
     public XAProducerBMTSB() {
     }
@@ -1267,7 +1272,26 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
     public void sendMessage() throws JMSException {
         :
         :
-}
+        UserTransaction ux = sessionContext.getUserTransaction();
+        
+        try {
+            ux.begin();
+            conn = myCF.createConnection();
+            session = conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
+            prod = session.createProducer(myReplyQueue);
+            ObjectMessage msg = session.createObjectMessage();
+            msg.setObject("Hello world!");
+            prod.send(msg, DeliveryMode.PERSISTENT, 0, 0);          
+            ux.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+               ux.rollback();
+            } catch (Exception ex) {
+               throw new EJBException(
+                "rollback failed: " + ex.getMessage(), ex);
+            }
+	}}
 ```
     
 The full source code for this example is available here:
@@ -1277,7 +1301,7 @@ The full source code for this example is available here:
 
 
 
-### Working with Solace Disaster Recovery
+### Working with Solace Disaster Recovery<a name="working-with-solace-disaster-recovery"></a>
 
 The [Solace-FG] section "Data Center Replication" contains a sub-section on "Application Implementation" which details items that need to be considered when working with Solace’s Data Center Replication feature. This integration guide will show how the following items required to have a JBoss Application Server successfully connect to a backup data center using the Solace Data Center Replication feature.
 
@@ -1336,23 +1360,13 @@ For JBoss applications that are sending messages, there is nothing specifically 
 * javax.jms.JMSException
 
 
-### Using an external JNDI store for Solace JNDI lookups
-                                                                           
-                                                                            
-                
+### Using an external JNDI store for Solace JNDI lookups<a name="using-an-external-jndi-store-for-solace-jndi-lookups"></a>
 
 By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the message broker.
-                                                                              
-                                                              
 
 It's possible to use an external JNDI provider such as an external LDAP server instead, and provision the Solace JNDI objects there.
-                                                                             
-                                                                               
-                                                                                    
 
 The following configuration changes are required to use an external JNDI provider:
-                                                                               
-                                                                   
 
 ##### Solace JMS Resource Adapter configuration
 

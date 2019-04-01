@@ -37,12 +37,12 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
     @Override
     public void sendMessage() throws JMSException {
 
-	System.out.println("Sending reply message");
-	Connection conn = null;
-	Session session = null;
-	MessageProducer prod = null;
+        System.out.println("Sending reply message");
+        Connection conn = null;
+        Session session = null;
+        MessageProducer prod = null;
         UserTransaction ux = sessionContext.getUserTransaction();
-        
+
         try {
             ux.begin();
             conn = myCF.createConnection();
@@ -50,7 +50,7 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
             prod = session.createProducer(myReplyQueue);
             ObjectMessage msg = session.createObjectMessage();
             msg.setObject("Hello world!");
-            prod.send(msg, DeliveryMode.PERSISTENT, 0, 0);          
+            prod.send(msg, DeliveryMode.PERSISTENT, 0, 0);
             ux.commit();
         } catch (Exception e) {
             e.printStackTrace();
@@ -60,13 +60,13 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
                throw new EJBException(
                 "rollback failed: " + ex.getMessage(), ex);
             }
-	} finally {
-	    if (prod != null)
-		prod.close();
-	    if (session != null)
-		session.close();
-	    if (conn != null)
-		conn.close();
-	}
+        } finally {
+            if (prod != null)
+          prod.close();
+            if (session != null)
+          session.close();
+            if (conn != null)
+          conn.close();
+        }
     }
 }
