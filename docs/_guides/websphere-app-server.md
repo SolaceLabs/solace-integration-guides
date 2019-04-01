@@ -347,7 +347,7 @@ The following table summarizes the values used for the resource adapter's bean p
 | MessageVPN | solace_VPN | A Message VPN, or virtual message broker, to scope the integration on the message broker. |
 | UserName | solace_user | The client username credentials on the message broker |
 | Password |  | Optional password of the Client Username on the message broker |
-| ExtendedProps |  | Comma-seperated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
+| ExtendedProps |  | Semicolon-separated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
 
 Extended Properties Supported Values:
 
@@ -758,7 +758,7 @@ In "Setting up Solace JNDI References", the Solace CLI commands correctly config
 
 In addition to configuring the above properties for connection factories, care should be taken to configure connection properties for performing JNDI lookups to the message broker.  These settings can be configured in the WebSphere application server globally by setting them at the Solace Resource Adapter level or within individual J2C entities.  
 
-To configure JNDI connection properties for JNDI lookups, set the corresponding Solace JMS property values (as a semi-colon separated list of name=value pairs) through the 'ExtendedProps' custom property of the Solace Resource Adapter or J2C administered objects.
+To configure JNDI connection properties for JNDI lookups, set the corresponding Solace JMS property values (as a semicolon-separated list of name=value pairs) through the 'ExtendedProps' custom property of the Solace Resource Adapter or J2C administered objects.
 
 * Solace_JMS_JNDI_ConnectRetries = 1
 * Solace_JMS_JNDI_ConnectRetriesPerHost = 5
@@ -853,7 +853,7 @@ WebSphere supports configuration of Container-Managed authentication for J2C res
 
 The message broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
 
-The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semi-colon separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for further details on the required JMS properties for configuring SSL client certificate authentication.
+The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for further details on the required JMS properties for configuring SSL client certificate authentication.
 
 Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default scheme, that scheme could also have been specified using the `extendedProps` custom property of the resource adapter.
 
@@ -936,7 +936,7 @@ By default, within Solace Message VPNs both plain-text and SSL services are enab
 
 Secure connections to the Solace JMS provider require configuring SSL parameters on one or more J2C entities. While using the Solace Resource Adapter, these two parameters include changes to the Solace J2C custom properties 'ConnectionURL' and 'ExtendedProps'.  Note that the property values for 'ConnectionURL' and 'ExtendedProps' are inherited by J2C connection factory,,and J2C administered objects from their parent Resource Adapter.  Thus, unless you are connecting to multiple message brokers, a best practice is to configure values for 'ConnectionURL' and 'ExtendedProps' in the Solace Resource Adapter, otherwise the SSL related changes should be duplicated across custom properties for all of the J2C entities you want to secure.
 
-The required SSL parameters include modifications to the URL scheme of 'ConnectionURL' (from `smf` to `smfs`), and setting additional SSL attributes through the custom property 'ExtendedProps'.  The following sections describe the required changes in more detail.
+The required SSL parameters include modifications to the URL scheme of 'ConnectionURL' (from `tcp` to `tcps`), and setting additional SSL attributes through the custom property 'ExtendedProps'.  The following sections describe the required changes in more detail.
 
 ##### Updating the JMS provider URL (ConnectionURL)
 
@@ -952,7 +952,7 @@ Recall from above, originally, the "ConnectionURL" was as follows:
 tcp://___IP:PORT___
 ```
 
-This specified a URI scheme of "smf" which is the plaint-text method of communicating with the message broker. This should be updated to "smfs" to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "smf" which is the plaint-text method of communicating with the message broker. This should be updated to "tcps" to switch to secure communication giving you the following configuration:
 
 ```
 tcps://___IP:PORT___
@@ -965,7 +965,7 @@ The Solace JMS API must be able to validate the server certificate of the messag
 
 First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the message broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.  
 
-Specifying a value for the parameter 'solace_JMS_SSL_TrustStore' is accomplished by modifying the Solace J2C custom property 'ExtendedProps'. The value for the property is comprised of a semi-colon separated list of Solace JMS parameters.
+Specifying a value for the parameter 'solace_JMS_SSL_TrustStore' is accomplished by modifying the Solace J2C custom property 'ExtendedProps'. The value for the property is comprised of a semicolon-separated list of Solace JMS parameters.
 
 ```
 Solace_JMS_SSL_TrustStore=___Path_or_URL___

@@ -437,7 +437,7 @@ Note: ‘ExtendedProps’ is a placeholder for advanced configuration and will n
 <resource-adapter id="com.solacesystems.ra">
     <module slot="main" id="com.solacesystems.ra"/>
     <transaction-support>XATransaction</transaction-support>
-    <config-property name="ConnectionURL">smf://__IP:Port__</config-property>
+    <config-property name="ConnectionURL">tcp://__IP:Port__</config-property>
     <config-property name="MessageVPN">solace_VPN</config-property>
     <config-property name="UserName">UserName</config-property>
     <config-property name="Password">Password</config-property>
@@ -447,7 +447,7 @@ Note: ‘ExtendedProps’ is a placeholder for advanced configuration and will n
 </resource-adapter>
 ```
 
-Step 2 - ‘ConnectionURL’ property has the format ‘smf://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message broker message-backbone VRF IP ).
+Step 2 - ‘ConnectionURL’ property has the format ‘tcp://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message broker message-backbone VRF IP ).
 
 Step 3 - Specify a value for the ‘UserName’ property that corresponds to the Solace username (use the value ‘solace_user’ for this example).
 
@@ -462,7 +462,7 @@ The following table summarizes the values used for the Resource Adapter configur
 | MessageVPN | solace_VPN | The value corresponding to the Solace message VPN |
 | UserName | solace_user | The client Solace username credentials |
 | Password | default | Client password |
-| ExtendedProps |  | Comma-seperated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
+| ExtendedProps |  | Semicolon-separated list for [advanced control of the connection]({{ site.links-docs-jms-properties }}){:target="_top"}.  For this example, leave empty.  Supported values are shown below. |
 
 Extended Properties Supported Values:
 
@@ -872,7 +872,7 @@ In "Setting up Solace JNDI References", the Solace CLI commands correctly config
 
 In addition to configuring the above properties for connection factories, care should be taken to configure connection properties for performing JNDI lookups to the Solace message broker.  These settings can be configured in the JBoss Application Server globally by setting them at the Solace resource adapter level or within individual JCA administered objects.  
 
-To configure JNDI connection properties for JNDI lookups, set the corresponding Solace JMS property values (as a semi-colon separated list of name=value pairs) through the ‘ExtendedProps’ configuration property of the Solace resource adapter or JCA administered objects.
+To configure JNDI connection properties for JNDI lookups, set the corresponding Solace JMS property values (as a semicolon-separated list of name=value pairs) through the ‘ExtendedProps’ configuration property of the Solace resource adapter or JCA administered objects.
 
 * Solace_JMS_JNDI_ConnectRetries = 1
 * Solace_JMS_JNDI_ConnectRetriesPerHost = 5
@@ -927,7 +927,7 @@ JBoss supports configuration of Container-Managed authentication for JCA connect
 
 The message broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
 
-The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semi-colon separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for further details on the required JMS properties for configuring SSL client certificate authentication.
+The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for further details on the required JMS properties for configuring SSL client certificate authentication.
 
 Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default scheme, that scheme could also have been specified using the `extendedProps` custom property of the resource adapter.
 
@@ -1007,7 +1007,7 @@ By default within Solace message VPNs both the plain-text and SSL services are e
 
 Secure connections to the Solace JMS provider require configuring SSL parameters of JCA objects. Two of these configuration parameters include ‘ConnectionURL’ and ‘ExtendedProps’.  Note that the property values for ‘ConnectionURL’ and ‘ExtendedProps’ are inherited by JCA connection factory, Activation specification, and administered objects from their parent Resource Adapter.  Thus, unless you are connecting to multiple Solace message brokers, a best practice is to configure values for ‘ConnectionURL’ and ‘ExtendedProps’ in the Solace Resource Adapter, otherwise the SSL related changes should be duplicated across configuration properties for all of the JMS administered objects you want to secure. 
 
-The required SSL parameters include modifications to the URL scheme of ‘ConnectionURL’ (from ‘smf’ to ‘smfs’), and setting additional SSL attributes through the configuration property ‘ExtendedProps’.  The following sections describe the required changes in more detail.
+The required SSL parameters include modifications to the URL scheme of ‘ConnectionURL’ (from ‘tcp’ to ‘tcps’), and setting additional SSL attributes through the configuration property ‘ExtendedProps’.  The following sections describe the required changes in more detail.
 
 ##### Updating the JMS provider URL (ConnectionURL)
 
@@ -1020,13 +1020,13 @@ In order to signal to the Solace JMS API that the connection should be a secure 
 Recall from section [Connecting to Solace JMS provider](#ConnToSolJMS), originally, the "ConnectionURL" was as follows:
 
 ```
-smf://___IP:PORT___
+tcp://___IP:PORT___
 ```
 
-This specified a URI scheme of "smf" which is the plaint-text method of communicating with the Solace message broker. This should be updated to "smfs" to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "tcp" which is the plaint-text method of communicating with the Solace message broker. This should be updated to "tcps" to switch to secure communication giving you the following configuration:
 
 ```
-smfs://___IP:PORT___
+tcps://___IP:PORT___
 ```
 
 Steps to update the ConnectionURL configuration property of a Solace JMS Resource Adapter:
@@ -1037,7 +1037,7 @@ Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-
 <resource-adapter id="com.solacesystems.ra">
     <module slot="main" id="com.solacesystems.ra"/>
     :
-    <config-property name="ConnectionURL">smfs://__IP:Port__</config-property>
+    <config-property name="ConnectionURL">tcps://__IP:Port__</config-property>
     
     <config-property name="MessageVPN">solace_VPN</config-property>
     <config-property name="UserName">solace_user</config-property>
@@ -1047,7 +1047,7 @@ Step 1 - Update the JBoss server configuration – ‘urn:jboss:domain:resource-
 </resource-adapter>
 ```
 
-Step 2 - ‘ConnectionURL’ property has the format ‘smfs://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message broker message-backbone VRF IP and SMF SSL Port #, note the default SSL Port is ‘55443).
+Step 2 - ‘ConnectionURL’ property has the format ‘tcps://__IP:Port__’ (Update the value ‘__IP:Port__’ with the actual Solace message broker message-backbone VRF IP and SMF SSL Port #, note the default SMF SSL Port is ‘55443).
 
 ##### Specifying other SSL Related Configuration
 
@@ -1055,7 +1055,7 @@ The Solace JMS API must be able to validate the server certificate of the Solace
 
 First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace message broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.  
 
-A value for the parameter ‘Solace_JMS_SSL_TrustStore’ can be set by modifying the Solace JCA Resource Adapter configuration property ‘ExtendedProps’. The configuration property value for ‘ExtendedProps’ is comprised of a semi-colon separated list of Solace JMS parameters:
+A value for the parameter ‘Solace_JMS_SSL_TrustStore’ can be set by modifying the Solace JCA Resource Adapter configuration property ‘ExtendedProps’. The configuration property value for ‘ExtendedProps’ is comprised of a semicolon-separated list of Solace JMS parameters:
 
 ```
 Solace_JMS_SSL_TrustStore=___Path_or_URL___ 
@@ -1315,7 +1315,7 @@ The [Solace-FG] section "Data Center Replication" contains a sub-section on "App
 As described in [Solace-Docs], the host list provides the address of the backup data center. This is configured within the JBoss Application Server through the ConnectionURL configuration property value (of a respective JCA entity) as follows:
 
 ```
-smf://__IP_active_site:PORT__,smf://__IP_standby_site:PORT__
+tcp://__IP_active_site:PORT__,tcp://__IP_standby_site:PORT__
 ```
 
 The active site and standby site addresses are provided as a comma-separated list of ‘Connection URIs’.  When connecting, the Solace JMS connection will first try the active site and if it is unable to successfully connect to the active site, then it will try the standby site. This is discussed in much more detail in the referenced Solace documentation
