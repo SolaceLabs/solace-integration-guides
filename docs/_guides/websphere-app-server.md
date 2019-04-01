@@ -302,7 +302,7 @@ Steps to deploy the Solace JMS Resource Adapter:
 
 Connecting to the message broker through the Solace JMS Resource Adapter requires configuration of additional resources in WebSphere.  Two key pieces of information are required including connectivity information to the message broker and client authentication data.
 
-The above information is specified across one or more J2C entities depending on your application’s JMS message flow (Inbound, Outbound, or both).  Configuration of a J2C connection factory is required for outbound message flow, while configuration of a J2C activation specification is required for inbound message flow.
+The above information is specified across one or more J2C entities depending on your application"s JMS message flow (Inbound, Outbound, or both).  Configuration of a J2C connection factory is required for outbound message flow, while configuration of a J2C activation specification is required for inbound message flow.
 
 The Solace Resource Adapter includes several custom properties for specifying connectivity and authentication details to the Solace message broker.  Setting these properties at the Resource Adapter level makes the information available to all child J2C entities like J2C connection factory, J2C activation specification and J2C administered objects.  The properties can also be overridden at the J2C entity level allowing connectivity to multiple message brokers.
 
@@ -385,33 +385,33 @@ Steps to create a J2C Connection Factory:
 
 1. Log into the WebSphere Application Server administrative console.
 
-1. Click on the ‘Resources > Resource adapters > J2C connection factories’ link in the navigation pane.
+1. Click on the "Resources > Resource adapters > J2C connection factories" link in the navigation pane.
 
-1. In the J2C connection factories page, click on the ‘New’ button.
+1. In the J2C connection factories page, click on the "New" button.
 
-1. Specify the Provider as ‘Solace JMS RA’ in the drop-down menu.
+1. Specify the Provider as "Solace JMS RA" in the drop-down menu.
 
 1. Specify a unique Name for this J2C Connection Factory (Name it `j2c_cf` for this example).
 
 1. Specify the JNDI name that will be used by clients to lookup this J2C Connection Factory (Name it `JNDI/J2C/CF` for this example).
 
-1. Specify the type of connection factory desired using the drop-down menu ‘Connection factory interface’ (use the value `javax.jmx.ConnectionFactory` for this example).
+1. Specify the type of connection factory desired using the drop-down menu "Connection factory interface" (use the value `javax.jmx.ConnectionFactory` for this example).
 
-1. Click the ‘OK’ button.
+1. Click the "OK" button.
 
-1. Click the ‘Save’ link to commit the changes to the application server.
+1. Click the "Save" link to commit the changes to the application server.
 
 1. Edit the J2C Connection Factory custom properties:
 
-  * Click on the ‘j2c_cf’ link in the J2C connection factories page, then click on the ‘Custom properties’ link under the ‘Additional properties’ section.
+  * Click on the "j2c_cf" link in the J2C connection factories page, then click on the "Custom properties" link under the "Additional properties" section.
 
 ![]({{ site.baseurl }}/images/WebSphere/config-cf-1.png)
 
-  * Specify value for ‘ConnectionFactoryJndiName’.
+  * Specify value for "ConnectionFactoryJndiName".
   
-    i.	Click on the ‘ConnectionFactoryJndiName’ property and specify the value `JNDI/Sol/CF` in the Value field. (**Note**: this is the value configured on the message broker in section Setting up Solace JNDI References).
+    i.	Click on the "ConnectionFactoryJndiName" property and specify the value `JNDI/Sol/CF` in the Value field. (**Note**: this is the value configured on the message broker in section Setting up Solace JNDI References).
     
-    ii.	Click on the ‘Apply’ button and then the ‘save’ link to commit your changes to the Master configuration. 
+    ii.	Click on the "Apply" button and then the "save" link to commit your changes to the Master configuration. 
 
 ![]({{ site.baseurl }}/images/WebSphere/config-cf-2.png)
 
@@ -444,9 +444,9 @@ Steps to create a J2C Activation Specification:
 
 1. Log into the WebSphere Application Server administrative console.
 
-1. Click on the ‘Resources > Resource Adapters > J2C activation specifications’ link in the navigation pane.
+1. Click on the "Resources > Resource Adapters > J2C activation specifications" link in the navigation pane.
 
-1. In the J2C activation specifications page, click on the ‘New’ button.
+1. In the J2C activation specifications page, click on the "New" button.
 
 1. Specify a value for the Name field (use the value `j2c_as` for this example).
 
@@ -454,29 +454,29 @@ Steps to create a J2C Activation Specification:
 
 1. Specify a value for the Message listener type using the drop-down menu (use the value `javax.jms.MessageListener supported by com.solacesystems.jms.ra.inbound.ActivationSpec`).
 
-1. Click the ‘OK’ button.
+1. Click the "OK" button.
 
-1. Click the ‘Save’ link to commit the changes to the application server.
+1. Click the "Save" link to commit the changes to the application server.
 
 1. Edit the J2C activation specification custom properties:
 
-  * Click on the ‘j2c_as’ link in the J2C activation specifications page then click on the ‘J2C administered objects custom properties’ link under the ‘Additional properties’ section.
+  * Click on the "j2c_as" link in the J2C activation specifications page then click on the "J2C administered objects custom properties" link under the "Additional properties" section.
 
 ![]({{ site.baseurl }}/images/WebSphere/config-as-1.png)
   
   * Specify values for the properties connectionFactoryJndiName, destination, and destinationType:
     
-    i.	Click on the ‘connectionFactoryJndiName’ property and specify the value ‘JNDI/Sol/CF’ in the Value field. (**Note**: this is the value configured on the message broker in Section 3.2.4 Setting up Solace JNDI References).
+    i.	Click on the "connectionFactoryJndiName" property and specify the value "JNDI/Sol/CF" in the Value field. (**Note**: this is the value configured on the message broker in Section 3.2.4 Setting up Solace JNDI References).
     
-    ii.	Click on the ‘Apply’ button and then the ‘save’ link to commit your changes to the Master configuration.
+    ii.	Click on the "Apply" button and then the "save" link to commit your changes to the Master configuration.
     
-    iii.	Click on the ‘destination’ property and specify the value ‘JNDI/Sol/Q/requests’ in the Value field. (**Note**: this is the value configured on the message broker in Section 3.2.4 Setting up Solace JNDI References).
+    iii.	Click on the "destination" property and specify the value "JNDI/Sol/Q/requests" in the Value field. (**Note**: this is the value configured on the message broker in Section 3.2.4 Setting up Solace JNDI References).
     
-    iv.	Click on the ‘Apply’ button and then the ‘save’ link to commit your changes to the Master configuration.
+    iv.	Click on the "Apply" button and then the "save" link to commit your changes to the Master configuration.
     
-    v.	Click on the ‘destinationType’ property and specify the value ‘javax.jms.Queue’ in the Value field.
+    v.	Click on the "destinationType" property and specify the value "javax.jms.Queue" in the Value field.
     
-    vi.	Click on the ‘Apply’ button and then the ‘Save’ link to commit your changes to the Master configuration.
+    vi.	Click on the "Apply" button and then the "Save" link to commit your changes to the Master configuration.
 
 ![]({{ site.baseurl }}/images/WebSphere/config-as-2.png)
 
@@ -495,11 +495,11 @@ Steps to create a J2C administered object (of type Queue)
 
 1. Log into the WebSphere Application Server administrative console.
 
-1. Click on the ‘Resources > Resource Adapters > J2C administered objects’ link in the navigation pane.
+1. Click on the "Resources > Resource Adapters > J2C administered objects" link in the navigation pane.
 
-1. In the J2C connection factories page, click on the ‘New’ button.
+1. In the J2C connection factories page, click on the "New" button.
 
-1. Specify the Provider as ‘Solace JMS RA’ in the drop-down menu.
+1. Specify the Provider as "Solace JMS RA" in the drop-down menu.
 
 1. Specify a value for the Name field of this end point (use the value `j2c_reply_queue` for this example).
 
@@ -507,23 +507,23 @@ Steps to create a J2C administered object (of type Queue)
 
 1. Specify the Administered object class for this end point using the drop-down menu (use the value `com.solacesystems.jms.ra.outbound.QueueProxy implements javax.jms.Queue` for this example).
 
-1. Click the ‘OK’ button.
+1. Click the "OK" button.
 
-1. Click the ‘Save’ link to commit the changes to the application server.
+1. Click the "Save" link to commit the changes to the application server.
 
-1. Edit the J2C administered object’s custom properties:
+1. Edit the J2C administered object"s custom properties:
 
-  * Click on the ‘j2c_reply_queue’ link in the J2C administered objects page then click on the ‘J2C administered objects custom properties’ link under the ‘Additional properties’ section.
+  * Click on the "j2c_reply_queue" link in the J2C administered objects page then click on the "J2C administered objects custom properties" link under the "Additional properties" section.
 
 ![]({{ site.baseurl }}/images/WebSphere/config-ao-1.png)
 
-  * Specify a value for the property ‘Destination’:
+  * Specify a value for the property "Destination":
   
-    i.	Click on the ‘Destination’ property and specify the value `JNDI/Sol/Q/replies` in the Value field. (**Note**: this is the value configured on the message broker in section Setting up Solace JNDI References).
+    i.	Click on the "Destination" property and specify the value `JNDI/Sol/Q/replies` in the Value field. (**Note**: this is the value configured on the message broker in section Setting up Solace JNDI References).
     
-    ii.	Click on the ‘Apply’ button.
+    ii.	Click on the "Apply" button.
     
-    iii.	Click the ‘Save’ link to commit the changes to the application server.
+    iii.	Click the "Save" link to commit the changes to the application server.
 
 ![]({{ site.baseurl }}/images/WebSphere/config-ao-2.png)
 
@@ -561,7 +561,7 @@ The structure of all variants is the same:
 
 ### Receiving messages from Solace – Sample Code
 
-The sample code below shows the implementation of a message-driven bean ("ConsumerMDB") which listens for JMS messages to arrive on the configured Solace connection factory and destination (`JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively - as configured in the J2C activation specification).  Upon receiving a message, the MDB calls the method sendMessage() of the "ProducerSB" session bean which in turn sends a reply message to a ‘reply’ Queue destination.
+The sample code below shows the implementation of a message-driven bean ("ConsumerMDB") which listens for JMS messages to arrive on the configured Solace connection factory and destination (`JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively - as configured in the J2C activation specification).  Upon receiving a message, the MDB calls the method sendMessage() of the "ProducerSB" session bean which in turn sends a reply message to a "reply" Queue destination.
 
 ```java
 @TransactionManagement(value = TransactionManagementType.BEAN)
@@ -599,7 +599,7 @@ The full source code for this example is available in the following source:
 
 The sample code below shows the implementation of a session bean ("ProducerSB") that implements a method sendMessage() which sends a JMS message to the Queue destination configured above.  The sendMessage() method is called by the "ConsumerMDB" bean outlined in the previous section.
 
-This example uses Java resource injection for the resources ‘myCF’ and ‘myReplyQueue’ which are mapped to their respective J2C entities using an application binding file (see example application bindings file following the code example below).
+This example uses Java resource injection for the resources "myCF" and "myReplyQueue" which are mapped to their respective J2C entities using an application binding file (see example application bindings file following the code example below).
 
 ```java
 @Stateless(name = "ProducerSB")
@@ -693,17 +693,17 @@ Steps to deploy the sample application:
 
 1. Log into the WebSphere Application Server administrative console.
 
-1. Click on the ‘Applications > Application Types > WebSphere enterprise applications’ link in the navigation pane.
+1. Click on the "Applications > Application Types > WebSphere enterprise applications" link in the navigation pane.
 
-1. In the Enterprise Applications page, click on the ‘Install’ button.
+1. In the Enterprise Applications page, click on the "Install" button.
 
-1. Specify the location of the JAR or EAR archive, then click ‘Next’.
+1. Specify the location of the JAR or EAR archive, then click "Next".
 
-1. Click through ‘Next’ on the following screens, then ‘Finish’.
+1. Click through "Next" on the following screens, then "Finish".
 
-1. Click the ‘Save’ link to commit the changes to the application server.
+1. Click the "Save" link to commit the changes to the application server.
 
-1. Select and click on ‘Start’ to start your application.
+1. Select and click on "Start" to start your application.
 
 You have now deployed the sample application and it is ready to receive messages from the `solace_requests` queue on the message broker.
 
@@ -721,7 +721,7 @@ You can also check how the message has been processed in WebSphere logs as descr
 
 The Solace JMS Resource Adapter relies on the WebSphere Application Server for managing the pool of JMS connections.  Tuning performance for outbound messaging can in part be accomplished by balancing the maximum number of pooled connections available against the number of peak concurrent outbound messaging clients.
 
-For inbound messaging there are different levers that can be tuned for maximum performance in a given environment.  The ‘batchSize’ custom property of the Solace J2C activation specification defines the maximum number of messages retrieved at a time from a JMS destination for delivery to a server session.  The server session then routes those messages to respective Message Driven Beans.  In addition, the ‘maxPoolSize’ custom property of the Solace J2C AS defines the maximum number of pooled JMS sessions that can be allocated to MDB threads.  Therefore to fine tune performance for inbound messaging, the ‘batchSize’ and ‘maxPoolSize’ must be balanced to the rate of incoming messages.
+For inbound messaging there are different levers that can be tuned for maximum performance in a given environment.  The "batchSize" custom property of the Solace J2C activation specification defines the maximum number of messages retrieved at a time from a JMS destination for delivery to a server session.  The server session then routes those messages to respective Message Driven Beans.  In addition, the "maxPoolSize" custom property of the Solace J2C AS defines the maximum number of pooled JMS sessions that can be allocated to MDB threads.  Therefore to fine tune performance for inbound messaging, the "batchSize" and "maxPoolSize" must be balanced to the rate of incoming messages.
 
 Another consideration is the overhead of performing JNDI lookups to the message broker.  WebSphere implements JNDI caching by default.  Resources referenced by a Message Driven Bean through resource injection will trigger an initial JNDI lookup and subsequently use the cached information whenever the MDB instance is reused from the MDB pool. Similarly, Session beans that perform JNDI lookups through a JNDI Context will have that information cached in association with that context.  Whenever the Session bean instance is reused from the Session bean pool, any lookups using the same JNDI Context will utilize the JNDI cached information.
 
@@ -782,17 +782,17 @@ Steps to configure Diagnostic trace service for Solace JMS:
 
 1. Log into the WebSphere Application Server administrative console.
 
-2. Click on the ‘Servers > Server Types > WebSphere application servers’ link in the navigation pane.
+2. Click on the "Servers > Server Types > WebSphere application servers" link in the navigation pane.
 
 3. Select your respective JEE server link In the Application servers page.
 
-4. Click on the ‘Logging and tracing’ link under the Troubleshooting section.
+4. Click on the "Logging and tracing" link under the Troubleshooting section.
 
-5. Click on the ‘Diagnostic Trace link’.
+5. Click on the "Diagnostic Trace link".
 
-6. Click on the ‘Change log detail levels’ link under the ‘Additional Properties’ section.
+6. Click on the "Change log detail levels" link under the "Additional Properties" section.
 
-    * Expand the ‘Components and Groups’ node, then the ‘’[All Components]’ node to reveal all deployed Java packages.
+    * Expand the "Components and Groups" node, then the ""[All Components]" node to reveal all deployed Java packages.
     
     * Select one of the following Solace Java packages to enable a specific logging level:
     
@@ -804,17 +804,17 @@ Steps to configure Diagnostic trace service for Solace JMS:
       
         Note: the implementation of the Solace JMS Resource Adapter is implemented by package com.solacesystems.jms.ra
       
-    * With one of the above nodes selected, select a logging level from the ‘Message and Trace Levels’ menu.
+    * With one of the above nodes selected, select a logging level from the "Message and Trace Levels" menu.
     
-    * Click the ‘OK’ button.
+    * Click the "OK" button.
     
-    * Click the ‘Save’ link to commit the changes to the application server.
+    * Click the "Save" link to commit the changes to the application server.
   
-7. Optional, modify the ‘File Name’ value to specify an alternate location for the Diagnostic trace log file.
+7. Optional, modify the "File Name" value to specify an alternate location for the Diagnostic trace log file.
 
-8. Click the ‘OK’ button.
+8. Click the "OK" button.
 
-9. Click the ‘Save’ link to commit the changes to the application server.
+9. Click the "Save" link to commit the changes to the application server.
 
 10. **Note**: the application server must be restarted for the above changes to take effect.
 
@@ -822,7 +822,7 @@ Steps to configure Diagnostic trace service for Solace JMS:
 
 You can use JMX to monitor MDBs that use the Solace resource adapter by registering the MDB with the Solace resource adapter – Management Bean (MBean).  The JConsole tool can then be used to monitor the Solace server session pool.
 
-To register a Message Driven Bean with the Solace MBean you must give the MDB a unique name through the MDB’s associated J2C activation specification – custom property ‘endpointName’.
+To register a Message Driven Bean with the Solace MBean you must give the MDB a unique name through the MDB"s associated J2C activation specification – custom property "endpointName".
 
 To enable viewing of the Solace resource adapter MBean and other JVM performance metrics in JConsole, do the following:
 
@@ -830,9 +830,9 @@ To enable viewing of the Solace resource adapter MBean and other JVM performance
 
 2. Click on Servers > Server Types > WebSphere application servers > [your server]
 
-3. In the Application Servers page, for your application server, under section ‘Server Infrastructure’, click on Java and Process Management > Process Definition > Java Virtual Machine
+3. In the Application Servers page, for your application server, under section "Server Infrastructure", click on Java and Process Management > Process Definition > Java Virtual Machine
 
-4. Enter the following space delimited name/value pairs under the ‘Generic JVM arguments’ field: 
+4. Enter the following space delimited name/value pairs under the "Generic JVM arguments" field: 
 
     * `-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=<port_number> -Djavax.management.builder.initial= -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false`
     
@@ -995,21 +995,21 @@ The integration examples in this guide use basic authentication (the default aut
 Solace_JMS_Authentication_Scheme=AUTHENTICATION_SCHEME_BASIC
 ```
 
-Steps to update the ‘extendedProps’ custom property of J2C Connection Factory:
+Steps to update the "extendedProps" custom property of J2C Connection Factory:
 
 1. Log into the WebSphere Application Server administrative console.
 
-1. Click on the ‘Resources > Resource adapters > J2C connection factories’ link in the navigation pane
+1. Click on the "Resources > Resource adapters > J2C connection factories" link in the navigation pane
 
 1. Edit the J2C Connection Factory:
 
     * Click on the desired connection factory link in the J2C connection factories page
     
-    * Update the value for the custom property ‘extendedProps’:
+    * Update the value for the custom property "extendedProps":
     
-      i.	Click on the ‘Custom properties’ link under the ‘Additional properties’ section
+      i.	Click on the "Custom properties" link under the "Additional properties" section
       
-      ii.	Click on the ‘extendedProps’ property and specify the value (Update the values ‘__Path_or_URL__’ and ‘__Password__’ accordingly)
+      ii.	Click on the "extendedProps" property and specify the value (Update the values "__Path_or_URL__" and "__Password__" accordingly)
       
       Note: following must be in one line and spaces between the JMS property name and preceding semi-colon are not allowed
 
@@ -1018,9 +1018,9 @@ Steps to update the ‘extendedProps’ custom property of J2C Connection Factor
       `Solace_JMS_SSL_TrustStorePassword=___Password___;`
       `Solace_JMS_SSL_TrustStoreFormat=jks`
       
-      iii.	Click on the ‘Apply’ button.
+      iii.	Click on the "Apply" button.
       
-      iv.	Click the ‘Save’ link to commit the changes to the application server
+      iv.	Click the "Save" link to commit the changes to the application server
 
 
 ### Working with Transactions<a name="working-with-transactions"></a>
@@ -1130,7 +1130,6 @@ EJB code can use the UserTransaction interface (Bean-Managed) to provision and c
 ```java
 @Stateless(name = "XAProducerBMTSB")
 @TransactionManagement(value=TransactionManagementType.BEAN)
-
 public class XAProducerBMTSB implements Producer, ProducerLocal {
     @Resource(name = "myCF")
     ConnectionFactory myCF;
@@ -1140,14 +1139,38 @@ public class XAProducerBMTSB implements Producer, ProducerLocal {
 
     @Resource
     SessionContext sessionContext;
-    
+
     public XAProducerBMTSB() {
     }
 
     @Override
     public void sendMessage() throws JMSException {
-:
-:
+        :
+        :
+        UserTransaction ux = sessionContext.getUserTransaction();
+        
+        try {
+            ux.begin();
+            conn = myCF.createConnection();
+            session = conn.createSession(true, Session.AUTO_ACKNOWLEDGE);
+            prod = session.createProducer(myReplyQueue);
+            ObjectMessage msg = session.createObjectMessage();
+            msg.setObject("Hello world!");
+            prod.send(msg, DeliveryMode.PERSISTENT, 0, 0);          
+            ux.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+               ux.rollback();
+            } catch (Exception ex) {
+               throw new EJBException(
+                "rollback failed: " + ex.getMessage(), ex);
+            }
+        }
+        :
+        :
+    }
+}
 ```
     
 The full source code for this example is available here:
@@ -1158,7 +1181,7 @@ The full source code for this example is available here:
 
 You can override the use of XA Transactions (the default transactional mode of the Solace JCA Resource Adapter) and force the use of Local Transactions for specific EJBs. **Note**: configuring Local Transactions for an EJB instructs the Transaction Manager in WebSphere to request the use of a Local Transaction from the Solace JCA Resource Adapter; hence, the use of Local Transaction support provided by the message broker.
 
-The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean ‘ProducerSB’ to use Local Transactions instead of XA Transactions.  Refer to [WAS-REF]({{ site.links-was-reference }}){:target="_top"} for further details on WebSphere specific EJB deployment descriptor files.
+The example EJB deployment descriptor file (ibm-ejb-jar-ext.xml) that configures the Session Bean "ProducerSB" to use Local Transactions instead of XA Transactions.  Refer to [WAS-REF]({{ site.links-was-reference }}){:target="_top"} for further details on WebSphere specific EJB deployment descriptor files.
 
 ```xml
 <ejb-jar-ext xmlns="http://websphere.ibm.com/xml/ns/javaee"
@@ -1207,7 +1230,7 @@ The reconnect retries is tuned for the respective JNDI connection factory on the
 
 #### Configuring Message Driven Bean Reactivation in the Event of Activation Failures
 
-If a message driven bean is de-activated during a replication failover, the bean may be successfully re-activated to the replication site if the reconnection properties of the bean’s Activation Specification are properly configured.  The default reconnection properties of the J2C activation specification are configured to not re-activate the bean upon de-activation. 
+If a message driven bean is de-activated during a replication failover, the bean may be successfully re-activated to the replication site if the reconnection properties of the bean"s Activation Specification are properly configured.  The default reconnection properties of the J2C activation specification are configured to not re-activate the bean upon de-activation. 
 
 To enable WebSphere to attempt to re-activate the de-activated MDB, configure the reconnection custom properties of the J2C activation specification:
 
@@ -1239,7 +1262,7 @@ The following configuration changes are required to use an external JNDI provide
 
 Refer to the [Configuring the Solace Resource Adapter properties](#configuring-the-solace-resource-adapter-properties) section to compare to the default setup.
 
-The following table summarizes the values used for the resource adapter’s bean properties if using an external JNDI store:
+The following table summarizes the values used for the resource adapter"s bean properties if using an external JNDI store:
 
 | **Name** | **Value** | **Description** |
 | ConnectionURL | PROVIDER_PROTOCOL://IP:Port | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
