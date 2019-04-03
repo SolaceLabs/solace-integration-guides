@@ -15,7 +15,6 @@ import javax.jms.MessageListener;
 import com.solace.sample.Producer;
 
 @TransactionManagement(value = TransactionManagementType.BEAN)
-@TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 /**
  * Message-Driven Bean implementation class for: ConsumerMDB
  */
