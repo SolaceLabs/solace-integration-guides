@@ -335,3 +335,13 @@ pre {
     color: #008080; }
   .highlight .il {
     color: #099; }
+
+/* Hides the scrollbar in Chrome */
+::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hides the scrollbar in Firefox */
+html {
+    scrollbar-width: none;
+}
