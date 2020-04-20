@@ -1,6 +1,6 @@
 ---
 layout: guides
-title: Pivotal Spring Framework v4 and v5
+title: Spring Framework v4 and v5
 summary: The Spring Framework provides a comprehensive programming and configuration model for modern Java-based enterprise applications - on any kind of deployment platform. A key element of Spring is infrastructural support at the application level.
 icon: spring-framework.png
 links:
