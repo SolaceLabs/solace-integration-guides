@@ -12,7 +12,7 @@ links:
 
 This guide assumes that:
 
--	You have successfully installed HermesJMS on your machine (do not use [WebStart HermesJMS](http://www.hermesjms.com/webstart/hermes/bin/hermes.jnlp){:target="_blank"})
+-	You have successfully installed HermesJMS on your machine
 -	You have access to Solace JMS libraries (version 6.2 or above)
 -	You have access to a Solace Messaging Router
 -	The necessary configuration on the Solace Message Broker is done. Configuration includes the creation of elements such as the message-VPN and the JMS Connection Factory.
