@@ -1,8 +1,8 @@
 ---
 layout: guides
-title: WebSphere Application Server V7 and V8
-summary: The WebSphere Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the WebSphere application server providing enterprise applications with connectivity to the Solace PubSub+ message broker.
-icon: ibm-websphere.png
+title: WebSphere Application Server Liberty
+summary: The IBM WebSphere Liberty is a Java EE application server with a low-overhead Java runtime environment designed for cloud-native applications and microservices. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the WebSphere Application Server   Liberty providing enterprise applications with connectivity to the Solace PubSub+ message broker.
+icon: websphere-liberty.png
 links:
    - label: Example Source Code - WebSphere
      link: https://github.com/SolaceLabs/solace-integration-guides/blob/master/src/websphere
@@ -238,20 +238,6 @@ Note: this will configure a connection factory without XA support as the default
 ## Deploying Solace JMS Resource Adapter
 
 Solace provides a JCA compliant Resource Adapter that can be deployed to the WebSphere application server allowing Enterprise Java Beans to connect to Solace through a standard JCA interface.  This integration guide outlines the steps to deploy the resource adapter which is provided by Solace as a packaged stand-alone RAR file. This is the recommended way of integrating Solace with WebSphere as it provides support for XA transactions.
-
-The following Java system property must be configured in the application server JVM properties:
-
-```
--DpasswordDecoderClassName=com.ibm.ISecurityUtilityImpl.PasswordUtil
--DpasswordDecoderMethodName=passwordDecode
-```
-
-**Note**: if using WebSphere 7 configure:
-
-```
-  -DpasswordDecoderClassName=com.ibm.ws.security.util.PasswordDecoder
-  -DpasswordDecoderMethodName=decodePassword
-```
 
 The above properties allow the resource adapter to decrypt authentication credentials encrypted by WebSphere before sending them to the Solace message broker.
 
@@ -1027,7 +1013,7 @@ Steps to update the "extendedProps" custom property of J2C Connection Factory:
 
 This section demonstrates how to configure the Solace message broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
-Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions. XA transactions are supported from the general-availability release of SolOS version 7.1.
+Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions.
 
 Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.
 

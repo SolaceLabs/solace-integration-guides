@@ -1,6 +1,6 @@
 ---
 layout: guides
-title: WebSphere Application Server V7 and V8
+title: WebSphere Application Server V8
 summary: The WebSphere Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the WebSphere application server providing enterprise applications with connectivity to the Solace PubSub+ message broker.
 icon: ibm-websphere.png
 links:
@@ -10,9 +10,9 @@ links:
 
 ## Overview
 
-This document shows you how to integrate the Solace Java Message Service (JMS) with the WebSphere Application Server V7 and V8 for production and consumption of JMS messages. We'll outline best practices to allow efficient use of both the application server and Solace JMS.
+This document shows you how to integrate the Solace Java Message Service (JMS) with the WebSphere Application Server version 8.5.5.18 or later for production and consumption of JMS messages. We'll outline best practices to allow efficient use of both the application server and Solace JMS.
 
-The target audience is developers using the WebSphere Application Server who have general knowledge of both it and JMS. This document focuses on the steps required to integrate the two, and provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter using the web console application of WebSphere versions 7 and 8.  For detailed information on either Solace JMS or the WebSphere Application Server, refer to the documents referenced below.
+The target audience is developers using the WebSphere Application Server who have general knowledge of both it and JMS. This document focuses on the steps required to integrate the two, and provides instructions on configuring and deploying the Solace JCA 1.5 resource adapter using the web console application of WebSphere.  For detailed information on either Solace JMS or the WebSphere Application Server, refer to the documents referenced below.
 
 This document is divided into the following sections:
 
@@ -244,13 +244,6 @@ The following Java system property must be configured in the application server 
 ```
 -DpasswordDecoderClassName=com.ibm.ISecurityUtilityImpl.PasswordUtil
 -DpasswordDecoderMethodName=passwordDecode
-```
-
-**Note**: if using WebSphere 7 configure:
-
-```
-  -DpasswordDecoderClassName=com.ibm.ws.security.util.PasswordDecoder
-  -DpasswordDecoderMethodName=decodePassword
 ```
 
 The above properties allow the resource adapter to decrypt authentication credentials encrypted by WebSphere before sending them to the Solace message broker.
@@ -681,7 +674,7 @@ cd solace-integration-guides/src/websphere/EJBSample-WAS/ejbModule/
 
 1. Add JEE API 5 or later jar library to the project build path. This can be your application server's JEE library or download and include a general one, such as from [org.apache.openejb » javaee-api](https://mvnrepository.com/artifact/org.apache.openejb/javaee-api ).
 
-1. Note: Depending on your  WebSphere target runtime version, the JRE System Library version configured in Eclipse Java Build Path libraries may need to be lower than Java v8.
+1. Note: The JRE System Library version configured in Eclipse Java Build Path libraries must be Java v8 or later, depending on your  WebSphere target runtime version. The Solace resource adapter supports Java v8 or later.
 
 1. Export your project to an EJB JAR file or alternatively, if you have a related EAR project created then export from there to an EAR file.
 
@@ -1027,7 +1020,7 @@ Steps to update the "extendedProps" custom property of J2C Connection Factory:
 
 This section demonstrates how to configure the Solace message broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
-Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions. XA transactions are supported from the general-availability release of SolOS version 7.1.
+Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions.
 
 Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.
 
@@ -1035,7 +1028,7 @@ In addition to the standard XA Recovery functionality provided through the Solac
 
 #### Enabling XA Support for JMS Connection Factories
 
-When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
+For both CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
 
 ```
 (config)# jndi message-vpn solace_VPN
@@ -1046,6 +1039,8 @@ When using CMT or BMT transactions, XA transaction support must be enabled for t
 (config-jndi-connection-factory)# exit
 (config-jndi)#
 ```
+
+Note: enabling XA support on the broker does not necessarily mean 2-phase commit. This simply means using transaction support implementation over the proprietary Solace SMF protocol, making use of a lightweight transaction manager implemented in the Solace message broker.
 
 #### Transactions – Sample Code
 
