@@ -18,7 +18,7 @@ links-docs-config-server-cert: https://docs.solace.com/Configuring-and-Managing/
 links-docs-cli: https://docs.solace.com/Solace-CLI/Using-Solace-CLI.htm
 links-docs-user-authenticate-authorize: https://docs.solace.com/Features/Mgmt-User-Authenticate-Authorize.htm
 links-docs-client-authenticate-authorize: https://docs.solace.com/Features/Client-authentication-and-authorization.htm
-links-downloads: http://dev.solace.com/downloads
+links-downloads: https://solace.com/downloads/
 links-vmr-getstarted: http://dev.solace.com/get-started/start-up-solace-messaging/
 links-jms-maven: https://mvnrepository.com/artifact/com.solacesystems/sol-jms
 links-jms-cust-rar-download: https://products.solace.com
@@ -26,6 +26,7 @@ links-contact-psg: http://dev.solace.com/contact-us/
 links-docs-webadmin: https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm
 links-docs-replication: https://docs.solace.com/Features/Data-Center-Replication.htm
 links-docs-replication-client-config: https://docs.solace.com/Features/Data-Center-Replication.htm#Client_Configuration
+links-liberty-reference: https://www.ibm.com/cloud/websphere-liberty
 links-was-reference: https://www.ibm.com/support/knowledgecenter/SSEQTP/mapfiles/product_welcome_was.html
 links-jboss-modules: https://jboss-modules.github.io/jboss-modules/manual
 links-jboss-modules-file-system: https://jboss-modules.github.io/jboss-modules/manual/#basic-repository

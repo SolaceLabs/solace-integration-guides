@@ -1,0 +1,28 @@
+<server description="new server">
+    <!-- Enable features -->
+    <featureManager>
+        <feature>javaee-8.0</feature>
+    </featureManager>
+
+    <resourceAdapter autoStart="true" id="solace" location="${shared.resource.dir}/solace/sol-jms-ra-10.9.1.rar">
+      <properties.solace ConnectionURL="tcps://mr-1js1thfew7mwh.messaging.solace.cloud:55443" MessageVPN="solace_VPN" Password="solace_password" UserName="solace-cloud-client"/>
+    </resourceAdapter>
+
+    <ejbApplication id="LibertyTest" location="LibertyTest.jar" name="LibertyTest">
+      <classloader classProviderRef="solace"/>
+    </ejbApplication>
+
+    <!--logging traceSpecification="*=info:com.solacesystems=all" consoleLogLevel="INFO" jsonAccessLogFields="logFormat"/-->
+
+    <jmsActivationSpec id="JNDI/J2C/AS">
+      <properties.solace connectionFactoryJndiName="JNDI/Sol/CF" destination="JNDI/Sol/Q/requests" destinationType="javax.jms.Queue"/>
+    </jmsActivationSpec>
+
+    <jmsConnectionFactory id="j2c_cf" jndiName="JNDI/J2C/CF">
+      <properties.solace ConnectionFactoryJndiName="JNDI/Sol/CF2"/>
+    </jmsConnectionFactory>
+
+    <jmsQueue id="j2c_reply_queue" jndiName="JNDI/J2C/Q/replies">
+      <properties.solace Destination="JNDI/Sol/Q/replies"/>
+    </jmsQueue>
+</server>
