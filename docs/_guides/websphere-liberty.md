@@ -570,6 +570,8 @@ You have now deployed the sample application and it is ready to receive messages
 
 The easiest option to send a test message is to use the [Try-Me! integrated publisher](https://docs.solace.com/Solace-PubSub-Manager/PubSub-Manager-Overview.htm#Test-Messages) of the PubSub+ Broker Manager. Ensure to provide the correct broker "Web Messaging" connection details and after successful connection, publish to the Queue `solace_requests`.
 
+![]({{ site.baseurl }}/images/websphere-liberty/try-me.png)
+
 Once a message has been sent to the `solace_requests` queue it will be delivered to the enterprise application, which will consume it from there and send a new message to the `solace_replies` queue.
 
 You can check the messages in the `solace_replies` queue using the using [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"}, Solace's browser-based administration console.
