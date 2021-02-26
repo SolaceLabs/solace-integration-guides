@@ -1,7 +1,7 @@
 
 ## Get Solace Messaging
 
-This tutorial requires access to Solace PubSub+ message broker and requires that you know several connectivity properties about your message broker. Specifically you need to know the following:
+This tutorial requires access to Solace PubSub+ event broker and requires that you know several connectivity properties about your event broker. Specifically you need to know the following:
 
 <table>
   <tr>
@@ -12,12 +12,12 @@ This tutorial requires access to Solace PubSub+ message broker and requires that
   <tr>
     <td>Host</td>
     <td>String</td>
-    <td>This is the address clients use when connecting to the message broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
+    <td>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
   </tr>
   <tr>
     <td>Message VPN</td>
     <td>String</td>
-    <td>The message broker Message VPN that this client should connect to. </td>
+    <td>The event broker Message VPN that this client should connect to. </td>
   </tr>
   <tr>
     <td>Client Username</td>
@@ -44,16 +44,16 @@ There are several ways you can get access to Solace messaging and find these req
 
 ![]({{ site.baseurl }}/assets/images/connectivity-info.png)
 
-### Option 2: Start a Solace PubSub+ Software Message Broker
+### Option 2: Start a Solace PubSub+ Software Event Broker
 
-* Follow [these instructions]({{ site.links-vmr-setup }}){:target="_top"} to start the software message broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software message broker.
+* Follow [these instructions]({{ site.links-vmr-setup }}){:target="_top"} to start the software event broker in leading Clouds, Container Platforms or Hypervisors. The tutorials outline where to download and how to install the Solace software event broker.
 * The messaging connectivity information are the following:
-    * Host: \<public_ip> (IP address assigned to the software message broker in tutorial instructions)
+    * Host: \<public_ip> (IP address assigned to the software event broker in tutorial instructions)
     * Message VPN: default
     * Client Username: sampleUser (can be any value)
     * Client Password: samplePassword (can be any value)
 
-    Note: By default, the Solace software message broker "default" message VPN has authentication disabled.
+    Note: By default, the Solace software event broker "default" message VPN has authentication disabled.
 
 ### Option 3: Get access to a Solace PubSub+ appliance
 

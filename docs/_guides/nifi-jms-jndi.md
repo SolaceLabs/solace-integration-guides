@@ -31,7 +31,7 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"}
 * [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace Event Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 * [NiFi Documentation](http://nifi.apache.org/docs.html){:target="_blank"}
 * [NiFi Developer Guide](http://nifi.apache.org/developer-guide.html){:target="_blank"}
@@ -50,8 +50,8 @@ The general NiFi Controller Services is documented in the [NiFi Developer Guide]
 
 This integration guide demonstrates how to build a JNDI connection provider and configure NiFi JMS processors to send and receive JMS messages using the new provider. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace message broker and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
-* Step 2 - Configuration of the Solace Message Broker.
+* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
+* Step 2 - Configuration of the Solace Event Broker.
 * Step 3 - Developing a Solace JMS application to do message PubSub via JNDI
 * Step 4 - Obtain Apache NiFi
 * Step 5 - Developing a new NiFi JMS ControllerService to support JNDI
@@ -63,14 +63,14 @@ This integration guide will demonstrate creation of Solace JMS custom sender and
 
 #### Solace Resources
 
-The following Solace Message Broker resources are required.
+The following Solace Event Broker resources are required.
 
 
 
 |Resource|Value|Description|
 |---|---|---|
-|Solace Message Broker IP:Port|__IP:Port__|The IP address and port of the Solace Message Broker message backbone. This is the address client’s use when connecting to the Solace Message Broker to send and receive message. This document uses a value of __IP:PORT__.|
-|Message VPN|default|A Message VPN, or virtual message broker, to scope the integration on the Solace message broker.|
+|Solace Event Broker IP:Port|__IP:Port__|The IP address and port of the Solace Event Broker message backbone. This is the address client’s use when connecting to the Solace Event Broker to send and receive message. This document uses a value of __IP:PORT__.|
+|Message VPN|default|A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.|
 |Client Username|nifi|The client username.|
 |Client Password||Optional client password. |
 |Solace Queue|toNifi|Solace destination of persistent messages consumed by NiFi|
@@ -97,26 +97,26 @@ The easiest way to integrate Solace and NiFi is using the client libraries avail
 |Apache Log4j 2 Core|log4j-core-2.8.2.jar|log4j 2 core libraries|
 |Apache Log4j 2 API|log4j-api-2.8.2.jar|log4j 2 API libraries|
 
-### Step 2 – Configuring the Solace Message Broker
+### Step 2 – Configuring the Solace Event Broker
 
-The Solace Message Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the NiFi application. 
+The Solace Event Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the NiFi application. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Broker.
+* A Message VPN, or virtual event broker, to scope the integration on the Solace Event Broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Broker configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.
 
-For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace Message Broker CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section "User Authentication and Authorization".
+For reference, the CLI commands in the following sections are from SolOS version 7.2 but will generally be forward compatible. For more details related to Solace Event Broker CLI see [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}. Wherever possible, default values will be used to minimize the required configuration. The CLI commands listed also assume that the CLI user has a Global Access Level set to Admin. For details on CLI access levels please see [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"} section "User Authentication and Authorization".
 
-Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Message Broker. This document uses CLI as the reference to remain concise.
+Also note that this configuration can also be easily performed using SolAdmin, Solace’s GUI management tool. This is in fact the recommended approach for configuring a Solace Event Broker. This document uses CLI as the reference to remain concise.
 
 {% include_relative assets/solaceVpn.md content="default" %}
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Event Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of "nifi" will be required by the NiFi application when connecting to the Solace Message Broker.
+The chosen client username of "nifi" will be required by the NiFi application when connecting to the Solace Event Broker.
 
         (config)# client-profile default message-vpn default
         (config-client-profile)# message-spool allow-guaranteed-message-receive
@@ -156,7 +156,7 @@ This integration guide shows publishing messaegs to a queue consumed by NiFi and
 
 #### Setting up Solace JNDI References
 
-To enable the JMS clients to connect and look up the Queue destination required by Solace application, there are two JNDI objects required on the Solace Message Broker:
+To enable the JMS clients to connect and look up the Queue destination required by Solace application, there are two JNDI objects required on the Solace Event Broker:
 
 * A connection factory: /jms/cf/default
 * A queue destination: JNDI/Q/toNifi
@@ -593,11 +593,11 @@ The received messages are from NiFi - hence some of the JMS properties are fille
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a Solace Message Broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a Solace Event Broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
-        Note: When using HA redundant message brokers, a fail-over from one message broker to its mate will typically
+        Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically
         occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 
 In the previous section "Setting up Solace JNDI References", the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.
