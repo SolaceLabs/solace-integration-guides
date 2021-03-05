@@ -6,7 +6,7 @@ repository: https://github.com/SolaceLabs/solace-integration-guides
 # Also see _includes/intro.html to customize the description which gets included in index.html.
 
 # Links
-links-vmr-setup: https://docs.solace.com/Solace-SW-Broker-Set-Up/Setting-Up-SW-Brokers.htm
+links-vmr-setup: https://docs.solace.com/Solace-Cloud/Deployment-Considerations/deployment-options.htm
 links-solaceCloud-setup: //cloud.solace.com/create-messaging-service/
 links-dev-portal: http://dev.solace.com
 links-docs-jms: http://docs.solace.com/Solace-JMS-API/JMS-home.htm

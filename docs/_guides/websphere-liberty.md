@@ -54,10 +54,8 @@ The Solace JCA 1.5 resource adapter is provided as a standalone RAR file and is 
 
 * Resource: Solace JCA 1.5 resource adapter stand-alone RAR file (sol-jms-ra-%version%.rar)
 * Download Options: 
-  * [Solace Developer Portal]({{ site.links-downloads }}){:target="_top"} - Under Open APIs and protocols, JMS API
-
-This integration guide will demonstrate the creation of Solace resources and the configuration of the WebSphere Application Server's managed resources. The next section outlines the resources that are created and used.
-
+  * [Solace Downloads]({{ site.links-downloads }}){:target="_top"} - Under Open APIs and protocols, JMS API
+  * From `products.solace.com` if you have an enterprise account
 
 #### Solace Resource Naming Convention
 
@@ -99,6 +97,11 @@ The following Solace PubSub+ event broker resources are required for the integra
       <td>Solace Queue</td>
       <td>solace_replies</td>
       <td>Solace destination for messages produced by JEE enterprise application. This is the name of physical queue configured on the broker.</td>
+    </tr>
+    <tr>
+      <td>JNDI Connection Factory</td>
+      <td>JNDI/Sol/CF</td>
+      <td>The JNDI Connection factory for controlling Solace JMS connection properties</td>
     </tr>
     <tr>
       <td>JNDI Connection Factory</td>
@@ -172,7 +175,7 @@ The chosen client username of "solace_user" will be required by Liberty when con
 
 #### Setting up Guaranteed Messaging Endpoints
 
-This integration guide shows receiving messages and sending reply messages within the WebSphere Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. The queue names chosen are "solace_requests" and "solace_replies".
+This integration guide shows receiving messages and sending reply messages within the WebSphere Application Server using two separate JMS Queues. For illustration purposes, these queues are chosen to be exclusive queues with a message spool quota of 2GB matching quota associated with the message VPN. This shall be adjusted to your requirements. The queue names chosen are "solace_requests" and "solace_replies".
 
 ```
 (config)# message-spool message-vpn solace_VPN
@@ -339,7 +342,7 @@ To receive messages from the Solace JMS provider, the client is bound to a J2C A
 The following table summarizes the values used for the J2C activation specification custom properties.
 
 | **Name** | **Value** | **Description** |
-| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker. |
+| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker, for inbound connections. |
 | destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the event broker. |
 | destinationType | javax.jms.Queue | The JMS class name for the desired destination type. |
 
@@ -347,7 +350,7 @@ The following table summarizes the values used for the J2C activation specificat
 
 A client must use a J2C Connection Factory to create a JMS connection to the Solace PubSub+ event broker. A JMS connection establishes a data channel between the event broker and the JMS application. The Connection Factory provides a number of configuration parameters to customize the connection between the JMS client and the event broker.
 
-* Create a JMS Connection with an ID of “j2c_cf” in the `server.xml` file. Specify the JNDI name that will be used to lookup this J2C Connection Factory. Use the value JNDI/J2C/CF for this example. **Important**: it must match with the `binding-name` configured for the ConnectionFactory resource of the session bean in `ibm-ejb-jar-bnd.xml` - see [section Sample Application Code](#sample-application-code)).
+* Create a JMS Connection with an ID of “j2c_cf” in the `server.xml` file. Specify the JNDI name that will be used to lookup this J2C Connection Factory. Use the value JNDI/J2C/CF for this example. **Important**: it must match with the `fing-name` configured for the ConnectionFactory resource of the session bean in `ibm-ejb-jar-bnd.xml` - see [section Sample Application Code](#sample-application-code)).
 * Add a custom property called `ConnectionFactoryJNDIName` and specify the name of the Connection Factory that was configured on the Solace event broker when setting up Solace JNDI References.
 ```
     <jmsConnectionFactory id="j2c_cf" jndiName="JNDI/J2C/CF">
@@ -358,7 +361,9 @@ A client must use a J2C Connection Factory to create a JMS connection to the Sol
 The following table summarizes the values used for the J2C connection factory custom properties.
 
 | **Name** | **Value** | **Description** |
-| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker. |
+| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker, for outbound connections. |
+
+Note: the same `JNDI/Sol/CF` configured on the Solace broker is used here for both incoming and outgoing connections. It is possible to specify two different connection factories, one for inbound and another one for outbound.
 
 ### Configuring Connection Pooling for a connection factory
 
@@ -383,7 +388,7 @@ Note: Liberty uses default values for any connection management settings that ar
 
 ### Configuring Administered Objects for Outbound Messaging
 
-A J2C Administered Object is required for a client to sends outbound messages to a JMS destination. It is either a JMS Queue (`jmsQueue`) or a JMS Topic (`jmsTopic`).
+A J2C Administered Object is required for a client to send outbound messages to a JMS destination. It is either a JMS Queue (`jmsQueue`) or a JMS Topic (`jmsTopic`).
 
 * Create a JMS Queue with an ID of “j2c_reply_queue”. This will be the queue that the session bean will publish reply messages to. Specify the J2C JNDI name, use a value of JNDI/J2S/Q/replies for this example. **Important**: it must match with the `binding-name` of the Queue resource configured for the session bean in `ibm-ejb-jar-bnd.xml` - see [section Sample Application Code](#sample-application-code)).
 
@@ -430,7 +435,6 @@ The structure of all variants is the same:
 The sample code below shows the implementation of a message-driven bean ("ConsumerMDB") which listens for JMS messages to arrive on the configured Solace connection factory and destination (`JNDI/Sol/CF` and `JNDI/Sol/Q/requests` respectively - as configured in the J2C activation specification).  Upon receiving a message, the MDB calls the method sendMessage() of the "ProducerSB" session bean which in turn sends a reply message to a "reply" Queue destination.
 
 ```java
-@TransactionManagement(value = TransactionManagementType.BEAN)
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 
 @MessageDriven
@@ -481,7 +485,6 @@ public class ProducerSB implements Producer, ProducerLocal {
     public ProducerSB() {
     }
 
-    @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
     @Override
     public void sendMessage() throws JMSException {
 

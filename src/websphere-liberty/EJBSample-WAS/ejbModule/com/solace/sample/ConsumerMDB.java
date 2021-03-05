@@ -13,7 +13,6 @@ import javax.jms.MessageListener;
 
 import com.solace.sample.Producer;
 
-@TransactionManagement(value = TransactionManagementType.BEAN)
 @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
 
 @MessageDriven

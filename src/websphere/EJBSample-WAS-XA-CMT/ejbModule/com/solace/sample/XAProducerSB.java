@@ -27,7 +27,7 @@ public class XAProducerSB implements Producer, ProducerLocal {
     public XAProducerSB() {
     }
 
-    @TransactionAttribute(value = TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(value = TransactionAttributeType.REQUIRED)
     @Override
     public void sendMessage() throws JMSException {
 
