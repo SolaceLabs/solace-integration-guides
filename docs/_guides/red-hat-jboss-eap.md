@@ -1,7 +1,7 @@
 ---
 layout: guides
 title: Red Hat JBoss EAP v6 and v7
-summary: The JBoss Enterprise Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace message broker.
+summary: The JBoss Enterprise Application Server provides a comprehensive framework for application and integration middleware that is compliant with the Java Enterprise Edition computing platform. Solace provides a Java Connector Architecture (JCA) compliant Resource Adapter that may be deployed to the JBoss Application Server providing enterprise applications with connectivity to the Solace event broker.
 icon: red-hat-jboss-eap.png
 links:
    - label: Example Source Code - JBoss EAP
@@ -37,7 +37,7 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"}
 * [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace PubSub+ Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace PubSub+ Event Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 * [JBoss Enterprise Application Platform Documentation](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/){:target="_blank"}
 * [JBoss Enterprise Application Platform 7.0 Security Guide](https://access.redhat.com/documentation/en/red-hat-jboss-enterprise-application-platform/7.0/how-to-configure-server-security/how-to-configure-server-security){:target="_blank"}
@@ -47,15 +47,15 @@ These links contain information related to this guide:
 
 ## Integrating with JBoss Application Server<a name="integrating-with-jboss-application-server"></a>
 
-Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ message broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
+Solace provides a JCA compliant resource adapter for integrating Java enterprise applications with the Solace PubSub+ event broker.  There are several options for deploying a Resource Adapter for use by Java enterprise applications including embedded and stand-alone deployment.  Solace provides a Resource Adapter Archive (RAR) file for stand-alone deployment.
 
 In order to illustrate JBoss Application Server integration, the following sections will highlight the required JBoss configuration changes, and provide sample code for sending and receiving messages using Enterprise Java Beans. 
 
 This EJB sample consists of two enterprise beans, a Message Driven Bean and a Session Bean.  The MDB is configured to receive a message on a `requests` Queue.  When the MDB receives a message it then calls a method of the Session Bean to send a reply message to a `replies` Queue.  The EJB sample requires configuration of various J2C entities in JBoss to support usage of the Solace JCA compliant resource adapter.
 
-The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS message broker. 
+The following steps are required to accomplish the above goals of sending and receiving messages using the Solace JMS event broker. 
 
-* Step 1 - Configure the Solace PubSub+ message broker
+* Step 1 - Configure the Solace PubSub+ event broker
 * Step 2 – Deploy the Solace Resource Adapter to the JBoss Application Server
 * Step 3 – Connect to Solace JMS provider
   * Configure resource adapter
@@ -85,7 +85,7 @@ To illustrate this integration example, all named resources created on the Solac
 
 #### Solace Resources
 
-The following message broker resources are required for the integration sample in this document.
+The following event broker resources are required for the integration sample in this document.
 
 <table>
     <tr>
@@ -94,7 +94,7 @@ The following message broker resources are required for the integration sample i
       <th>Description</th>
     </tr>
     <tr>
-      <td>Solace Message Broker Host</td>
+      <td>Solace Event Broker Host</td>
       <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
     </tr>
     <tr>
@@ -152,12 +152,12 @@ The following JBoss Application Server resources are required for the integratio
 
 ### Step 1: Solace JMS provider Configuration
 
-The following entities on the Solace message broker need to be configured at a minimum to enable JMS to send and receive messages within the JBoss Application Server. 
+The following entities on the Solace event broker need to be configured at a minimum to enable JMS to send and receive messages within the JBoss Application Server. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace message broker.
+* A Message VPN, or virtual event broker, to scope the integration on the Solace event broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving and sending messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace message broker configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace event broker configuration.
 
 {% include_relative assets/solaceConfig.md %}
 
@@ -165,9 +165,9 @@ The following entities on the Solace message broker need to be configured at a m
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace message broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace event broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of "solace_user" will be required by the JBoss Application Server when connecting to the Solace message broker.
+The chosen client username of "solace_user" will be required by the JBoss Application Server when connecting to the Solace event broker.
 
 ```
 (config)# client-profile default message-vpn solace_VPN
@@ -209,7 +209,7 @@ This integration guide shows receiving messages and sending reply messages withi
 
 #### Setting up Solace JNDI References<a name="setting-up-solace-jndi-references"></a>
 
-To enable the JMS clients to connect and look up the Queue destination required by JBoss Application Server, there are three JNDI objects required on the Solace message broker:
+To enable the JMS clients to connect and look up the Queue destination required by JBoss Application Server, there are three JNDI objects required on the Solace event broker:
 
 * A connection factory: JNDI/Sol/CF
   * Note: Ensure `direct-transport` is disabled for JMS persistent messaging.
@@ -422,11 +422,11 @@ Note: the version of the subsystem, "V.V" depends on your JBoss EAP version.
 
 ### <a name="ConnToSolJMS"></a>Step 3: Connecting to Solace JMS provider
 
-Connecting to the Solace message broker through the Solace JCA Resource Adapter requires configuration of additional resources in JBoss.  Two key pieces of information are required including connectivity information to the Solace message broker and client authentication data.  
+Connecting to the Solace event broker through the Solace JCA Resource Adapter requires configuration of additional resources in JBoss.  Two key pieces of information are required including connectivity information to the Solace event broker and client authentication data.  
 
 The above information is specified across one or more JMS entities depending on your application"s JMS message flow (Inbound, Outbound, or both).  Configuration of a JMS connection factory is required for outbound message flow, while configuration of the Activation Specification associated with a Message-Driven-Bean - is required for inbound message flow.  
 
-The Solace resource adapter includes several custom properties for specifying connectivity and authentication details (Application-Managed credentials) to the Solace message broker.  Setting these properties at the Resource Adapter level makes the information available to all child JCA entities like Connection Factory, Activation Specification and Administered Objects.  The properties can also be overridden at the specific JCA entity level allowing connectivity to multiple Solace message brokers.
+The Solace resource adapter includes several custom properties for specifying connectivity and authentication details (Application-Managed credentials) to the Solace event broker.  Setting these properties at the Resource Adapter level makes the information available to all child JCA entities like Connection Factory, Activation Specification and Administered Objects.  The properties can also be overridden at the specific JCA entity level allowing connectivity to multiple Solace event brokers.
 
 #### <a name="RAConf">Steps to configure the Solace JCA Resource Adapter
 
@@ -448,7 +448,7 @@ Note: the <transaction-support> element only indicates the Solace resource adapt
 </resource-adapter>
 ```
 
-Step 2 - "ConnectionURL" property has the format "tcp://__IP:Port__" (Update the value "__IP:Port__" with the actual Solace message broker message-backbone VRF IP ).
+Step 2 - "ConnectionURL" property has the format "tcp://__IP:Port__" (Update the value "__IP:Port__" with the actual Solace event broker message-backbone VRF IP ).
 
 Step 3 - Specify a value for the "UserName" property that corresponds to the Solace username (use the value "solace_user" for this example).
 
@@ -459,7 +459,7 @@ Step 5 - Specify a value for the "MessageVPN" property and specify the value cor
 The following table summarizes the values used for the Resource Adapter configuration properties.
 
 | **Name** | **Value** | **Description** |
-| ConnectionURL | tcp://__IP:Port__ | Update the value '__IP:Port__' with the actual message broker message-backbone VRF IP |
+| ConnectionURL | tcp://__IP:Port__ | Update the value '__IP:Port__' with the actual event broker message-backbone VRF IP |
 | MessageVPN | solace_VPN | The value corresponding to the Solace message VPN |
 | UserName | solace_user | The client Solace username credentials |
 | Password | default | Client password |
@@ -533,19 +533,19 @@ Note, values for ConnectionURL, MessageVPN, UserName and Password must also be s
 The following table summarizes the values used for the JMS connection factory configuration properties.
 
 | **Name** | **Value** | **Description** |
-| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the Solace message broker. |
+| ConnectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the Solace event broker. |
 
 #### Connecting – Sample code 
 
-Sample code for connecting to the Solace message broker through a JCA connection factory will be demonstrated in the section below Step 5 – Sending outbound messages using Solace JMS provider. The sample code in this integration guide is triggered by the receipt of a message by a Message-Driven-Bean (MDB) which in turn calls a Session Bean method to publish an outbound reply message. 
+Sample code for connecting to the Solace event broker through a JCA connection factory will be demonstrated in the section below Step 5 – Sending outbound messages using Solace JMS provider. The sample code in this integration guide is triggered by the receipt of a message by a Message-Driven-Bean (MDB) which in turn calls a Session Bean method to publish an outbound reply message. 
 
 ### <a name="RecInbMessages"></a>Step 4: Receiving inbound messages using Solace JMS provider
 
-This example uses a Message-Driven-Bean to receive messages from the Solace JMS provider.  The bean is bound to an Activation Specification which specifies the Solace JMS destination from which to consume messages as well as the authentication details used to connect to the Solace message broker. 
+This example uses a Message-Driven-Bean to receive messages from the Solace JMS provider.  The bean is bound to an Activation Specification which specifies the Solace JMS destination from which to consume messages as well as the authentication details used to connect to the Solace event broker. 
 
 #### Configuration
 
-In JBoss EAP, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace message broker as well as other configuration options.  
+In JBoss EAP, Message Driven Bean – Activation Specifications are configured using either EJB 3.0 annotations or through EJB deployment descriptor files.  The following example shows the Activation Specification configuration properties available for connecting to a JMS end point on the Solace event broker as well as other configuration options.  
 
 Note: the actual values for the attributes ("propertyValue") can take the form of a variable like "${propertyName}" where JBoss replaces the values if the "spec-descriptor-property-replacement" or "jboss-descriptor-property-replacement" JBoss server configuration properties are set to "true" in the "urn:jboss:domain:ee" subsystem (Refer to the [JBoss documentation](https://access.redhat.com/documentation/en-us/jboss_enterprise_application_platform/6.2/html/security_guide/enablingdisabling_descriptor_based_property_replacement1 ) for further details).
 
@@ -597,15 +597,15 @@ The following activation configuration properties are mandatory:
 
 Configuration for this Message-Driven-Bean example:
 
-1. For the "connectionFactoryJndiName" property, specify the value "JNDI/Sol/CF" (this is the value configured on the Solace message broker in section [Setting up Solace JNDI References](#setting-up-solace-jndi-references)).
-1. For the "destination" property, specify the value "JNDI/Sol/Q/requests" (the value configured on the Solace message broker in section [Setting up Solace JNDI References](#setting-up-solace-jndi-references).
+1. For the "connectionFactoryJndiName" property, specify the value "JNDI/Sol/CF" (this is the value configured on the Solace event broker in section [Setting up Solace JNDI References](#setting-up-solace-jndi-references)).
+1. For the "destination" property, specify the value "JNDI/Sol/Q/requests" (the value configured on the Solace event broker in section [Setting up Solace JNDI References](#setting-up-solace-jndi-references).
 1. For the "destinationType" property, specify the value "javax.jms.Queue". 
 
 The following table summarizes important values used for the Activation specification configuration properties:
 
 | **Name** | **Value** | **Description** |
-| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the message broker. |
-| destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the message broker. |
+| connectionFactoryJndiName | JNDI/Sol/CF | The JNDI name of the JMS connection factory as configured on the event broker. |
+| destination | JNDI/Sol/Q/requests | The JNDI name of the JMS destination as configured on the event broker. |
 | destinationType | javax.jms.Queue | The JMS class name for the desired destination type. |
 | batchSize | 1 | For non-transacted MDBs, the batchSize() is an optimization to read-in 'batchSize' number of messages at a time from the Connection for distribution to MDB threads. Note, for MDB's that are configured to be transacted, the batchSize property is ignored (internally set to '1'). |
 | maxPoolSize | 8 | The maximum size of the MDB Session Pool.  One Session services one MDB thread |
@@ -649,7 +649,7 @@ Step 4 - Edit the value for the admin-object configuration property "Destination
 The following table summarizes the values used for the administered object configuration properties:
 
 | **Name** | **Value** | **Description** |
-| Destination | JNDI/Sol/Q/replies | The JNDI name of the JMS destination as configured on the message broker. |
+| Destination | JNDI/Sol/Q/replies | The JNDI name of the JMS destination as configured on the event broker. |
 
 ## Sample Application Code
 
@@ -664,8 +664,8 @@ There are three variants:
 The structure of all variants is the same:
 
 * Java source files under `ejbModule/com/solace/sample/`
-  * ConsumerMDB.java - implements a message-driven EJB bean, triggered on receiving a message from the Solace message broker
-  * ProducerSB.java - implements `sendMessage()` in a session EJB bean, used to send a message to the Solace message broker
+  * ConsumerMDB.java - implements a message-driven EJB bean, triggered on receiving a message from the Solace event broker
+  * ProducerSB.java - implements `sendMessage()` in a session EJB bean, used to send a message to the Solace event broker
   * Producer.java - "Producer"'s remote EJB interface to call `sendMessage()`
   * ProducerLocal.java - "Producer"'s local EJB interface to call `sendMessage()`
 
@@ -823,7 +823,7 @@ Steps to deploy the sample application, assuming the "standalone" mode clusterin
 
 1. Ensure your JBoss EAP application server is running.
 
-You have now deployed the sample application and it is ready to receive messages from the `solace_requests` queue on the message broker.
+You have now deployed the sample application and it is ready to receive messages from the `solace_requests` queue on the event broker.
 
 ### Testing the sample application
 
@@ -841,7 +841,7 @@ The Solace JCA Resource Adapter relies on the JBoss Application Server for manag
 
 For inbound messaging there are different levers that can be tuned for maximum performance in a given environment.  The "batchSize" configuration property of the Solace - Activation Specification (AS) defines the maximum number of messages retrieved at a time from a JMS destination for delivery to a server session.  The server session then routes those messages to respective Message Driven Beans.  In addition, the "maxPoolSize" configuration property of the Solace AS defines the maximum number of pooled JMS sessions that can be allocated to MDB threads.  Therefore to fine tune performance for inbound messaging, the "batchSize" and "maxPoolSize" must be balanced to the rate of incoming messages.
 
-Another consideration is the overhead of performing JNDI lookups to the Solace message broker.  JBoss implements JNDI caching by default.  Resources referenced by a Message Driven Bean through resource injection will trigger an initial JNDI lookup and subsequently use the cached information whenever the MDB instance is reused from the MDB pool. Similarly, Session beans that perform JNDI lookups through a JNDI Context will have that information cached in association with that context.  Whenever the Session bean instance is reused from the Session bean pool, any lookups using the same JNDI Context will utilize the JNDI cached information.  
+Another consideration is the overhead of performing JNDI lookups to the Solace event broker.  JBoss implements JNDI caching by default.  Resources referenced by a Message Driven Bean through resource injection will trigger an initial JNDI lookup and subsequently use the cached information whenever the MDB instance is reused from the MDB pool. Similarly, Session beans that perform JNDI lookups through a JNDI Context will have that information cached in association with that context.  Whenever the Session bean instance is reused from the Session bean pool, any lookups using the same JNDI Context will utilize the JNDI cached information.  
 
 Note, in order to use the JNDI caching mechanisms within JBoss you must use JMS through a JCA resource adapter and reference JMS end points in your code through JEE resource injection. 
 
@@ -849,11 +849,11 @@ Please refer to [JBOSS-REF] for details on modifying the default behavior of JND
 
 ## Working with Solace High Availability (HA)<a name="working-with-solace-high-availability-ha"></a>
 
-The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a message broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a event broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
-Note: When using HA redundant message brokers, a fail-over from one message broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
+Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically occur in less than 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 
 In "Setting up Solace JNDI References", the Solace CLI commands correctly configured the required JNDI properties to reasonable values. These commands are repeated here for completeness.
 
@@ -871,7 +871,7 @@ In "Setting up Solace JNDI References", the Solace CLI commands correctly config
 (config)#
 ```
 
-In addition to configuring the above properties for connection factories, care should be taken to configure connection properties for performing JNDI lookups to the Solace message broker.  These settings can be configured in the JBoss Application Server globally by setting them at the Solace resource adapter level or within individual JCA administered objects.  
+In addition to configuring the above properties for connection factories, care should be taken to configure connection properties for performing JNDI lookups to the Solace event broker.  These settings can be configured in the JBoss Application Server globally by setting them at the Solace resource adapter level or within individual JCA administered objects.  
 
 To configure JNDI connection properties for JNDI lookups, set the corresponding Solace JMS property values (as a semicolon-separated list of name=value pairs) through the "ExtendedProps" configuration property of the Solace resource adapter or JCA administered objects.
 
@@ -924,9 +924,9 @@ Note: the version of the subsystem, “V.V” depends on your JBoss EAP version.
 
 The integration example illustrated in [Connecting to Solace JMS provider](#ConnToSolJMS) of this guide uses the authentication information specified in the custom properties of the Solace resource adapter.  These authentication properties are used whenever Application Managed authentication is specified for a JCA resource.  No matter the authentication mode (Application-Managed or Container-Managed) specified for a resource, the Solace "MessageVPN" information for a connection is always retrieved from the Solace resource adapter configured properties (or from the configured properties of one of the JCA entities – connection factory, administered object or activation specification).
 
-JBoss supports configuration of Container-Managed authentication for JCA connection factories.  The JAAS login module ConfiguredIdentityLoginModule can be used to provide EJB Container-supplied sign-on credentials to the Solace message broker. Refer to [JBOSS-SEC] for more details on configuring EJB Security.
+JBoss supports configuration of Container-Managed authentication for JCA connection factories.  The JAAS login module ConfiguredIdentityLoginModule can be used to provide EJB Container-supplied sign-on credentials to the Solace event broker. Refer to [JBOSS-SEC] for more details on configuring EJB Security.
 
-The message broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
+The event broker supports a variety of client authentications schemes as described in the Solace documentation [Client Authentication and Authorization]({{ site.links-docs-client-authenticate-authorize }}){:target="_top"}.  The Solace JCA resource adapter supports a subset of these schemes including `Basic` authentication and 'SSL Client Certificate' authentication.  The default authentication scheme used by the Solace JMS Resource Adapter is AUTHENTICATION_SCHEME_BASIC.
 
 The value of the Solace Resource Adapter custom property 'extendedProps' is used to specify an alternate authentication scheme such as 'AUTHENTICATION_SCHEME_CLIENT_CERTIFICATE'. The value of the custom property 'extendedProps' consists of a semicolon-separated list of Solace JMS property / value pairs (SOLACE_PROPERTY=value).  You can specify the required properties for an alternate authentication scheme using this technique.  Refer to the [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} for further details on the required JMS properties for configuring SSL client certificate authentication.
 
@@ -936,13 +936,13 @@ Although the authentication scheme AUTHENTICATION_SCHEME_BASIC is the default sc
 
 ### Using SSL Communication<a name="using-ssl-communication"></a>
 
-This section outlines how to update the Solace message broker and JBoss Application Server configuration to switch the client connection to using secure connections with the Solace message broker. For the purposes of illustration, this section uses a server certificate on the Solace message broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-Docs] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.
+This section outlines how to update the Solace event broker and JBoss Application Server configuration to switch the client connection to using secure connections with the Solace event broker. For the purposes of illustration, this section uses a server certificate on the Solace event broker and basic client authentication. It is possible to configure Solace JMS to use client certificates instead of basic authentication. This is done using configuration steps that are very similar to those outlined in this document. The [Solace-Docs] and [Solace-JMS-REF] outline the extra configuration items required to switch from basic authentication to client certificates.
 
-To change a JBoss Application Server from using a plain text connection to a secure connection, first the Solace message broker configuration, then the Solace JMS configuration within the JBoss Application Server must be updated as outlined in the next sections.
+To change a JBoss Application Server from using a plain text connection to a secure connection, first the Solace event broker configuration, then the Solace JMS configuration within the JBoss Application Server must be updated as outlined in the next sections.
 
-#### Configuring the Solace Message Broker
+#### Configuring the Solace Event Broker
 
-To enable secure connections to the Solace message broker, the following configuration must be updated on the Solace message broker.
+To enable secure connections to the Solace event broker, the following configuration must be updated on the Solace event broker.
 
 * Server Certificate
 * TLS/SSL Service Listen Port
@@ -952,13 +952,13 @@ The following sections outline how to configure these items.
 
 ##### Configure the Server Certificate
 
-Before starting, here is some background information on the server certificate required by the message broker. This is from the [Solace documentation](https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm ):
+Before starting, here is some background information on the server certificate required by the event broker. This is from the [Solace documentation](https://docs.solace.com/Configuring-and-Managing/Managing-Server-Certs.htm ):
 
 ```
-To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace PubSub+ message broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
+To enable TLS/SSL-encryption, you must set the TLS/SSL server certificate file that the Solace PubSub+ event broker is to use. This server certificate is presented to clients during TLS/SSL handshakes. The server certificate must be an x509v3 certificate and include a private key. The server certificate and key use an RSA algorithm for private key generation, encryption and decryption, and they both must be encoded with a Privacy Enhanced Mail (PEM) format.
 ```
 
-To configure the server certificate, first copy the server certificate to the Solace message broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
+To configure the server certificate, first copy the server certificate to the Solace event broker. For the purposes of this example, assume the server certificate file is named "mycert.pem".
 
 ```
 # copy sftp://[<username>@]<ip-addr>/<remote-pathname>/mycert.pem /certs
@@ -966,7 +966,7 @@ To configure the server certificate, first copy the server certificate to the So
 #
 ```
 
-Then set the server certificate for the Solace message broker.
+Then set the server certificate for the Solace event broker.
 
 ```
 (config)# ssl server-certificate mycert.pem
@@ -975,7 +975,7 @@ Then set the server certificate for the Solace message broker.
 
 ##### Configure TLS/SSL Service Listen Port
 
-By default, the Solace message broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace message broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.
+By default, the Solace event broker accepts secure messaging client connections on port 55443. If this port is acceptable then no further configuration is required and this section can be skipped. If a non-default port is desired, then follow the steps below. Note this configuration change will disrupt service to all clients of the Solace event broker and should therefore be performed during a maintenance window when this client disconnection is acceptable. This example assumes that the new port should be 55403.
 
 ```
 (config)# service smf
@@ -1006,7 +1006,7 @@ By default within Solace message VPNs both the plain-text and SSL services are e
 
 #### Configuring the JBoss Application Server
 
-Secure connections to the Solace JMS provider require configuring SSL parameters of JCA objects. Two of these configuration parameters include "ConnectionURL" and "ExtendedProps".  Note that the property values for "ConnectionURL" and "ExtendedProps" are inherited by JCA connection factory, Activation specification, and administered objects from their parent Resource Adapter.  Thus, unless you are connecting to multiple Solace message brokers, a best practice is to configure values for "ConnectionURL" and "ExtendedProps" in the Solace Resource Adapter, otherwise the SSL related changes should be duplicated across configuration properties for all of the JMS administered objects you want to secure. 
+Secure connections to the Solace JMS provider require configuring SSL parameters of JCA objects. Two of these configuration parameters include "ConnectionURL" and "ExtendedProps".  Note that the property values for "ConnectionURL" and "ExtendedProps" are inherited by JCA connection factory, Activation specification, and administered objects from their parent Resource Adapter.  Thus, unless you are connecting to multiple Solace event brokers, a best practice is to configure values for "ConnectionURL" and "ExtendedProps" in the Solace Resource Adapter, otherwise the SSL related changes should be duplicated across configuration properties for all of the JMS administered objects you want to secure. 
 
 The required SSL parameters include modifications to the URL scheme of "ConnectionURL" (from "tcp" to "tcps"), and setting additional SSL attributes through the configuration property "ExtendedProps".  The following sections describe the required changes in more detail.
 
@@ -1024,7 +1024,7 @@ Recall from section [Connecting to Solace JMS provider](#ConnToSolJMS), original
 tcp://___IP:PORT___
 ```
 
-This specified a URI scheme of "tcp" which is the plaint-text method of communicating with the Solace message broker. This should be updated to "tcps" to switch to secure communication giving you the following configuration:
+This specified a URI scheme of "tcp" which is the plaint-text method of communicating with the Solace event broker. This should be updated to "tcps" to switch to secure communication giving you the following configuration:
 
 ```
 tcps://___IP:PORT___
@@ -1048,13 +1048,13 @@ Step 1 - Update the JBoss server configuration – "urn:jboss:domain:resource-ad
 </resource-adapter>
 ```
 
-Step 2 - "ConnectionURL" property has the format "tcps://__IP:Port__" (Update the value "__IP:Port__" with the actual Solace message broker message-backbone VRF IP and SMF SSL Port #, note the default SMF SSL Port is "55443).
+Step 2 - "ConnectionURL" property has the format "tcps://__IP:Port__" (Update the value "__IP:Port__" with the actual Solace event broker message-backbone VRF IP and SMF SSL Port #, note the default SMF SSL Port is "55443).
 
 ##### Specifying other SSL Related Configuration
 
-The Solace JMS API must be able to validate the server certificate of the Solace message broker in order to establish a secure connection. To do this, the following trust store parameters need to be provided.
+The Solace JMS API must be able to validate the server certificate of the Solace event broker in order to establish a secure connection. To do this, the following trust store parameters need to be provided.
 
-First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace message broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.  
+First the Solace JMS API must be given a location of a trust store file so that it can verify the credentials of the Solace event broker server certificate during connection establishment. This parameter takes a URL or Path to the trust store file.  
 
 A value for the parameter "Solace_JMS_SSL_TrustStore" can be set by modifying the Solace JCA Resource Adapter configuration property "ExtendedProps". The configuration property value for "ExtendedProps" is comprised of a semicolon-separated list of Solace JMS parameters:
 
@@ -1117,17 +1117,17 @@ Step 2 - Specify or supplement the value for the "ExtendedProps" configuration p
 
 ### Working with Transactions<a name="working-with-transactions"></a>
 
-This section demonstrates how to configure the Solace message broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
+This section demonstrates how to configure the Solace event broker to support the transaction processing capabilities of the Solace JCA Resource Adapter.  In addition, code examples are provided showing JMS message consumption and production over both types of Enterprise Java Bean transactions: Container-Managed-Transactions (CMT) and Bean-Managed-Transaction (BMT) configuration.
 
 Both BMT and CMT transactions are mapped to Solace JCA Resource Adapter XA Transactions. XA transactions are supported from the general-availability release of SolOS version 7.1.
 
 Note: BMT is using one-phase-commit and for CMT it is up to the container to use one-phase or two-phase-commit.
 
-In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, the Solace message broker provides XA transaction administration facilities in the event that customers must perform manual failure recovery. For full details refer to the [Solace documentation on administering and configuring XA Transaction](https://docs.solace.com/Configuring-and-Managing/Performing-Heuristic-Actions.htm ) on the Solace message broker.
+In addition to the standard XA Recovery functionality provided through the Solace JCA Resource Adapter, the Solace event broker provides XA transaction administration facilities in the event that customers must perform manual failure recovery. For full details refer to the [Solace documentation on administering and configuring XA Transaction](https://docs.solace.com/Configuring-and-Managing/Performing-Heuristic-Actions.htm ) on the Solace event broker.
 
-#### Enabling XA Support for JMS Connection Factories – Solace Message Broker<a name="enabling-xa-support"></a>
+#### Enabling XA Support for JMS Connection Factories – Solace Event Broker<a name="enabling-xa-support"></a>
 
-When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace message broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
+When using CMT or BMT transactions, XA transaction support must be enabled for the specific JMS connection factories: the customer needs to configure XA support property for the respective JNDI connection factory on the Solace event broker using the [Solace PubSub+ Manager]({{ site.links-docs-webadmin }}){:target="_top"} admin console or the CLI as follows:
 
 
 ```
@@ -1142,7 +1142,7 @@ When using CMT or BMT transactions, XA transaction support must be enabled for t
 
 #### Enabling XA Recovery Support for JCA Connection Factories – JBoss
 
-To enable XA Recovery for specific JCA connection factories in JBoss the customer must update the connection factory definition with the Solace message broker sign-on credentials that will be used by the JTS subsystem during XA-recovery.  In addition the customer may also want to modify XA connection pool settings from default values.
+To enable XA Recovery for specific JCA connection factories in JBoss the customer must update the connection factory definition with the Solace event broker sign-on credentials that will be used by the JTS subsystem during XA-recovery.  In addition the customer may also want to modify XA connection pool settings from default values.
 
 Steps to enable XA-recovery for a JCA connection factory:
 
@@ -1330,7 +1330,7 @@ The active site and standby site addresses are provided as a comma-separated lis
 
 In order to enable applications to successfully reconnect to the standby site in the event of a data center failure, it is required that the Solace JMS connection be configured to attempt connection reconnection for a sufficiently long time to enable the manual switch-over to occur. This time is application specific depending on individual disaster recovery procedures and can range from minutes to hours depending on the application. In general it is best to tune the reconnection by changing the "reconnect retries" parameter within the Solace JNDI to a value large enough to cover the maximum time to detect and execute a disaster recovery switch over. If this time is unknown, it is also possible to use a value of "-1" to force the Solace JMS API to reconnect indefinitely.
 
-The reconnect retries is tuned in the Solace message broker CLI as follows:
+The reconnect retries is tuned in the Solace event broker CLI as follows:
 
 ```
 config)# jndi message-vpn solace_VPN
@@ -1368,7 +1368,7 @@ For JBoss applications that are sending messages, there is nothing specifically 
 
 ### Using an external JNDI store for Solace JNDI lookups<a name="using-an-external-jndi-store-for-solace-jndi-lookups"></a>
 
-By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the message broker.
+By default the Solace JMS Resource Adapter looks up JNDI objects, which are the Connection Factory and Destination Objects, from the JNDI store on the event broker.
 
 It's possible to use an external JNDI provider such as an external LDAP server instead, and provision the Solace JNDI objects there.
 
@@ -1385,8 +1385,8 @@ The following table summarizes the values used for the resource adapter"s bean p
 | **Name** | **Value** | **Description** |
 | ConnectionURL | PROVIDER_PROTOCOL://IP:Port | The JNDI provider connection URL (Update the value with the actual protocol, IP and port). Example: `ldap://localhost:10389/o=solacedotcom` |
 | MessageVPN |  | The associated solace message VPN for Connection Factory or Destination Objectis is expected to be stored in the external JNDI store. |
-| UserName | jndi_provider_username | The username credential on the external JNDI store (not on the message broker) |
-| Password | jndi_provider_password | The password credential on the external JNDI store (not on the message broker) |
+| UserName | jndi_provider_username | The username credential on the external JNDI store (not on the event broker) |
+| Password | jndi_provider_password | The password credential on the external JNDI store (not on the event broker) |
 | ExtendedProps | java.naming.factory.initial= PROVIDER_InitialContextFactory_CLASSNAME (ensure there is no space used around the = sign) | Substitute `PROVIDER_InitialContextFactory_CLASSNAME` with your provider's class name implementing "javax.naming.spi.InitialContextFactory". Example: `com.sun.jndi.ldap.LdapCtxFactory`. Additional Extended Properties Supported Values may be configured as described in the [Solace Resource Adapter configuration section](#RAConf).
 
 **Important note**: the jar library with the 3rd party provider's implementation of the  "javax.naming.spi.InitialContextFactory" class must be placed in the application server's class path. For JBoss EAP v6 the recommended approach is to make use of [JBoss Modules]({{ site.links-jboss-modules }}){:target="_top"}: declare a dependency from Solace Resource Adapter module file (`<JBoss_Home>/modules/com/solacesystems/ra/main/module.xml`) to the module where the jar library is located. Example for the LDAP `com.sun.jndi.ldap.LdapCtxFactory`:

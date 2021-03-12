@@ -15,8 +15,8 @@ This guide assumes that:
 -	You have successfully installed HermesJMS on your machine
 -	You have access to Solace JMS libraries (version 6.2 or above)
 -	You have access to a Solace Messaging Router
--	The necessary configuration on the Solace Message Broker is done. Configuration includes the creation of elements such as the message-VPN and the JMS Connection Factory.
--	If SSL connectivity is desired, you will need to ensure that the Solace Message Broker is correctly configured with SSL certificate(s), and that you have obtained a copy of the trust store, and keystore (if necessary) from your administrator.
+-	The necessary configuration on the Solace Event Broker is done. Configuration includes the creation of elements such as the message-VPN and the JMS Connection Factory.
+-	If SSL connectivity is desired, you will need to ensure that the Solace Event Broker is correctly configured with SSL certificate(s), and that you have obtained a copy of the trust store, and keystore (if necessary) from your administrator.
 
 {% include_relative assets/solaceMessaging.md %}
 
@@ -154,7 +154,7 @@ c)	Edit the Hermes JMS session in [Start HemesJMS](#start-hermesjms-and-create-a
 
 ![]({{ site.baseurl }}/images/hermesjms/connect-ssl-1.png)
 
-d)	Edit the providerURL property to connect to `smfs://<message broker IP>:[<SSL port>]`.
+d)	Edit the providerURL property to connect to `smfs://<event broker IP>:[<SSL port>]`.
 
 e)	Add "userPropertiesFile" property to the connection factory. This value of this property must be the full file name of the solace.jms.properties file that was created earlier in step (a).
 

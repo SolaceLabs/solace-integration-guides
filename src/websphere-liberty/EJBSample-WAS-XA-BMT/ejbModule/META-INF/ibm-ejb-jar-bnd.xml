@@ -1,0 +1,17 @@
+<ejb-jar-bnd xmlns="http://websphere.ibm.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://websphere.ibm.com/xml/ns/javaee 
+    http://websphere.ibm.com/xml/ns/javaee/ibm-ejb-jar-bnd_1_0.xsd"
+    version="1.0">
+
+    <!-- ProducerSB (Session Bean) resources binding -->
+    <session name="XAProducerBMTSB">
+        <resource-ref name="myCF" binding-name="JNDI/J2C/CF" />
+        <resource-ref name="myReplyQueue" binding-name="JNDI/J2C/Q/replies" />
+    </session>
+
+    <!-- ConsumerMDB (Message Driven Bean) activation specification binding -->
+    <message-driven name="XAConsumerMDB">
+        <jca-adapter activation-spec-binding-name="JNDI/J2C/AS" />
+    </message-driven>
+</ejb-jar-bnd>

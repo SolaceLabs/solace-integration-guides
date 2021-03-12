@@ -16,7 +16,7 @@ This document demonstrates how to integrate the Solace Java Message Service (JMS
 
 Apama CEP has been used in many real-time applications, i.e. HFT, trade surveillance, auto hedging, real-time betting, real-time analytics, real-time firewall and etc. Apama CEP has its place in streaming space with little footprint. Flink and Spark are all implemented in Java and Scala with inherited JVM disadvantages. [How can Apama’s EPL run faster than both C and Java®?](https://www.softwareag.com/corporate/images/SAG_Apama_EPL_FS_Jun14_Web_tcm16-122355.pdf)
 
-Solace has been the OPEN messaging leader in the industry, and is widely adopted by many financial firms and vertical industries. Solace's ultra wide bandwidth and low latency message broker works well with Apama hand-in-hand.
+Solace has been the OPEN messaging leader in the industry, and is widely adopted by many financial firms and vertical industries. Solace's ultra wide bandwidth and low latency event broker works well with Apama hand-in-hand.
 
 The target audience of this document is developers with knowledge of both Apama and JMS in general. As such this document focuses on the technical steps required to achieve the integration. For detailed background on either Solace JMS or Apama refer to the referenced documents below.
 
@@ -35,7 +35,7 @@ These links contain information related to this guide:
 * [Solace Messaging API for JMS]({{ site.links-docs-jms }}){:target="_top"}
 * [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"}
 * [Solace Feature Guide]({{ site.links-docs-features }}){:target="_top"}
-* [Solace Message Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
+* [Solace Event Broker Configuration]({{ site.links-docs-router-config }}){:target="_top"}
 * [Solace Command Line Interface Reference]({{ site.links-docs-cli }}){:target="_top"}
 * [Apama Streaming Analytics Documentation](http://www.apamacommunity.com/docs/){:target="_blank"}
 * [Connecting Apama Applications to External Components](http://www.apamacommunity.com/documents/10.0.0.1/apama_10.0.0.1_connecting-apama-applications.pdf){:target="_blank"}
@@ -49,8 +49,8 @@ The general Apama Streaming Analytics support for connectors is documented in th
 
 This integration guide demonstrates how to configure a Apama Streaming Analytics application to receive JMS messages using a set of custom message-to-event configurations. Accomplishing this requires completion of the following steps. 
 
-* Step 1 - Obtain access to Solace message broker and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
-* Step 2 - Configuration of the Solace Message Broker.
+* Step 1 - Obtain access to Solace event broker and JMS API, see the [Solace Developer Portal]({{ site.links-dev-portal }}){:target="_top"}
+* Step 2 - Configuration of the Solace Event Broker.
 * Step 3 - Obtain Apama Streaming Analytics, see the [Apama Community Edition Downloads](http://www.apamacommunity.com/downloads/){:target="_blank"}
 * Step 4 – Coding Solace message producer
 * Step 5 – Coding Apama Event Processing Language AKA MonitorScript
@@ -63,7 +63,7 @@ This integration guide will demonstrate creation of Solace JMS custom receiver a
 
 #### Solace Resources
 
-The following Solace Message Broker resources are required.
+The following Solace Event Broker resources are required.
 
 <table>
   <tr>
@@ -72,7 +72,7 @@ The following Solace Message Broker resources are required.
     <th>Description</th>
   </tr>
   <tr>
-    <td>Solace Message Broker Host</td>
+    <td>Solace Event Broker Host</td>
     <td colspan="2" rowspan="4">Refer to section <a href="#get-solace-messaging">Get Solace Messaging</a>  for values</td>
   </tr>
   <tr>
@@ -142,14 +142,14 @@ Or if you downloaded the libraries and are referencing them directly, the follow
     </tr>
 </table>
 
-### Step 2 – Configuring the Solace Message Broker
+### Step 2 – Configuring the Solace Event Broker
 
-The Solace Message Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Apama application. 
+The Solace Event Broker needs to be configured with the following configuration objects at a minimum to enable JMS to send and receive messages within the Apama application. 
 
-* A Message VPN, or virtual message broker, to scope the integration on the Solace Message Broker.
+* A Message VPN, or virtual event broker, to scope the integration on the Solace Event Broker.
 * Client connectivity configurations like usernames and profiles
 * Guaranteed messaging endpoints for receiving messages.
-* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Message Broker configuration.
+* Appropriate JNDI mappings enabling JMS clients to connect to the Solace Event Broker configuration.
 
 {% include_relative assets/solaceConfig.md %}
 
@@ -157,9 +157,9 @@ The Solace Message Broker needs to be configured with the following configuratio
 
 #### Configuring Client Usernames & Profiles
 
-This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Message Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
+This section outlines how to update the default client-profile and how to create a client username for connecting to the Solace Event Broker. For the client-profile, it is important to enable guaranteed messaging for JMS messaging and transacted sessions if using transactions.
 
-The chosen client username of "apama_user" will be required by the Apama when connecting to the Solace Message Broker.
+The chosen client username of "apama_user" will be required by the Apama when connecting to the Solace Event Broker.
 
 ```
 (config)# client-profile default message-vpn apama
@@ -193,7 +193,7 @@ This integration guide shows receiving messages within the Apama from a single J
 
 #### Setting up Solace JNDI References
 
-To enable the JMS clients to connect and look up the Queue destination required by Apama, there are two JNDI objects required on the Solace Message Broker:
+To enable the JMS clients to connect and look up the Queue destination required by Apama, there are two JNDI objects required on the Solace Event Broker:
 
 * A connection factory: jms/cf/apama
 * A queue destination: JNDI/Q/apama
@@ -376,12 +376,12 @@ Starting up Apama correlator in development is done from Apama Workbench. For se
 
 ## Working with Solace High Availability (HA)
 
-The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby message broker in the case of a HA failover of a Solace Message Broker. By default Solace JMS connections will reconnect to the standby message broker in the case of an HA failover.
+The [Solace JMS API Online Reference Documentation]({{ site.links-docs-jms-api }}){:target="_top"} section "Establishing Connection and Creating Sessions" provides details on how to enable the Solace JMS connection to automatically reconnect to the standby event broker in the case of a HA failover of a Solace Event Broker. By default Solace JMS connections will reconnect to the standby event broker in the case of an HA failover.
 
 In general the Solace documentation contains the following note regarding reconnection:
 
 ```
-Note: When using HA redundant message brokers, a fail-over from one message broker to its mate will typically
+Note: When using HA redundant event brokers, a fail-over from one event broker to its mate will typically
 occur in under 30 seconds, however, applications should attempt to reconnect for at least five minutes. 
 ```
 
@@ -433,7 +433,7 @@ log4j.category.com.solacesystems.jms=DEBUG
 log4j.category.com.solacesystems.jcsmp=DEBUG
 ```
 
-This project has a built-in topic consumer to dump received messages from "apamaTopic" - hence Solace console shows received messages from the message broker.
+This project has a built-in topic consumer to dump received messages from "apamaTopic" - hence Solace console shows received messages from the event broker.
 
 ```text
 Received message: 
