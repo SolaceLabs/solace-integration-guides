@@ -11,5 +11,5 @@
   - websphere-app-server
   - websphere-liberty
   - spring-framework
-  
+  - spark-streaming
   

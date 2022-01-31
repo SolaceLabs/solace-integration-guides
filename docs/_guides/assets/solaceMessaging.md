@@ -12,7 +12,7 @@ This tutorial requires access to Solace PubSub+ event broker and requires that y
   <tr>
     <td>Host</td>
     <td>String</td>
-    <td>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
+    <td>This is the address clients use when connecting to the event broker to send and receive messages. (Format: <code>tcp://</code> or <code>tcps://</code> prefix, followed by <code>DNS_NAME:Port</code> or <code>IP:Port</code>)</td>
   </tr>
   <tr>
     <td>Message VPN</td>
@@ -33,7 +33,7 @@ This tutorial requires access to Solace PubSub+ event broker and requires that y
 
 There are several ways you can get access to Solace messaging and find these required properties.
 
-### Option 1: Use Solace Cloud
+### Option 1: Use PubSub+ Cloud
 
 * Follow [these instructions]({{ site.links-solaceCloud-setup }}){:target="_top"} to quickly spin up a cloud-based Solace messaging service for your applications.
 * The messaging connectivity information is found in the service details in the connectivity tab (shown below). You will need:
