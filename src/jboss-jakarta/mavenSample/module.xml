@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module xmlns="urn:jboss:module:1.1" name="com.solacesystems.ra" >
+<!--
+	all jar files in "target/sol-jms-ra-$project.version" should be listed here
+--> 
+    <resources>
+        <resource-root path="." />
+        <resource-root path="commons-logging-1.2.jar" />
+        <resource-root path="netty-buffer-4.2.8.Final.jar" />
+        <resource-root path="netty-codec-base-4.2.8.Final.jar" />
+        <resource-root path="netty-codec-compression-4.2.8.Final.jar" />
+        <resource-root path="netty-codec-http-4.2.8.Final.jar" />
+        <resource-root path="netty-codec-socks-4.2.8.Final.jar" />
+        <resource-root path="netty-common-4.2.8.Final.jar" />
+        <resource-root path="netty-handler-4.2.8.Final.jar" />
+        <resource-root path="netty-handler-proxy-4.2.8.Final.jar" />
+        <resource-root path="netty-resolver-4.2.8.Final.jar" />
+        <resource-root path="netty-transport-4.2.8.Final.jar" />
+        <resource-root path="netty-transport-classes-epoll-4.2.8.Final.jar" />
+        <resource-root path="netty-transport-native-epoll-4.2.8.Final-linux-x86_64.jar" />
+        <resource-root path="netty-transport-native-unix-common-4.2.8.Final.jar" />
+        <resource-root path="org.apache.servicemix.bundles.jzlib-1.1.3_2.jar" />
+        <resource-root path="org.osgi.annotation-6.0.0.jar" />
+        <resource-root path="solace-serdes-1.0.0.jar" />
+        <resource-root path="sol-jms-jakarta-10.29.1.jar" />
+        <resource-root path="sol-jms-compat-1.1-1.0.0.jar"/>
+        <resource-root path="sol-jms-jakarta-ra-0.0.0-SNAPSHOT.jar"/>
+    </resources>
+
+    <dependencies>
+        <module name="javaee.api"/>
+        <module name="jakarta.transaction.api"/>
+        <module name="jakarta.resource.api"/>
+        <module name="jakarta.jms.api"/>
+    </dependencies>
+</module>

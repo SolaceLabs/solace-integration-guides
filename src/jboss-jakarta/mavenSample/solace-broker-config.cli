@@ -1,0 +1,80 @@
+home
+enable
+configure
+
+create message-vpn solace_VPN
+authentication
+user-class client
+basic auth-type none
+exit
+exit
+service rest incoming
+listen-port 9001
+no plain-text shutdown
+exit
+exit
+exit
+no shutdown
+exit
+
+message-spool message-vpn solace_VPN
+max-spool-usage 2000
+exit
+
+client-profile default message-vpn solace_VPN
+message-spool allow-guaranteed-message-receive
+message-spool allow-guaranteed-message-send
+message-spool allow-guaranteed-endpoint-create
+message-spool allow-transacted-sessions
+exit
+
+create client-username solace_user message-vpn solace_VPN
+acl-profile default
+client-profile default
+no shutdown
+exit
+
+client-username default message-vpn solace_VPN
+no shut
+exit
+
+message-spool message-vpn solace_VPN
+create queue solace_requests
+access-type exclusive
+max-spool-usage 2000
+permission all delete
+no shutdown
+exit
+create queue solace_replies
+access-type exclusive
+max-spool-usage 2000
+permission all delete
+no shutdown
+exit
+exit
+
+jndi message-vpn solace_VPN
+create connection-factory JNDI/Sol/CF
+property-list messaging-properties
+property default-delivery-mode persistent
+property xa true
+exit
+property-list transport-properties
+property direct-transport false
+property "reconnect-retry-wait" "3000"
+property "reconnect-retries" "20"
+property "connect-retries-per-host" "5"
+property "connect-retries" "1"
+exit
+exit
+create queue JNDI/Sol/Q/requests
+property physical-name solace_requests
+exit
+create queue JNDI/Sol/Q/replies
+property physical-name solace_replies
+exit
+no shutdown
+exit
+exit
+
+end
