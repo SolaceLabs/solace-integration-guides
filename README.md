@@ -1,3 +1,7 @@
+This is no longer the repository of the guide documents (.md files).
+Use this repo instead: https://github.com/SolaceDev/solace-dev-codelabs/ 
+Specifically, the integration guide .md files live in the /markdown/integrations/ directory.
+
 # solace-integration-guides
 
 This project provides the markdown tutorials and supporting source code for these Integration Guides: http://dev.solace.com/integration-guides/.
