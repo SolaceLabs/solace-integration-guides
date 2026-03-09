@@ -1,0 +1,24 @@
+# WildFly CLI commands to configure Solace Resource Adapter
+# Run with: /opt/jboss/wildfly/bin/jboss-cli.sh --connect --file=wildfly-solace-module-config.cli
+
+/subsystem=ee:write-attribute(name=global-modules, value=[{ name=>'com.solacesystems.ra', slot=>'main'}])
+
+# Set Solace as the default resource adapter for EJB3
+/subsystem=ejb3:write-attribute(name=default-resource-adapter-name,value=com.solacesystems.ra)
+
+# Configure Solace Resource Adapter with connection properties at RA level
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra:add(module=com.solacesystems.ra, transaction-support=XATransaction)
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/config-properties=ConnectionURL:add(value="tcp://solace:55555")
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/config-properties=MessageVPN:add(value="solace_VPN")
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/config-properties=UserName:add(value="solace_user")
+
+# Define Connection Factory with recovery configuration
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/connection-definitions=myCF:add(class-name=com.solacesystems.jms.ra.outbound.ManagedJMSConnectionFactory, jndi-name=java:/jms/myCF, enabled=true, recovery-username=solace_user, no-recovery=false)
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/connection-definitions=myCF/config-properties=ConnectionFactoryJndiName:add(value="JNDI/Sol/CF")
+
+# Define Admin Objects (Queues)
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/admin-objects=myReplyQueue:add(class-name=com.solacesystems.jms.ra.outbound.QueueProxy, jndi-name=java:/jms/myReplyQueue, enabled=true)
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra/admin-objects=myReplyQueue/config-properties=Destination:add(value="JNDI/Sol/Q/replies")
+
+# Activate the resource adapter
+/subsystem=resource-adapters/resource-adapter=com.solacesystems.ra:activate
